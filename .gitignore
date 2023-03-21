@@ -1,0 +1,8 @@
+### Kotlin template
+# Compiled class file
+.gradle
+.idea
+build
+gradle
+
+
