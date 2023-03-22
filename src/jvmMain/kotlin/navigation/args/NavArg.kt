@@ -19,11 +19,3 @@ fun longArg(name: ArgName, value: Long) = Pair(name, LongArg(value))
 fun stringArg(name: ArgName, value: String) = Pair(name, StringArg(value))
 fun booleanArg(name: ArgName, value: Boolean) = Pair(name, BooleanArg(value))
 
-
-data class CustomArg<T>(val value: T) : NavArg {
-    companion object {
-        fun <T>create(name: ArgName, value: T) : Pair<ArgName, CustomArg<T>> {
-            return Pair(name, CustomArg(value))
-        }
-    }
-}

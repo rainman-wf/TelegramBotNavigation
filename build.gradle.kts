@@ -25,7 +25,12 @@ kotlin {
         }
         withJava()
     }
+}
 
+publishing {
+    publications {
+        
+    }
 }
 
 

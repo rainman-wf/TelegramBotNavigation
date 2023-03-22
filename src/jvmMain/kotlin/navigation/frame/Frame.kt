@@ -2,25 +2,16 @@ package navigation.frame
 
 import navigation.NavigationController
 import navigation.args.ArgName
+import navigation.args.ArgsContainer
 import navigation.args.NavArg
-import navigation.models.DeleteMessage
-import navigation.models.NewMessage
-import navigation.models.Response
-import navigation.models.UserId
+import navigation.models.*
 
 
-abstract class Frame(private val userId: UserId) {
+abstract class Frame(private val userId: UserId, private val args: ArgsContainer? = null) {
 
     internal val controller = NavigationController
 
-    private val _args = mutableMapOf<ArgName, NavArg>()
-
-    fun arg(name: ArgName) = _args[name]
-
-    fun withArgs(vararg navArgEntry: Pair<ArgName, NavArg>): Frame {
-        _args.putAll(navArgEntry.associate { it.first to it.second })
-        return this
-    }
+    fun arg(name: ArgName) = args?.args?.get(name) ?: error ("args not passed")
 
     abstract suspend fun show()
 
@@ -32,18 +23,11 @@ abstract class Frame(private val userId: UserId) {
         controller.setNavSession(userId, response.messageId)
     }
 
-    suspend fun clear() {
-        val msgId = controller.getNavSession(userId) ?: return
-        val builder = DeleteMessage(userId, msgId)
-        builder.execute()
-        controller.setNavSession(userId, null)
-    }
+    suspend fun home() = controller.home(userId)
 
     open suspend fun handle(response: Response) {
         response.messageId?.let { deleteInput(it) }
     }
-
-    suspend fun home() = controller.home(userId)
 
     private suspend fun deleteInput(messageId: Int) {
         DeleteMessage(userId, messageId).execute()
