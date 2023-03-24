@@ -1,7 +1,22 @@
 package navigation.frame
 
 interface FrameKey {
-    val command: String? get () = null
-    val isHome: Boolean get () = false
-    val isRoot: Boolean get () = false
+    val type: Type? get() = null
 }
+
+interface Type
+
+interface TypeWithCommand : Type{
+    val command: String?
+}
+
+class Final : Type
+
+data class Root(
+    override val command: String
+) : TypeWithCommand
+
+data class Home(
+    override val command: String? = null
+) : TypeWithCommand
+

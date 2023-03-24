@@ -3,6 +3,7 @@ package navigation.models
 import bot.models.*
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup
+import com.pengrad.telegrambot.model.request.ParseMode
 import com.pengrad.telegrambot.request.AnswerInlineQuery
 import com.pengrad.telegrambot.request.EditMessageText
 import com.pengrad.telegrambot.request.SendMessage
@@ -23,9 +24,21 @@ fun NewMessage.toRequest(): RequestType<*> {
         }.toTypedArray()
     }.toTypedArray()
 
+    val formattedText = if (formatted) text.toMarkdown() else text
+
     return this.messageId?.let {
-        EditMessageDto(EditMessageText(userId.value, it, text).replyMarkup(InlineKeyboardMarkup(*buttons)))
-    } ?: SendMessageDto(SendMessage(userId.value, text).replyMarkup(InlineKeyboardMarkup(*buttons)))
+        EditMessageDto(
+            EditMessageText(userId.value, it, formattedText)
+                .also { msg ->
+                    if (buttons.isNotEmpty()) msg.replyMarkup(InlineKeyboardMarkup(*buttons))
+                    if (formatted) msg.parseMode(ParseMode.MarkdownV2)
+                })
+    } ?: SendMessageDto(
+        SendMessage(userId.value, formattedText)
+            .also { msg ->
+                if (buttons.isNotEmpty()) msg.replyMarkup(InlineKeyboardMarkup(*buttons))
+                if (formatted) msg.parseMode(ParseMode.MarkdownV2)
+            })
 }
 
 
@@ -40,7 +53,8 @@ fun <T> DataList<T>.toRequest(adapter: DataListAdapter<T>): RequestType<AnswerIn
 }
 
 fun Update.toResponse(): Response {
-    return when (val result = message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: error("unhandled update type")) {
+    return when (val result =
+        message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: error("unhandled update type")) {
         is Message -> Response(
             userId = UserId(result.from.id),
             username = result.from.username,

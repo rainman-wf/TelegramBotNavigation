@@ -21,3 +21,19 @@ data class DeleteMessageDto(override val request: DeleteMessage) : RequestType<D
 data class AnswerCallbackQueryDto(override val request: AnswerCallbackQuery) : RequestType<AnswerCallbackQuery>(request)
 
 data class AnswerInlineQueryDto(override val request: AnswerInlineQuery) : RequestType<AnswerInlineQuery>(request)
+
+fun String.toMarkdown(): String {
+    return this
+        .replace(">", "\\>")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+        .replace("#", "\\#")
+        .replace(".", "\\.")
+        .replace("!", "\\!")
+        .replace("-", "\\-")
+        .replace("~\\(", "(")
+        .replace("~\\)", ")")
+        .replace("|", "\\|")
+        .replace("=", "\\=")
+        .replace("+", "\\+")
+}
