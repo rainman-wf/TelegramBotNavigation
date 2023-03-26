@@ -6,16 +6,28 @@ import navigation.args.ArgsContainer
 import navigation.args.NavArg
 import navigation.models.*
 
-
 abstract class Frame(private val userId: UserId, private val args: ArgsContainer? = null) {
 
     internal val controller = NavigationController
 
-    fun arg(name: ArgName) = args?.args?.get(name) ?: error ("args not passed")
+    private var result: NavArg? = null
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T : NavArg?> getResult(): T? {
+        return result as T?
+    }
+
+    private suspend fun putResult(arg: NavArg) {
+        result = arg
+    }
+
+    private suspend fun parentFrame(): Frame = controller.parentFrame(userId)
+
+    fun arg(name: ArgName) = args?.args?.get(name)
 
     abstract suspend fun show()
 
-    suspend fun text(block: (NewMessage) -> Unit) {
+    suspend fun text(block: NewMessage.() -> Unit) {
         val msgId = controller.getNavSession(userId)
         val builder = NewMessage(userId, msgId)
         block(builder)
@@ -33,8 +45,25 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         DeleteMessage(userId, messageId).execute()
     }
 
+    @Suppress("UNCHECKED_CAST")
+    suspend fun <T : NavArg> navigateForResult(
+        key: FrameKey,
+        vararg args: Pair<ArgName, NavArg>,
+    ) {
+        controller.navigate(userId, key, args)
+    }
+
+    suspend fun update() {
+        controller.update(userId)
+    }
+
+    suspend fun backWithResult(arg: NavArg) {
+        parentFrame().putResult(arg)
+        controller.back(userId)
+    }
+
     suspend fun navigate(key: FrameKey, vararg args: Pair<ArgName, NavArg>) = controller.navigate(userId, key, args)
-    open suspend fun back() = controller.back(userId)
+    suspend fun back() = controller.back(userId)
 
     override fun toString(): String = this::class.simpleName.toString()
 }

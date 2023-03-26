@@ -1,6 +1,6 @@
 package navigation.models
 
-data class NewMessage(override val userId: UserId, val messageId: Int? = null) : Request {
+data class NewMessage(override val toUserId: UserId, val messageId: Int? = null) : Request {
     lateinit var text: String
     private val _buttons = mutableListOf(listOf<Button>())
     var formatted: Boolean = false

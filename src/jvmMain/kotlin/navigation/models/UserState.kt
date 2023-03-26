@@ -49,7 +49,6 @@ data class UserState(
     }
 
     fun resetStack() : Frame {
-        _navSession = null
         val homeFrame = frameStack.pollFirst()
         frameStack.clear()
         frameStack.addLast(homeFrame)
@@ -57,6 +56,9 @@ data class UserState(
         return last
     }
 
-
+    fun parent() : Frame {
+        val size= frameStack.size
+        return frameStack.elementAt(size - 2)
+    }
 
 }

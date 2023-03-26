@@ -24,7 +24,7 @@ object NavigationController {
     }
 
     suspend fun updateHandler(response: Response) {
-        checkState(response.userId)
+        if (!createState(response)) return
         if (response.data == (homeKey.type as Home).command) home(response.userId)
         roots[response.data]?.let {
             val frame = frameFactory.create(response.userId, it, null)
@@ -47,6 +47,15 @@ object NavigationController {
         }
     }
 
+    suspend fun update(userId: UserId) {
+        log("update")
+        states[userId]!!.last.show()
+    }
+
+    suspend fun parentFrame(userId: UserId) : Frame {
+        return states[userId]!!.parent()
+    }
+
     suspend fun back(userId: UserId) {
         val currentFrame = states[userId]!!.last
         states[userId]!!.apply {
@@ -56,15 +65,20 @@ object NavigationController {
 
     suspend fun home(userId: UserId) {
         states[userId]!!.resetStack().show()
+        states[userId]!!.resetSession()
     }
 
     /**
      * Support functions
      */
 
-    private fun checkState(userId: UserId) {
-        if (!states.containsKey(userId)) states[userId] =
-            UserState(userId).addLast(frameFactory.create(userId, homeKey, null))
+    private suspend fun createState(response: Response) : Boolean {
+        return if (!states.containsKey(response.userId)) {
+            val state = UserState(response.userId).addLast(frameFactory.create(response.userId, homeKey, null))
+            states[response.userId] = state
+            state.last.handle(response)
+            false
+        } else true
     }
 
     fun setNavSession(userId: UserId, sessionId: Int?) {

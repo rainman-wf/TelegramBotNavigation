@@ -1,5 +1,6 @@
 package navigation.frame
 
+import navigation.log
 import navigation.models.DeleteMessage
 import navigation.models.UserId
 

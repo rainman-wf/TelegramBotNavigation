@@ -12,7 +12,7 @@ sealed interface Request {
         }
     }
 
-    val userId: UserId
+    val toUserId: UserId
 
     suspend fun execute(): Response {
         val request = when (this) {

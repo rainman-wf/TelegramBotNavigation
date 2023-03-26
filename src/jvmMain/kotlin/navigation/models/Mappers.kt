@@ -28,13 +28,13 @@ fun NewMessage.toRequest(): RequestType<*> {
 
     return this.messageId?.let {
         EditMessageDto(
-            EditMessageText(userId.value, it, formattedText)
+            EditMessageText(toUserId.value, it, formattedText)
                 .also { msg ->
                     if (buttons.isNotEmpty()) msg.replyMarkup(InlineKeyboardMarkup(*buttons))
                     if (formatted) msg.parseMode(ParseMode.MarkdownV2)
                 })
     } ?: SendMessageDto(
-        SendMessage(userId.value, formattedText)
+        SendMessage(toUserId.value, formattedText)
             .also { msg ->
                 if (buttons.isNotEmpty()) msg.replyMarkup(InlineKeyboardMarkup(*buttons))
                 if (formatted) msg.parseMode(ParseMode.MarkdownV2)
@@ -43,7 +43,7 @@ fun NewMessage.toRequest(): RequestType<*> {
 
 
 fun DeleteMessage.toRequest(): RequestType<com.pengrad.telegrambot.request.DeleteMessage> {
-    return DeleteMessageDto(com.pengrad.telegrambot.request.DeleteMessage(userId.value, messageId))
+    return DeleteMessageDto(com.pengrad.telegrambot.request.DeleteMessage(toUserId.value, messageId))
 }
 
 fun <T> DataList<T>.toRequest(adapter: DataListAdapter<T>): RequestType<AnswerInlineQuery> {
