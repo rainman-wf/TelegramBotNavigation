@@ -19,6 +19,7 @@ sealed interface Request {
             is NewMessage -> this.toRequest()
             is DeleteMessage -> this.toRequest()
             is DataListRequest<*> -> error("use DataListRequest interface")
+            is PopUpMsg -> this.toRequest()
         }
         return send(request)
     }

@@ -37,6 +37,12 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     suspend fun home() = controller.home(userId)
 
+    suspend fun popUp(callbackId: String, block: PopUpMsg.() -> Unit) {
+        val builder = PopUpMsg(callbackId, userId)
+        block(builder)
+        builder.execute()
+    }
+
     open suspend fun handle(response: Response) {
         response.messageId?.let { deleteInput(it) }
     }

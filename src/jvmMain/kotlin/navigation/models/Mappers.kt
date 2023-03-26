@@ -4,6 +4,7 @@ import bot.models.*
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup
 import com.pengrad.telegrambot.model.request.ParseMode
+import com.pengrad.telegrambot.request.AnswerCallbackQuery
 import com.pengrad.telegrambot.request.AnswerInlineQuery
 import com.pengrad.telegrambot.request.EditMessageText
 import com.pengrad.telegrambot.request.SendMessage
@@ -44,6 +45,10 @@ fun NewMessage.toRequest(): RequestType<*> {
 
 fun DeleteMessage.toRequest(): RequestType<com.pengrad.telegrambot.request.DeleteMessage> {
     return DeleteMessageDto(com.pengrad.telegrambot.request.DeleteMessage(toUserId.value, messageId))
+}
+
+fun PopUpMsg.toRequest(): RequestType<AnswerCallbackQuery> {
+    return AnswerCallbackQueryDto(AnswerCallbackQuery(callbackId).text(text).showAlert(true))
 }
 
 fun <T> DataList<T>.toRequest(adapter: DataListAdapter<T>): RequestType<AnswerInlineQuery> {
