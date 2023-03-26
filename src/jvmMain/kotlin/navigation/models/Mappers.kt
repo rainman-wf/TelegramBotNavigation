@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.request.EditMessageText
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.response.BaseResponse
 import com.pengrad.telegrambot.response.SendResponse
+import okhttp3.internal.EMPTY_RESPONSE
 
 fun NewMessage.toRequest(): RequestType<*> {
 
@@ -93,16 +94,16 @@ fun Update.toResponse(): Response {
 }
 
 fun BaseResponse.toResponse() = when (this) {
-    is SendResponse -> Response(
-        userId = UserId(message().from().id()),
-        username = message().from().username(),
-        firstName = message().from().firstName(),
-        data = message().text() ?: "",
-        messageId = message().messageId()
-    )
-    else -> Response(
-        userId = UserId(0),
-        firstName = "stub",
-        data = "deleted"
-    )
+    is SendResponse -> {
+        if (this.isOk)
+            Response(
+                userId = UserId(message().from().id()),
+                username = message().from().username(),
+                firstName = message().from().firstName(),
+                data = message().text() ?: "",
+                messageId = message().messageId()
+            )
+        else null
+    }
+    else -> null
 }

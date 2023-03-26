@@ -6,15 +6,15 @@ import navigation.sender.MessageSendingManager
 sealed interface Request {
 
     companion object {
-        private lateinit var sendMessageManager: MessageSendingManager
+        val sendMessageManager = MessageSendingManager
         fun attachSendingManager(botToken: String) {
-            sendMessageManager = MessageSendingManager(TelegramBot(botToken))
+            sendMessageManager.attachBot(TelegramBot(botToken))
         }
     }
 
     val toUserId: UserId
 
-    suspend fun execute(): Response {
+    suspend fun execute(): Response? {
         val request = when (this) {
             is NewMessage -> this.toRequest()
             is DeleteMessage -> this.toRequest()

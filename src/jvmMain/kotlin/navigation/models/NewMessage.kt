@@ -13,5 +13,17 @@ data class NewMessage(override val toUserId: UserId, val messageId: Int? = null)
     fun formatted() {
         formatted = true
     }
+
+    fun <T>grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) {
+        val buttons = adapter.map(list)
+        val grouped = buttons.groupBy(columns).map { it.toList() }
+        _buttons.addAll(grouped)
+    }
+
+    private fun <T> Collection<T>.groupBy(quantity: Int): Collection<Collection<T>> {
+        return withIndex()
+            .groupBy { it.index / quantity }
+            .map { it.value.map { index -> index.value } }
+    }
 }
 

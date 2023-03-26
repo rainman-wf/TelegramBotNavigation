@@ -23,7 +23,8 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     private suspend fun parentFrame(): Frame = controller.parentFrame(userId)
 
-    fun arg(name: ArgName) = args?.args?.get(name)
+    @Suppress("UNCHECKED_CAST")
+    fun <T: NavArg>arg(name: ArgName) = args?.args?.get(name) as T
 
     abstract suspend fun show()
 
@@ -31,7 +32,7 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         val msgId = controller.getNavSession(userId)
         val builder = NewMessage(userId, msgId)
         block(builder)
-        val response = builder.execute()
+        val response = builder.execute() ?: return
         controller.setNavSession(userId, response.messageId)
     }
 

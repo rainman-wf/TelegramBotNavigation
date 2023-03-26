@@ -6,9 +6,13 @@ import kotlinx.coroutines.delay
 import navigation.log
 import navigation.models.*
 
-class MessageSendingManager (
-    private val bot: TelegramBot,
-) {
+object MessageSendingManager {
+
+    private lateinit var bot: TelegramBot
+
+    fun attachBot(telegramBot: TelegramBot) {
+        bot = telegramBot
+    }
 
     private val executor = QueueTasksExecutor<RequestType<*>, BaseResponse>(150) {
         var result: BaseResponse
@@ -21,15 +25,17 @@ class MessageSendingManager (
                 is AnswerCallbackQueryDto -> bot.execute(it.request)
                 is AnswerInlineQueryDto -> bot.execute(it.request)
             }
-            if (result.isOk || result.errorCode() == 403 || result.errorCode() == 400) {
-                result.description()?.let{ d -> log("${result.errorCode()} :: $d")}
-                break
-            }
+            if (result.isOk) break
+
             if (result.parameters()?.retryAfter() != null) {
                 log("${result.errorCode()} :: ${result.description()}")
-                delay(result.parameters().retryAfter().toLong())
+                delay(result.parameters().retryAfter().toLong() * 1000)
             }
+
             if (!result.isOk) {
+                when (result.errorCode()) {
+                    400, 403 -> break
+                }
                 log("${result.errorCode()} :: ${result.description()}")
             }
         } while (true)
