@@ -2,7 +2,9 @@
 # Compiled class file
 .gradle
 .idea
-build
+!build/
+build/*
+!build/libs
 gradle
 
 
