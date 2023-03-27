@@ -10,6 +10,10 @@ repositories {
     mavenCentral()
 }
 
+java {
+    withSourcesJar()
+}
+
 dependencies {
     implementation("com.github.pengrad:java-telegram-bot-api:6.5.0")
     implementation("com.squareup.retrofit2:retrofit:2.7.2")
@@ -22,9 +26,6 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("maven_public") {
-            groupId = "com.rainmann.telegram-bot"
-            artifactId = "TelegramBotNavigation"
-            version = "0.1.3"
             from(components.getByName("java"))
         }
     }
