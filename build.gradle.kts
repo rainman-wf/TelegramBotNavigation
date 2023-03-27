@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "rainmann.telegram-bot"
-version = "0.1"
+version = "0.1.3"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ publishing {
         create<MavenPublication>("maven_public") {
             groupId = "com.rainmann.telegram-bot"
             artifactId = "TelegramBotNavigation"
-            version = "0.1"
+            version = "0.1.3"
             from(components.getByName("java"))
         }
     }
