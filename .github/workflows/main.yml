@@ -13,8 +13,8 @@ jobs:
             java-version: '17'
             distribution: 'temurin'
         - run: mvn --batch-mode --update-snapshots package
-        - run: mkdir staging && cp target/*.jar staging
+        - run: mkdir staging && cp build/libs/*.jar staging
         - uses: actions/upload-artifact@v3
           with:
             name: build
-            path: libs
+            path: build/libs
