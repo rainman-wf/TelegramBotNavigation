@@ -21,7 +21,12 @@ dependencies {
 
 publishing {
     publications {
-        
+        create<MavenPublication>("maven_public") {
+            groupId = "com.rainmann.telegram-bot"
+            artifactId = "TelegramBotNavigation"
+            version = "0.1"
+            from(components.getByName("java"))
+        }
     }
 }
 
