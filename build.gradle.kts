@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("maven-publish")
+    id("java-library")
 }
 
 group = "rainmann.telegram-bot"
@@ -26,7 +27,10 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("maven_public") {
-            from(components.getByName("java"))
+            groupId  = "rainmann.telegram-bot"
+            version = "0.1.3"
+            artifactId = "TelegramBotNavigation"
+            from(components.getByName("kotlin"))
         }
     }
 }
