@@ -38,7 +38,7 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     suspend fun chain(vararg block: NewMessage.() -> Unit) {
         block.forEach {
-            val builder = NewMessage(userId, 0)
+            val builder = NewMessage(userId, null)
             it(builder)
             builder.execute()
         }
