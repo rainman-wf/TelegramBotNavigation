@@ -36,6 +36,14 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         controller.setNavSession(userId, response.messageId)
     }
 
+    suspend fun chain(vararg block: NewMessage.() -> Unit) {
+        block.forEach {
+            val builder = NewMessage(userId, 0)
+            it(builder)
+            builder.execute()
+        }
+    }
+
     suspend fun home() = controller.home(userId)
 
     suspend fun popUp(callbackId: String, block: PopUpMsg.() -> Unit) {
