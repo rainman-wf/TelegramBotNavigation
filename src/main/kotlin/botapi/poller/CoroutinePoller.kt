@@ -1,6 +1,6 @@
-package bot.poller
+package botapi.poller
 
-import bot.models.Update
+import botapi.models.Update
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +18,9 @@ class CoroutinePoller (
         return channelFlow {
             while (true) {
                 val data = try {
-                    api.getUpdates(lastUpdateId, 30)
+                    api.getUpdates(lastUpdateId, 90)
                 } catch (e: Exception) {
-                    println(e.message)
+                    println("${e::class.simpleName} : ${e.message}")
                     delay(1000)
                     continue
                 }

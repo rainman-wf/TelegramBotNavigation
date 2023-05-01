@@ -1,6 +1,19 @@
-package bot.models
+package botapi.models
 
 import com.google.gson.annotations.SerializedName as Name
+
+enum class ParseMode {
+    Markdown,
+    MarkdownV2,
+    HTML
+}
+
+data class BaseResponse<T>(
+    val result: T?,
+    val ok: Boolean,
+    @Name("error_code") val errorCode: Int? = null,
+    @Name("description") val errorDescription: String? = null
+)
 
 data class User(
     @Name("id") val id: Long,
@@ -48,11 +61,11 @@ data class Chat(
 )
 
 data class Message(
-    @Name("message_id") val messageId: Int,
-    @Name("message_thread_id") val messageThreadId: Int?,
+    @Name("message_id") val messageId: Long,
+    @Name("message_thread_id") val messageThreadId: Long?,
     @Name("from") val from: User,
     @Name("sender_chat") val senderChat: Chat?,
-    @Name("date") val date: Int,
+    @Name("date") val date: Long,
     @Name("chat") val chat: Chat,
     @Name("forward_from") val forwardFrom: User?,
     @Name("forward_from_chat") val forwardFromChat: Chat?,
@@ -122,7 +135,7 @@ data class Message(
 )
 
 data class MessageId(
-    @Name("message_id") val messageId: Int,
+    @Name("message_id") val messageId: Long,
 )
 
 data class MessageEntity(
@@ -340,6 +353,8 @@ data class WebAppInfo(
     @Name("url") val url: String,
 )
 
+interface ReplyMarkup
+
 data class ReplyKeyboardMarkup(
     @Name("keyboard") val keyboard: List<List<KeyboardButton>>,
     @Name("is_persistent") val isPersistent: Boolean?,
@@ -347,7 +362,7 @@ data class ReplyKeyboardMarkup(
     @Name("one_time_keyboard") val oneTimeKeyboard: Boolean?,
     @Name("input_field_placeholder") val inputFieldPlaceholder: String?,
     @Name("selective") val selective: Boolean?,
-)
+) : ReplyMarkup
 
 data class KeyboardButton(
     @Name("text") val text: String,
@@ -383,11 +398,11 @@ data class KeyboardButtonPollType(
 data class ReplyKeyboardRemove(
     @Name("remove_keyboard") val removeKeyboard: Boolean,
     @Name("selective") val selective: Boolean?,
-)
+) : ReplyMarkup
 
 data class InlineKeyboardMarkup(
     @Name("inline_keyboard") val inlineKeyboard: List<List<InlineKeyboardButton>>,
-)
+) : ReplyMarkup
 
 data class InlineKeyboardButton(
     @Name("text") val text: String,
@@ -422,7 +437,7 @@ data class ForceReply(
     @Name("force_reply") val forceReply: Boolean,
     @Name("input_field_placeholder") val inputFieldPlaceholder: String?,
     @Name("selective") val selective: Boolean?,
-)
+) : ReplyMarkup
 
 data class ChatPhoto(
     @Name("small_file_id") val smallFileId: String,
@@ -922,6 +937,13 @@ data class InlineQuery(
 
 sealed interface InlineQueryResult
 
+data class InlineQueryResultButton(
+    @Name("text") val text: String,
+    @Name("web_app") val webApp: WebAppInfo?,
+    @Name("start_parameter") val startParameter: String?
+)
+
+
 data class InlineQueryResultArticle(
     @Name("type") val type: String,
     @Name("id") val id: String,
@@ -1271,7 +1293,7 @@ data class SentWebAppMessage(
 
 data class Update(
     @Name("update_id") val updateId: Int,
-    @Name("message")val message: Message? = null,
+    @Name("message") val message: Message? = null,
     @Name("edited_message") val editedMessage: Message? = null,
     @Name("channel_post") val channelPost: Message? = null,
     @Name("edited_channel_post") val editedChannelPost: Message? = null,
@@ -1283,3 +1305,5 @@ data class Update(
     @Name("poll") val poll: Poll? = null,
     @Name("poll_answer") val pollAnswer: PollAnswer? = null
 )
+
+

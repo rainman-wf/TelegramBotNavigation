@@ -1,6 +1,6 @@
-package bot.poller
+package botapi.poller
 
-import bot.models.Update
+import botapi.models.Update
 
 data class PollingUpdatesResult(
     val ok: Boolean,

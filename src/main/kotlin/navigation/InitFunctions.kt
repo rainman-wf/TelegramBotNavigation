@@ -1,6 +1,6 @@
 package navigation
 
-import bot.models.Update
+import botapi.models.Update
 import navigation.frame.FrameFactory
 import navigation.frame.FrameKey
 import navigation.models.Request

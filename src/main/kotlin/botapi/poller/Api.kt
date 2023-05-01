@@ -1,4 +1,4 @@
-package bot.poller
+package botapi.poller
 
 import retrofit2.Response
 import retrofit2.http.GET

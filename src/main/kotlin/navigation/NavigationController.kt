@@ -7,7 +7,7 @@ import navigation.models.Response
 import navigation.models.UserId
 import navigation.models.UserState
 
-object NavigationController {
+internal object NavigationController {
 
     private val states = mutableMapOf<UserId, UserState>()
 

@@ -1,6 +1,6 @@
 package navigation.models
 
-import bot.models.*
+import botapi.models.*
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup
 import com.pengrad.telegrambot.model.request.ParseMode
@@ -10,7 +10,6 @@ import com.pengrad.telegrambot.request.EditMessageText
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.response.BaseResponse
 import com.pengrad.telegrambot.response.SendResponse
-import okhttp3.internal.EMPTY_RESPONSE
 
 fun NewMessage.toRequest(): RequestType<*> {
 
@@ -66,7 +65,7 @@ fun Update.toResponse(): Response {
             username = result.from.username,
             firstName = result.from.firstName,
             data = result.text ?: "",
-            messageId = result.messageId
+            messageId = result.messageId.toInt()
         )
         is CallbackQuery -> Response(
             userId = UserId(result.from.id),
