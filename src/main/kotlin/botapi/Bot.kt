@@ -177,6 +177,25 @@ class Bot(token: String) {
             replyMarkup = _builder.replyMarkup?.toJson(),
         )
     }
+
+    suspend fun answerCallbackQuery(
+        callbackQueryId: String,
+        text: String,
+        builder: AnswerCallbackQueryBuilder.() -> Unit = {}
+    ) = apiRequest {
+
+        val _builder = AnswerCallbackQueryBuilder()
+
+        builder(_builder)
+
+        inlineModeApi.answerCallbackQuery(
+            callbackQueryId = callbackQueryId,
+            text = text,
+            showAlert = _builder.showAlert,
+            url = _builder.url,
+            cacheTime = _builder.cacheTime,
+        )
+    }
 }
 
 

@@ -42,7 +42,7 @@ data class InlineKeyboardBuilder(
                 ButtonType.CALLBACK -> _builder.callbackData = data
                 ButtonType.URL -> _builder.url = data
                 ButtonType.INLINE_QUERY -> _builder.switchInlineQuery = data
-                ButtonType.INLINE_QUERY_CURRENT_CHAT -> _builder.switchInlineQuery = data
+                ButtonType.INLINE_QUERY_CURRENT_CHAT -> _builder.switchInlineQueryCurrentChat = data
                 ButtonType.PAY -> _builder.pay = true
             }
 

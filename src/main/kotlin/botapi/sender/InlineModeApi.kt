@@ -19,7 +19,7 @@ interface InlineModeApi {
     ): Response<BaseResponse<Boolean>>
 
     @FormUrlEncoded
-    @POST("answerInlineQuery")
+    @POST("answerCallbackQuery")
     suspend fun answerCallbackQuery(
         @Field("callback_query_id") callbackQueryId: String,
         @Field("text") text: String?,

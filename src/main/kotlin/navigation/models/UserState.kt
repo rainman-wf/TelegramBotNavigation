@@ -4,15 +4,15 @@ import navigation.frame.Frame
 import navigation.log
 import java.util.*
 
-data class UserState(
-    val userId: UserId,
+internal class UserState(
+    private val userId: UserId,
     private val frameStack: Deque<Frame> = LinkedList(),
-    private var _navSession: Int? = null,
+    private var _navSession: Long? = null,
 ) {
 
-    val navSession: Int?  get() = _navSession
+    val navSession: Long?  get() = _navSession
 
-    fun setSession(sessionId: Int) {
+    fun setSession(sessionId: Long) {
         _navSession = sessionId
     }
 

@@ -16,7 +16,7 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
     private var result: NavArg? = null
 
     internal companion object {
-        private lateinit var bot: Bot
+        lateinit var bot: Bot
 
         fun attachBot(bot: Bot) {
             this.bot = bot
@@ -39,29 +39,13 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     abstract suspend fun show()
 
+
     suspend fun text(block: NewMessage.() -> Unit) {
         val msgId = controller.getNavSession(userId)
-
         val builder = NewMessage(userId, msgId)
         block(builder)
-        val response = builder.execute() ?: return
-        controller.setNavSession(userId, response.messageId)
-    }
-
-    suspend fun text(block: NewMessage_.() -> Unit) {
-        val msgId = controller.getNavSession(userId)
-        val builder = NewMessage_(userId, msgId)
-        block(builder)
-        val response = if (msgId == null) {
-            bot.sendMessage(chatId = userId.value, text = builder.text) {
-                replyMarkup = builder.keyboard
-            }
-        } else {
-            bot.editMessageText(chatId = userId.value, messageId = msgId.toLong(), text = builder.text) {
-                replyMarkup = builder.keyboard
-            }
-        }
-        controller.setNavSession(userId, response.result?.messageId?.toInt())
+        val response = builder.execute()
+        controller.setNavSession(userId, response.result?.messageId)
     }
 
     suspend fun chain(vararg block: NewMessage.() -> Unit) {
@@ -73,12 +57,12 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
     }
 
 
-    inner class NewMessage_(val toUserId: UserId, val messageId: Int? = null) : RequestBuilder {
+    inner class NewMessage(val toUserId: UserId, private val messageId: Long? = null) : RequestBuilder {
         lateinit var text: String
         var keyboard: ReplyMarkup? = null
         var formatted: Boolean = false
 
-        fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) : InlineKeyboardMarkup {
+        fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>): InlineKeyboardMarkup {
             val buttons = adapter.map(list)
             val grouped = buttons.groupBy(columns).map { it.toList() }
             return InlineKeyboardMarkup(grouped)
@@ -89,7 +73,22 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
                 .groupBy { it.index / quantity }
                 .map { it.value.map { index -> index.value } }
         }
+
+        suspend fun execute() = if (messageId == null) {
+            bot.sendMessage(chatId = userId.value, text = text) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+            }
+        } else {
+            bot.editMessageText(chatId = userId.value, messageId = messageId, text = text) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+            }
+        }
     }
+
+
+
 
     interface GridAdapter<T> {
         fun map(data: List<T>): List<InlineKeyboardButton>
@@ -97,18 +96,18 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     suspend fun home() = controller.home(userId)
 
-    suspend fun popUp(callbackId: String, block: PopUpMsg.() -> Unit) {
-        val builder = PopUpMsg(callbackId, userId)
-        block(builder)
-        builder.execute()
+    suspend fun popUp(callbackId: String, text: String) {
+        bot.answerCallbackQuery(callbackId, text) {
+            this.showAlert = true
+        }
     }
 
-    open suspend fun handle(response: Response) {
-        response.messageId?.let { deleteInput(it) }
+    open suspend fun handle(navResponse: NavResponse) {
+        navResponse.messageId?.let { deleteInput(it) }
     }
 
-    private suspend fun deleteInput(messageId: Int) {
-        DeleteMessage(userId, messageId).execute()
+    private suspend fun deleteInput(messageId: Long) {
+        bot.deleteMessage(userId.value, messageId)
     }
 
     suspend fun <T : NavArg> navigateForResult(

@@ -5,7 +5,6 @@ import com.google.gson.Gson
 
 internal val gson = Gson()
 
-
 data class SendMessageBuilder(
     var messageThreadId: Long? = null,
     var parseMode: ParseMode? = null,
@@ -52,7 +51,6 @@ data class AnswerInlineQueryBuilder(
 }
 
 data class AnswerCallbackQueryBuilder(
-    var text: String? = null,
     var showAlert: Boolean? = null,
     var url: String? = null,
     var cacheTime: Int? = null,

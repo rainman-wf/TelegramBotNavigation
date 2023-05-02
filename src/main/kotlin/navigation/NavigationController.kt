@@ -3,7 +3,7 @@ package navigation
 import navigation.args.ArgName
 import navigation.args.NavArg
 import navigation.frame.*
-import navigation.models.Response
+import navigation.models.NavResponse
 import navigation.models.UserId
 import navigation.models.UserState
 
@@ -23,14 +23,14 @@ internal object NavigationController {
         )
     }
 
-    suspend fun updateHandler(response: Response) {
-        if (!createState(response)) return
-        if (response.data == (homeKey.type as Home).command) home(response.userId)
-        roots[response.data]?.let {
-            val frame = frameFactory.create(response.userId, it, null)
-            states[response.userId]!!.resetToRoot(frame).show()
+    suspend fun updateHandler(navResponse: NavResponse) {
+        if (!createState(navResponse)) return
+        if (navResponse.data == (homeKey.type as Home).command) home(navResponse.userId)
+        roots[navResponse.data]?.let {
+            val frame = frameFactory.create(navResponse.userId, it, null)
+            states[navResponse.userId]!!.resetToRoot(frame).show()
         }
-        states[response.userId]?.last?.handle(response)
+        states[navResponse.userId]?.last?.handle(navResponse)
     }
 
     suspend fun navigate(userId: UserId, key: FrameKey, args: Array<out Pair<ArgName, NavArg>>? = null) {
@@ -72,16 +72,16 @@ internal object NavigationController {
      * Support functions
      */
 
-    private suspend fun createState(response: Response) : Boolean {
-        return if (!states.containsKey(response.userId)) {
-            val state = UserState(response.userId).addLast(frameFactory.create(response.userId, homeKey, null))
-            states[response.userId] = state
-            state.last.handle(response)
+    private suspend fun createState(navResponse: NavResponse) : Boolean {
+        return if (!states.containsKey(navResponse.userId)) {
+            val state = UserState(navResponse.userId).addLast(frameFactory.create(navResponse.userId, homeKey, null))
+            states[navResponse.userId] = state
+            state.last.handle(navResponse)
             false
         } else true
     }
 
-    fun setNavSession(userId: UserId, sessionId: Int?) {
+    fun setNavSession(userId: UserId, sessionId: Long?) {
         states[userId]?.let { user ->
             sessionId?.let { id ->
                 user.setSession(id)
