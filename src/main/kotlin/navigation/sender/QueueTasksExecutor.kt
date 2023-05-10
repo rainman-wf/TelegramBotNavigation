@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-internal class QueueTasksExecutor<T, R>(private val delay: Long? = null, private val block: suspend (T) -> R) {
+class QueueTasksExecutor<T, R>(private val delay: Long? = null, private val block: suspend (T) -> R) {
 
     private val que: Deque<Pair<T, Callback<R>>> = LinkedList()
 

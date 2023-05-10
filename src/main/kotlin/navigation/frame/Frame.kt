@@ -39,7 +39,6 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     abstract suspend fun show()
 
-
     suspend fun text(block: NewMessage.() -> Unit) {
         val msgId = controller.getNavSession(userId)
         val builder = NewMessage(userId, msgId)
@@ -56,6 +55,9 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         }
     }
 
+    suspend fun repeat() {
+        controller.repeat(userId)
+    }
 
     inner class NewMessage(val toUserId: UserId, private val messageId: Long? = null) : RequestBuilder {
         lateinit var text: String

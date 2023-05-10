@@ -12,7 +12,8 @@ data class BaseResponse<T>(
     val result: T?,
     val ok: Boolean,
     @Name("error_code") val errorCode: Int? = null,
-    @Name("description") val errorDescription: String? = null
+    @Name("description") val errorDescription: String? = null,
+    val parameters: ResponseParameters? = null,
 )
 
 data class User(

@@ -91,5 +91,10 @@ internal object NavigationController {
 
     fun getNavSession(userId: UserId) = states[userId]?.navSession
 
+    suspend fun repeat(userId: UserId) {
+        setNavSession(userId, null)
+        update(userId)
+    }
+
 }
 

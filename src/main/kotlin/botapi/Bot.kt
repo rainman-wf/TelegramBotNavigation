@@ -196,6 +196,61 @@ class Bot(token: String) {
             cacheTime = _builder.cacheTime,
         )
     }
+
+    suspend fun copyMessage(
+        chatId: Any,
+        fromChatId: Any,
+        messageId: Long, builder: CopyMessageBuilder.() -> Unit = {}
+    ) = apiRequest {
+
+        val _builder = CopyMessageBuilder()
+
+        builder(_builder)
+
+        requestSenderApi.copyMessage(
+            chatId = chatId,
+            fromChatId = fromChatId,
+            messageId = messageId,
+            messageThreadId = _builder.messageThreadId,
+            caption = _builder.caption,
+            parseMode = _builder.parseMode?.name,
+            captionEntities = _builder.captionEntities?.toJson(),
+            disableNotification = _builder.disableNotification,
+            protectContent = _builder.protectContent,
+            replyToMessageId = _builder.replyToMessageId,
+            allowSendingWithoutReply = _builder.allowSendingWithoutReply,
+            replyMarkup = _builder.replyMarkup?.toJson(),
+        )
+    }
+
+    suspend fun sendDocument(chatId: Long, document: File, builder: SendDocumentBuilder.() -> Unit = {}) = apiRequest {
+
+        val _builder = SendDocumentBuilder()
+
+        builder(_builder)
+
+        val _document = MultipartBody.Part.createFormData(
+            "document", document.name, document.asRequestBody(
+                "multipart/form-data".toMediaType()
+            )
+        )
+
+        requestSenderApi.sendDocument(
+            chatId = chatId,
+            document = _document,
+            messageThreadId = _builder.messageThreadId,
+            thumbnail = _builder.thumbnail?.toRequestBody(),
+            caption = _builder.caption?.toRequestBody(),
+            parseMode = _builder.parseMode?.name?.toRequestBody(),
+            captionEntities = _builder.captionEntities?.toJson()?.toRequestBody(),
+            disableContentTypeDetection = _builder.disableContentTypeDetection,
+            disableNotification = _builder.disableNotification,
+            protectContent = _builder.protectContent,
+            replyToMessageId = _builder.replyToMessageId,
+            allowSendingWithoutReply = _builder.allowSendingWithoutReply,
+            replyMarkup = _builder.replyMarkup?.toJson()?.toRequestBody(),
+        )
+    }
 }
 
 

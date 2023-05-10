@@ -27,6 +27,7 @@ import botapi.common.THUMBNAIL
 import botapi.common.TITLE
 import botapi.models.BaseResponse
 import botapi.models.Message
+import botapi.models.MessageId
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -69,7 +70,7 @@ internal interface SendMsgApi {
 
     @FormUrlEncoded
     @POST("copyMessage")
-    fun copyMessage(
+    suspend fun copyMessage(
         @Field(CHAT_ID) chatId: Any,
         @Field(FROM_CHAT_ID) fromChatId: Any,
         @Field(MESSAGE_ID) messageId: Long,
@@ -82,7 +83,7 @@ internal interface SendMsgApi {
         @Field(REPLY_TO_MESSAGE_ID) replyToMessageId: Long?,
         @Field(ALLOW_SENDING_WITHOUT_REPLY) allowSendingWithoutReply: Boolean?,
         @Field(REPLY_MARKUP) replyMarkup: String?
-    ): Response<BaseResponse<Message>>
+    ): Response<BaseResponse<MessageId>>
 
 
     @Multipart
@@ -203,7 +204,7 @@ internal interface SendMsgApi {
 
     @Multipart
     @POST("sendDocument")
-    fun sendDocument(
+    suspend fun sendDocument(
         @Part(CHAT_ID) chatId: Any,
         @Part(MESSAGE_THREAD_ID) messageThreadId: Long?,
         @Part document: MultipartBody.Part,
@@ -221,7 +222,7 @@ internal interface SendMsgApi {
 
     @Multipart
     @POST("sendDocument")
-    fun sendDocument(
+    suspend fun sendDocument(
         @Part(CHAT_ID) chatId: Any,
         @Part(MESSAGE_THREAD_ID) messageThreadId: Long?,
         @Part document: MultipartBody.Part,
@@ -239,7 +240,7 @@ internal interface SendMsgApi {
 
     @Multipart
     @POST("sendDocument")
-    fun sendDocument(
+    suspend fun sendDocument(
         @Part(CHAT_ID) chatId: Any,
         @Part(MESSAGE_THREAD_ID) messageThreadId: Long?,
         @Part(DOCUMENT) document: RequestBody,
@@ -257,7 +258,7 @@ internal interface SendMsgApi {
 
     @FormUrlEncoded
     @POST("sendDocument")
-    fun sendDocument(
+    suspend fun sendDocument(
         @Field(CHAT_ID) chatId: Any,
         @Field(MESSAGE_THREAD_ID) messageThreadId: Long?,
         @Field(DOCUMENT) document: String,
