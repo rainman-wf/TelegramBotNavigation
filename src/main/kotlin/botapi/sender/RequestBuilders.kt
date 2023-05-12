@@ -1,21 +1,7 @@
 package botapi.sender
 
-import botapi.common.*
-import botapi.common.ALLOW_SENDING_WITHOUT_REPLY
-import botapi.common.CAPTION
-import botapi.common.CAPTION_ENTITIES
-import botapi.common.DISABLE_NOTIFICATION
-import botapi.common.MESSAGE_THREAD_ID
-import botapi.common.PARSE_MODE
-import botapi.common.PROTECT_CONTENT
-import botapi.common.REPLY_MARKUP
-import botapi.common.REPLY_TO_MESSAGE_ID
 import botapi.models.*
 import com.google.gson.Gson
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.http.Field
-import retrofit2.http.Part
 
 internal val gson = Gson()
 
@@ -47,7 +33,7 @@ data class SendPhotoBuilder(
 
 data class SendDocumentBuilder(
     var messageThreadId: Long? = null,
-    var thumbnail: String? = null,
+    var thumbnail: Any? = null,
     var caption: String? = null,
     var parseMode: ParseMode? = null,
     var captionEntities: List<MessageEntity>? = null,

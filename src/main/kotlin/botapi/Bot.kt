@@ -113,6 +113,28 @@ class Bot(token: String) {
         )
     }
 
+    suspend fun sendPhoto(chatId: Long, photo: String, builder: SendPhotoBuilder.() -> Unit = {}) = apiRequest {
+
+        val _builder = SendPhotoBuilder()
+
+        builder(_builder)
+
+        sender.sendPhoto(
+            chatId = chatId,
+            photo = photo,
+            messageThreadId = _builder.messageThreadId,
+            caption = _builder.caption,
+            parseMode = _builder.parseMode?.name,
+            captionEntities = _builder.captionEntities.toJson(),
+            hasSpoiler = _builder.hasSpoiler,
+            disableNotification = _builder.disableNotification,
+            protectContent = _builder.protectContent,
+            replyToMessageId = _builder.replyToMessageId,
+            allowSendingWithoutReply = _builder.allowSendingWithoutReply,
+            replyMarkup = _builder.replyMarkup?.toJson()
+        )
+    }
+
     suspend fun editMessageReplyMarkup(
         chatId: Long,
         messageId: Long,
@@ -239,7 +261,7 @@ class Bot(token: String) {
             chatId = chatId,
             document = _document,
             messageThreadId = _builder.messageThreadId,
-            thumbnail = _builder.thumbnail?.toRequestBody(),
+            thumbnail = _builder.thumbnail?.let { (it as String).toRequestBody() },
             caption = _builder.caption?.toRequestBody(),
             parseMode = _builder.parseMode?.name?.toRequestBody(),
             captionEntities = _builder.captionEntities?.toJson()?.toRequestBody(),
@@ -249,6 +271,29 @@ class Bot(token: String) {
             replyToMessageId = _builder.replyToMessageId,
             allowSendingWithoutReply = _builder.allowSendingWithoutReply,
             replyMarkup = _builder.replyMarkup?.toJson()?.toRequestBody(),
+        )
+    }
+
+    suspend fun sendDocument(chatId: Long, document: String, builder: SendDocumentBuilder.() -> Unit = {}) = apiRequest {
+
+        val _builder = SendDocumentBuilder()
+
+        builder(_builder)
+
+        requestSenderApi.sendDocument(
+            chatId = chatId,
+            document = document,
+            messageThreadId = _builder.messageThreadId,
+            thumbnail = _builder.thumbnail?.let { it as String } ,
+            caption = _builder.caption,
+            parseMode = _builder.parseMode?.name,
+            captionEntities = _builder.captionEntities?.toJson(),
+            disableContentTypeDetection = _builder.disableContentTypeDetection,
+            disableNotification = _builder.disableNotification,
+            protectContent = _builder.protectContent,
+            replyToMessageId = _builder.replyToMessageId,
+            allowSendingWithoutReply = _builder.allowSendingWithoutReply,
+            replyMarkup = _builder.replyMarkup?.toJson(),
         )
     }
 }

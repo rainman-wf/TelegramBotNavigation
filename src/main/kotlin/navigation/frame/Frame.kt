@@ -7,13 +7,17 @@ import navigation.NavigationController
 import navigation.args.ArgName
 import navigation.args.ArgsContainer
 import navigation.args.NavArg
+import navigation.log
 import navigation.models.*
+import java.io.File
 
 abstract class Frame(private val userId: UserId, private val args: ArgsContainer? = null) {
 
     internal val controller = NavigationController
 
     private var result: NavArg? = null
+
+    internal var chainMode: Boolean = false
 
     internal companion object {
         lateinit var bot: Bot
@@ -39,42 +43,44 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
 
     abstract suspend fun show()
 
-    suspend fun text(block: NewMessage.() -> Unit) {
+    suspend fun text(block: Message.() -> Unit) {
         val msgId = controller.getNavSession(userId)
-        val builder = NewMessage(userId, msgId)
+        val builder = Message(msgId)
         block(builder)
         val response = builder.execute()
-        controller.setNavSession(userId, response.result?.messageId)
+        setNavSession(response.result?.messageId)
     }
 
-    suspend fun chain(vararg block: NewMessage.() -> Unit) {
-        block.forEach {
-            val builder = NewMessage(userId, null)
-            it(builder)
-            builder.execute()
-        }
+    suspend fun photo(block: Photo.() -> Unit) {
+        val msgId = controller.getNavSession(userId)
+        val builder = Photo(msgId)
+        block(builder)
+        val response = builder.execute()
+        setNavSession(response.result?.messageId)
+    }
+
+    suspend fun file(block: Document.() -> Unit) {
+        val msgId = controller.getNavSession(userId)
+        val builder = Document(msgId)
+        block(builder)
+        val response = builder.execute()
+        log(response)
+        setNavSession(response.result?.messageId)
+    }
+
+    internal fun setNavSession(messageId: Long?) {
+        val msgId = if (chainMode) null else messageId
+        controller.setNavSession(userId, msgId)
     }
 
     suspend fun repeat() {
         controller.repeat(userId)
     }
 
-    inner class NewMessage(val toUserId: UserId, private val messageId: Long? = null) : RequestBuilder {
+    inner class Message(private val messageId: Long? = null) : RequestBuilder {
         lateinit var text: String
         var keyboard: ReplyMarkup? = null
         var formatted: Boolean = false
-
-        fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>): InlineKeyboardMarkup {
-            val buttons = adapter.map(list)
-            val grouped = buttons.groupBy(columns).map { it.toList() }
-            return InlineKeyboardMarkup(grouped)
-        }
-
-        private fun <T> Collection<T>.groupBy(quantity: Int): Collection<Collection<T>> {
-            return withIndex()
-                .groupBy { it.index / quantity }
-                .map { it.value.map { index -> index.value } }
-        }
 
         suspend fun execute() = if (messageId == null) {
             bot.sendMessage(chatId = userId.value, text = text) {
@@ -89,8 +95,69 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         }
     }
 
+    inner class Photo(private val messageId: Long? = null) : RequestBuilder {
+        lateinit var photo: Any
+        var keyboard: ReplyMarkup? = null
+        var formatted: Boolean = false
+        var text: String? = null
 
+        suspend fun execute() = when (photo) {
+            is File -> bot.sendPhoto(
+                userId.value,
+                photo as File
+            ) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+                caption = text
+            }
 
+            is String -> bot.sendPhoto(
+                userId.value,
+                photo as String
+            ) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+                caption = text
+            }
+
+            else -> throw IllegalArgumentException("photo must be File or string (id / url)")
+        }
+    }
+
+    inner class Document(private val messageId: Long? = null) : RequestBuilder {
+        lateinit var document: Any
+        var keyboard: ReplyMarkup? = null
+        var formatted: Boolean = false
+        var text: String? = null
+
+        suspend fun execute() = when (document) {
+            is File -> bot.sendDocument(
+                userId.value,
+                document as File
+            ) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+                caption = text
+            }
+
+            is String -> bot.sendDocument(
+                userId.value,
+                document as String
+            ) {
+                if (formatted) parseMode = ParseMode.MarkdownV2
+                replyMarkup = keyboard
+                caption = text
+            }
+
+            else -> throw IllegalArgumentException("document must be File or string (id / url)")
+        }
+    }
+
+    suspend fun chain(body: suspend () -> Unit) {
+        chainMode = true
+        body()
+        chainMode = false
+    }
 
     interface GridAdapter<T> {
         fun map(data: List<T>): List<InlineKeyboardButton>
@@ -119,6 +186,8 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
         controller.navigate(userId, key, args)
     }
 
+
+
     suspend fun update() {
         controller.update(userId)
     }
@@ -129,6 +198,12 @@ abstract class Frame(private val userId: UserId, private val args: ArgsContainer
     }
 
     suspend fun navigate(key: FrameKey, vararg args: Pair<ArgName, NavArg>) = controller.navigate(userId, key, args)
+
+    suspend fun navigateWithReset (key: FrameKey, vararg args: Pair<ArgName, NavArg>) {
+        setNavSession(null)
+        controller.navigate(userId, key, args)
+    }
+
     suspend fun back() = controller.back(userId)
 
     override fun toString(): String = this::class.simpleName.toString()

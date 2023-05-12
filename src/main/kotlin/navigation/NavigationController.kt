@@ -47,6 +47,8 @@ internal object NavigationController {
         }
     }
 
+
+
     suspend fun update(userId: UserId) {
         log("update")
         states[userId]!!.last.show()
