@@ -1,4 +1,4 @@
-package botapi.sender
+package botapi.sender.api
 
 import botapi.*
 import botapi.common.CAPTION

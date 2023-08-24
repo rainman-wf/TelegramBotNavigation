@@ -1,25 +1,37 @@
-package botapi.sender
+package navigation.frame
 
 import botapi.common.ButtonType
-import botapi.models.CallbackGame
-import botapi.models.InlineKeyboardButton
-import botapi.models.LoginUrl
-import botapi.models.WebAppInfo
+import botapi.models.*
 
-data class InlineKeyboardBuilder(
-    val rows: MutableList<List<InlineKeyboardButton>> = mutableListOf()
-) {
-    fun addRow(rowBuilder: RowBuilder.() -> Unit) {
+class NavKeyboardBuilder {
+
+    private val rows: MutableList<List<InlineKeyboardButton>> = mutableListOf()
+
+    internal fun build() = InlineKeyboardMarkup(rows)
+
+    fun row(rowBuilder: RowBuilder.() -> Unit) {
         val builder = RowBuilder()
         rowBuilder(builder)
-        rows.add(builder.buttons)
+        rows.add(builder.build())
     }
 
-    inner class RowBuilder(
-        internal val buttons: MutableList<InlineKeyboardButton> = mutableListOf()
-    ) {
+    fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) {
+        val buttons = adapter.map(list)
+        val grouped = buttons.groupBy(columns).map { it.toList() }
+        rows.addAll(grouped)
+    }
 
-        private inner class InlineButtonBuilder(
+    private fun <T> Collection<T>.groupBy(quantity: Int): Collection<Collection<T>> {
+        return withIndex()
+            .groupBy { it.index / quantity }
+            .map { it.value.map { index -> index.value } }
+    }
+
+    inner class RowBuilder {
+
+        private val buttons: MutableList<InlineKeyboardButton> = mutableListOf()
+
+        inner class InlineButtonBuilder(
             var url: String? = null,
             var callbackData: String? = null,
             var webApp: WebAppInfo? = null,
@@ -29,6 +41,8 @@ data class InlineKeyboardBuilder(
             var callbackGame: CallbackGame? = null,
             var pay: Boolean? = null,
         )
+
+        fun build() = buttons
 
         fun button(
             text: String,

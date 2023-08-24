@@ -1,3 +1,0 @@
-package navigation.dataprovider
-
-interface DataProvider

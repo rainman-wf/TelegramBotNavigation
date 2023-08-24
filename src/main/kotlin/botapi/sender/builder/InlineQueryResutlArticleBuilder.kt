@@ -1,11 +1,13 @@
-package botapi.sender
+package botapi.sender.builder
 
 import botapi.models.*
 
 
-data class InlineQueryResultsBuilder(
-    val results: MutableList<InlineQueryResult> = mutableListOf()
-) {
+class InlineQueryResultsBuilder{
+
+    private val results: MutableList<InlineQueryResult> = mutableListOf()
+
+    fun build() = results
 
     fun article(id: String, title: String, builder: InlineQueryResultArticleBuilder.() -> Unit) {
         val _builder = InlineQueryResultArticleBuilder()
@@ -45,7 +47,7 @@ data class InlineQueryResultArticleBuilder(
     var thumbUrl: String? = null,
     var thumbWidth: Int? = null,
     var thumbHeight: Int? = null,
-) : RequestBuilder {
+) {
 
     fun setUrl(url: String, hideUrl: Boolean? = null) {
         this.url = url

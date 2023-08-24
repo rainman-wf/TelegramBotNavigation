@@ -20,8 +20,8 @@ class CoroutinePoller (
                 val data = try {
                     api.getUpdates(lastUpdateId, 90)
                 } catch (e: Exception) {
-                    println("${e::class.simpleName} : ${e.message}")
-                    delay(1000)
+                    println("Update polling error : ${e::class.simpleName} : ${e.message}")
+                    delay(5000)
                     continue
                 }
                 val body = data.body() ?: PollingUpdatesResult(false, listOf())

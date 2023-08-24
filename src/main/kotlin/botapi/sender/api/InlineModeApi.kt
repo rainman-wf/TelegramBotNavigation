@@ -1,4 +1,4 @@
-package botapi.sender
+package botapi.sender.api
 
 import botapi.models.BaseResponse
 import retrofit2.Response

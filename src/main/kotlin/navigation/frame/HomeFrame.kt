@@ -1,13 +1,17 @@
 package navigation.frame
 
-import navigation.models.UserId
+import botapi.sender.deleteMessage
 
-abstract class HomeFrame(private val userId: UserId) : Frame(userId) {
+
+abstract class HomeFrame : Frame() {
 
     final override suspend fun show() {
         val sessionId = controller.getNavSession(userId) ?: return
-        bot.deleteMessage(userId.value, sessionId)
+        bot.deleteMessage(userId, sessionId)
         controller.setNavSession(userId, null)
     }
-
 }
+
+abstract class RootFrame : Frame()
+
+abstract class FinalFrame : Frame()

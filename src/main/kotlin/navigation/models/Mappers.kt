@@ -5,9 +5,11 @@ import botapi.models.*
 internal fun Update.toResponse(): NavResponse {
     return when (val result =
         message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: error("unhandled update type")) {
+
         is Message -> result.toResponse()
+
         is CallbackQuery -> NavResponse(
-            userId = UserId(result.from.id),
+            userId = result.from.id,
             username = result.from.username,
             firstName = result.from.firstName,
             data = result.data ?: error("data is null"),
@@ -15,7 +17,7 @@ internal fun Update.toResponse(): NavResponse {
         )
 
         is InlineQuery -> NavResponse(
-            userId = UserId(result.from.id),
+            userId = result.from.id,
             username = result.from.username,
             firstName = result.from.firstName,
             data = result.query,
@@ -23,7 +25,7 @@ internal fun Update.toResponse(): NavResponse {
         )
 
         is ChosenInlineResult -> NavResponse(
-            userId = UserId(result.from.id),
+            userId = result.from.id,
             username = result.from.username,
             firstName = result.from.firstName,
             data = result.query,
@@ -36,7 +38,7 @@ internal fun Update.toResponse(): NavResponse {
 
 internal fun Message.toResponse() =
     NavResponse(
-        userId = UserId(from.id),
+        userId = from.id,
         username = from.username,
         firstName = from.firstName,
         data = text ?: "",
@@ -52,8 +54,11 @@ internal fun String.toMarkdown(): String {
         .replace(".", "\\.")
         .replace("!", "\\!")
         .replace("-", "\\-")
-        .replace("~\\(", "(")
-        .replace("~\\)", ")")
+        .replace("~(", "\\(")
+        .replace("~)", "\\)")
+        .replace("~[", "\\[")
+        .replace("~]", "\\]")
+        .replace("~_", "\\_")
         .replace("|", "\\|")
         .replace("=", "\\=")
         .replace("+", "\\+")

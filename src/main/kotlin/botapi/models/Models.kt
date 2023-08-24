@@ -9,130 +9,135 @@ enum class ParseMode {
 }
 
 data class BaseResponse<T>(
-    val result: T?,
+    val result: T? = null,
     val ok: Boolean,
     @Name("error_code") val errorCode: Int? = null,
     @Name("description") val errorDescription: String? = null,
     val parameters: ResponseParameters? = null,
 )
 
+data class ResponseParameters(
+    @Name("migrate_to_chat_id") val migrateToChatId: Int? = null,
+    @Name("retry_after") val retryAfter: Int? = null,
+)
+
 data class User(
     @Name("id") val id: Long,
     @Name("is_bot") val isBot: Boolean,
     @Name("first_name") val firstName: String,
-    @Name("last_name") val lastName: String?,
-    @Name("username") val username: String?,
-    @Name("language_code") val languageCode: String?,
-    @Name("is_premium") val isPremium: Boolean?,
-    @Name("added_to_attachment_menu") val addedToAttachmentMenu: Boolean?,
-    @Name("can_join_groups") val canJoinGroups: Boolean?,
-    @Name("can_read_all_group_messages") val canReadAllGroupMessages: Boolean?,
-    @Name("supports_inline_queries") val supportsInlineQueries: Boolean?,
+    @Name("last_name") val lastName: String? = null,
+    @Name("username") val username: String? = null,
+    @Name("language_code") val languageCode: String? = null,
+    @Name("is_premium") val isPremium: Boolean? = null,
+    @Name("added_to_attachment_menu") val addedToAttachmentMenu: Boolean? = null,
+    @Name("can_join_groups") val canJoinGroups: Boolean? = null,
+    @Name("can_read_all_group_messages") val canReadAllGroupMessages: Boolean? = null,
+    @Name("supports_inline_queries") val supportsInlineQueries: Boolean? = null,
 )
 
 data class Chat(
     @Name("id") val id: Long,
     @Name("type") val type: String,
-    @Name("title") val title: String?,
-    @Name("username") val username: String?,
-    @Name("first_name") val firstName: String?,
-    @Name("last_name") val lastName: String?,
-    @Name("is_forum") val isForum: Boolean?,
-    @Name("photo") val photo: ChatPhoto?,
-    @Name("active_usernames") val activeUsernames: List<String>?,
-    @Name("emoji_status_custom_emoji_id") val emojiStatusCustomEmojiId: String?,
-    @Name("bio") val bio: String?,
-    @Name("has_private_forwards") val hasPrivateForwards: Boolean?,
-    @Name("has_restricted_voice_and_video_messages") val hasRestrictedVoiceAndVideoMessages: Boolean?,
-    @Name("join_to_send_messages") val joinToSendMessages: Boolean?,
-    @Name("join_by_request") val joinByRequest: Boolean?,
-    @Name("description") val description: String?,
-    @Name("invite_link") val inviteLink: String?,
-    @Name("pinned_message") val pinnedMessage: Message?,
-    @Name("permissions") val permissions: ChatPermissions?,
-    @Name("slow_mode_delay") val slowModeDelay: Int?,
-    @Name("message_auto_delete_time") val messageAutoDeleteTime: Int?,
-    @Name("has_aggressive_anti_spam_enabled") val hasAggressiveAntiSpamEnabled: Boolean?,
-    @Name("has_hidden_members") val hasHiddenMembers: Boolean?,
-    @Name("has_protected_content") val hasProtectedContent: Boolean?,
-    @Name("sticker_set_name") val stickerSetName: String?,
-    @Name("can_set_sticker_set") val canSetStickerSet: Boolean?,
-    @Name("linked_chat_id") val linkedChatId: Int?,
-    @Name("location") val location: ChatLocation?,
+    @Name("title") val title: String? = null,
+    @Name("username") val username: String? = null,
+    @Name("first_name") val firstName: String? = null,
+    @Name("last_name") val lastName: String? = null,
+    @Name("is_forum") val isForum: Boolean? = null,
+    @Name("photo") val photo: ChatPhoto? = null,
+    @Name("active_usernames") val activeUsernames: List<String>? = null,
+    @Name("emoji_status_custom_emoji_id") val emojiStatusCustomEmojiId: String? = null,
+    @Name("bio") val bio: String? = null,
+    @Name("has_private_forwards") val hasPrivateForwards: Boolean? = null,
+    @Name("has_restricted_voice_and_video_messages") val hasRestrictedVoiceAndVideoMessages: Boolean? = null,
+    @Name("join_to_send_messages") val joinToSendMessages: Boolean? = null,
+    @Name("join_by_request") val joinByRequest: Boolean? = null,
+    @Name("description") val description: String? = null,
+    @Name("invite_link") val inviteLink: String? = null,
+    @Name("pinned_message") val pinnedMessage: Message? = null,
+    @Name("permissions") val permissions: ChatPermissions? = null,
+    @Name("slow_mode_delay") val slowModeDelay: Int? = null,
+    @Name("message_auto_delete_time") val messageAutoDeleteTime: Int? = null,
+    @Name("has_aggressive_anti_spam_enabled") val hasAggressiveAntiSpamEnabled: Boolean? = null,
+    @Name("has_hidden_members") val hasHiddenMembers: Boolean? = null,
+    @Name("has_protected_content") val hasProtectedContent: Boolean? = null,
+    @Name("sticker_set_name") val stickerSetName: String? = null,
+    @Name("can_set_sticker_set") val canSetStickerSet: Boolean? = null,
+    @Name("linked_chat_id") val linkedChatId: Int? = null,
+    @Name("location") val location: ChatLocation? = null,
 )
 
 data class Message(
     @Name("message_id") val messageId: Long,
-    @Name("message_thread_id") val messageThreadId: Long?,
+    @Name("message_thread_id") val messageThreadId: Long? = null,
     @Name("from") val from: User,
-    @Name("sender_chat") val senderChat: Chat?,
+    @Name("sender_chat") val senderChat: Chat? = null,
     @Name("date") val date: Long,
     @Name("chat") val chat: Chat,
-    @Name("forward_from") val forwardFrom: User?,
-    @Name("forward_from_chat") val forwardFromChat: Chat?,
-    @Name("forward_from_message_id") val forwardFromMessageId: Int?,
-    @Name("forward_signature") val forwardSignature: String?,
-    @Name("forward_sender_name") val forwardSenderName: String?,
-    @Name("forward_date") val forwardDate: Int?,
-    @Name("is_topic_message") val isTopicMessage: Boolean?,
-    @Name("is_automatic_forward") val isAutomaticForward: Boolean?,
-    @Name("reply_to_message") val replyToMessage: Message?,
-    @Name("via_bot") val viaBot: User?,
-    @Name("edit_date") val editDate: Int?,
-    @Name("has_protected_content") val hasProtectedContent: Boolean?,
-    @Name("media_group_id") val mediaGroupId: String?,
-    @Name("author_signature") val authorSignature: String?,
-    @Name("text") val text: String?,
-    @Name("entities") val entities: List<MessageEntity>?,
-    @Name("animation") val animation: Animation?,
-    @Name("audio") val audio: Audio?,
-    @Name("document") val document: Document?,
-    @Name("photo") val photo: List<PhotoSize>?,
-    @Name("sticker") val sticker: Sticker?,
-    @Name("video") val video: Video?,
-    @Name("video_note") val videoNote: VideoNote?,
-    @Name("voice") val voice: Voice?,
-    @Name("caption") val caption: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("has_media_spoiler") val hasMediaSpoiler: Boolean?,
-    @Name("contact") val contact: Contact?,
-    @Name("dice") val dice: Dice?,
-    @Name("game") val game: Game?,
-    @Name("poll") val poll: Poll?,
-    @Name("venue") val venue: Venue?,
-    @Name("location") val location: Location?,
-    @Name("new_chat_members") val newChatMembers: List<User>?,
-    @Name("left_chat_member") val leftChatMember: User?,
-    @Name("new_chat_title") val newChatTitle: String?,
-    @Name("new_chat_photo") val newChatPhoto: List<PhotoSize>?,
-    @Name("delete_chat_photo") val deleteChatPhoto: Boolean?,
-    @Name("group_chat_created") val groupChatCreated: Boolean?,
-    @Name("supergroup_chat_created") val supergroupChatCreated: Boolean?,
-    @Name("channel_chat_created") val channelChatCreated: Boolean?,
-    @Name("message_auto_delete_timer_changed") val messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged?,
-    @Name("migrate_to_chat_id") val migrateToChatId: Int?,
-    @Name("migrate_from_chat_id") val migrateFromChatId: Int?,
-    @Name("pinned_message") val pinnedMessage: Message?,
-    @Name("invoice") val invoice: Invoice?,
-    @Name("successful_payment") val successfulPayment: SuccessfulPayment?,
-    @Name("user_shared") val userShared: UserShared?,
-    @Name("chat_shared") val chatShared: ChatShared?,
-    @Name("connected_website") val connectedWebsite: String?,
-    @Name("write_access_allowed") val writeAccessAllowed: WriteAccessAllowed?,
-    @Name("passport_data") val passportData: PassportData?,
-    @Name("proximity_alert_triggered") val proximityAlertTriggered: ProximityAlertTriggered?,
-    @Name("forum_topic_created") val forumTopicCreated: ForumTopicCreated?,
-    @Name("forum_topic_edited") val forumTopicEdited: ForumTopicEdited?,
-    @Name("forum_topic_closed") val forumTopicClosed: ForumTopicClosed?,
-    @Name("forum_topic_reopened") val forumTopicReopened: ForumTopicReopened?,
-    @Name("general_forum_topic_hidden") val generalForumTopicHidden: GeneralForumTopicHidden?,
-    @Name("general_forum_topic_unhidden") val generalForumTopicUnhidden: GeneralForumTopicUnhidden?,
-    @Name("video_chat_scheduled") val videoChatScheduled: VideoChatScheduled?,
-    @Name("video_chat_started") val videoChatStarted: VideoChatStarted?,
-    @Name("video_chat_ended") val videoChatEnded: VideoChatEnded?,
-    @Name("video_chat_participants_invited") val videoChatParticipantsInvited: VideoChatParticipantsInvited?,
-    @Name("web_app_data") val webAppData: WebAppData?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
+    @Name("forward_from") val forwardFrom: User? = null,
+    @Name("forward_from_chat") val forwardFromChat: Chat? = null,
+    @Name("forward_from_message_id") val forwardFromMessageId: Int? = null,
+    @Name("forward_signature") val forwardSignature: String? = null,
+    @Name("forward_sender_name") val forwardSenderName: String? = null,
+    @Name("forward_date") val forwardDate: Int? = null,
+    @Name("is_topic_message") val isTopicMessage: Boolean? = null,
+    @Name("is_automatic_forward") val isAutomaticForward: Boolean? = null,
+    @Name("reply_to_message") val replyToMessage: Message? = null,
+    @Name("via_bot") val viaBot: User? = null,
+    @Name("edit_date") val editDate: Int? = null,
+    @Name("has_protected_content") val hasProtectedContent: Boolean? = null,
+    @Name("media_group_id") val mediaGroupId: String? = null,
+    @Name("author_signature") val authorSignature: String? = null,
+    @Name("text") val text: String? = null,
+    @Name("entities") val entities: List<MessageEntity>? = null,
+    @Name("animation") val animation: Animation? = null,
+    @Name("audio") val audio: Audio? = null,
+    @Name("document") val document: Document? = null,
+    @Name("photo") val photo: List<PhotoSize>? = null,
+    @Name("sticker") val sticker: Sticker? = null,
+    @Name("video") val video: Video? = null,
+    @Name("video_note") val videoNote: VideoNote? = null,
+    @Name("voice") val voice: Voice? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("has_media_spoiler") val hasMediaSpoiler: Boolean? = null,
+    @Name("contact") val contact: Contact? = null,
+    @Name("dice") val dice: Dice? = null,
+    @Name("game") val game: Game? = null,
+    @Name("poll") val poll: Poll? = null,
+    @Name("venue") val venue: Venue? = null,
+    @Name("location") val location: Location? = null,
+    @Name("new_chat_members") val newChatMembers: List<User>? = null,
+    @Name("left_chat_member") val leftChatMember: User? = null,
+    @Name("new_chat_title") val newChatTitle: String? = null,
+    @Name("new_chat_photo") val newChatPhoto: List<PhotoSize>? = null,
+    @Name("delete_chat_photo") val deleteChatPhoto: Boolean? = null,
+    @Name("group_chat_created") val groupChatCreated: Boolean? = null,
+    @Name("supergroup_chat_created") val supergroupChatCreated: Boolean? = null,
+    @Name("channel_chat_created") val channelChatCreated: Boolean? = null,
+    @Name("message_auto_delete_timer_changed") val messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged? = null,
+    @Name("migrate_to_chat_id") val migrateToChatId: Int? = null,
+    @Name("migrate_from_chat_id") val migrateFromChatId: Int? = null,
+    @Name("pinned_message") val pinnedMessage: Message? = null,
+    @Name("invoice") val invoice: Invoice? = null,
+    @Name("successful_payment") val successfulPayment: SuccessfulPayment? = null,
+    @Name("user_shared") val userShared: UserShared? = null,
+    @Name("chat_shared") val chatShared: ChatShared? = null,
+    @Name("connected_website") val connectedWebsite: String? = null,
+    @Name("write_access_allowed") val writeAccessAllowed: WriteAccessAllowed? = null,
+    @Name("passport_data") val passportData: PassportData? = null,
+    @Name("proximity_alert_triggered") val proximityAlertTriggered: ProximityAlertTriggered? = null,
+    @Name("forum_topic_created") val forumTopicCreated: ForumTopicCreated? = null,
+    @Name("forum_topic_edited") val forumTopicEdited: ForumTopicEdited? = null,
+    @Name("forum_topic_closed") val forumTopicClosed: ForumTopicClosed? = null,
+    @Name("forum_topic_reopened") val forumTopicReopened: ForumTopicReopened? = null,
+    @Name("general_forum_topic_hidden") val generalForumTopicHidden: GeneralForumTopicHidden? = null,
+    @Name("general_forum_topic_unhidden") val generalForumTopicUnhidden: GeneralForumTopicUnhidden? = null,
+    @Name("video_chat_scheduled") val videoChatScheduled: VideoChatScheduled? = null,
+    @Name("video_chat_started") val videoChatStarted: VideoChatStarted? = null,
+    @Name("video_chat_ended") val videoChatEnded: VideoChatEnded? = null,
+    @Name("video_chat_participants_invited") val videoChatParticipantsInvited: VideoChatParticipantsInvited? = null,
+    @Name("web_app_data") val webAppData: WebAppData? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
 )
 
 data class MessageId(
@@ -143,10 +148,10 @@ data class MessageEntity(
     @Name("type") val type: String,
     @Name("offset") val offset: Int,
     @Name("length") val length: Int,
-    @Name("url") val url: String?,
-    @Name("user") val user: User?,
-    @Name("language") val language: String?,
-    @Name("custom_emoji_id") val customEmojiId: String?,
+    @Name("url") val url: String? = null,
+    @Name("user") val user: User? = null,
+    @Name("language") val language: String? = null,
+    @Name("custom_emoji_id") val customEmojiId: String? = null,
 )
 
 data class PhotoSize(
@@ -154,7 +159,7 @@ data class PhotoSize(
     @Name("file_unique_id") val fileUniqueId: String,
     @Name("width") val width: Int,
     @Name("height") val height: Int,
-    @Name("file_size") val fileSize: Int?,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class Animation(
@@ -163,31 +168,31 @@ data class Animation(
     @Name("width") val width: Int,
     @Name("height") val height: Int,
     @Name("duration") val duration: Int,
-    @Name("thumb") val thumb: PhotoSize?,
-    @Name("file_name") val fileName: String?,
-    @Name("mime_type") val mimeType: String?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("thumb") val thumb: PhotoSize? = null,
+    @Name("file_name") val fileName: String? = null,
+    @Name("mime_type") val mimeType: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class Audio(
     @Name("file_id") val fileId: String,
     @Name("file_unique_id") val fileUniqueId: String,
     @Name("duration") val duration: Int,
-    @Name("performer") val performer: String?,
-    @Name("title") val title: String?,
-    @Name("file_name") val fileName: String?,
-    @Name("mime_type") val mimeType: String?,
-    @Name("file_size") val fileSize: Int?,
-    @Name("thumb") val thumb: PhotoSize?,
+    @Name("performer") val performer: String? = null,
+    @Name("title") val title: String? = null,
+    @Name("file_name") val fileName: String? = null,
+    @Name("mime_type") val mimeType: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
+    @Name("thumb") val thumb: PhotoSize? = null,
 )
 
 data class Document(
     @Name("file_id") val fileId: String,
     @Name("file_unique_id") val fileUniqueId: String,
-    @Name("thumb") val thumb: PhotoSize?,
-    @Name("file_name") val fileName: String?,
-    @Name("mime_type") val mimeType: String?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("thumb") val thumb: PhotoSize? = null,
+    @Name("file_name") val fileName: String? = null,
+    @Name("mime_type") val mimeType: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class Video(
@@ -196,10 +201,10 @@ data class Video(
     @Name("width") val width: Int,
     @Name("height") val height: Int,
     @Name("duration") val duration: Int,
-    @Name("thumb") val thumb: PhotoSize?,
-    @Name("file_name") val fileName: String?,
-    @Name("mime_type") val mimeType: String?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("thumb") val thumb: PhotoSize? = null,
+    @Name("file_name") val fileName: String? = null,
+    @Name("mime_type") val mimeType: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class VideoNote(
@@ -207,24 +212,24 @@ data class VideoNote(
     @Name("file_unique_id") val fileUniqueId: String,
     @Name("length") val length: Int,
     @Name("duration") val duration: Int,
-    @Name("thumb") val thumb: PhotoSize?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("thumb") val thumb: PhotoSize? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class Voice(
     @Name("file_id") val fileId: String,
     @Name("file_unique_id") val fileUniqueId: String,
     @Name("duration") val duration: Int,
-    @Name("mime_type") val mimeType: String?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("mime_type") val mimeType: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class Contact(
     @Name("phone_number") val phoneNumber: String,
     @Name("first_name") val firstName: String,
-    @Name("last_name") val lastName: String?,
-    @Name("user_id") val userId: Int?,
-    @Name("vcard") val vcard: String?,
+    @Name("last_name") val lastName: String? = null,
+    @Name("user_id") val userId: Int? = null,
+    @Name("vcard") val vcard: String? = null,
 )
 
 data class Dice(
@@ -252,30 +257,30 @@ data class Poll(
     @Name("is_anonymous") val isAnonymous: Boolean,
     @Name("type") val type: String,
     @Name("allows_multiple_answers") val allowsMultipleAnswers: Boolean,
-    @Name("correct_option_id") val correctOptionId: Int?,
-    @Name("explanation") val explanation: String?,
-    @Name("explanation_entities") val explanationEntities: List<MessageEntity>?,
-    @Name("open_period") val openPeriod: Int?,
-    @Name("close_date") val closeDate: Int?,
+    @Name("correct_option_id") val correctOptionId: Int? = null,
+    @Name("explanation") val explanation: String? = null,
+    @Name("explanation_entities") val explanationEntities: List<MessageEntity>? = null,
+    @Name("open_period") val openPeriod: Int? = null,
+    @Name("close_date") val closeDate: Int? = null,
 )
 
 data class Location(
     @Name("longitude") val longitude: Float,
     @Name("latitude") val latitude: Float,
-    @Name("horizontal_accuracy") val horizontalAccuracy: Float?,
-    @Name("live_period") val livePeriod: Int?,
-    @Name("heading") val heading: Int?,
-    @Name("proximity_alert_radius") val proximityAlertRadius: Int?,
+    @Name("horizontal_accuracy") val horizontalAccuracy: Float? = null,
+    @Name("live_period") val livePeriod: Int? = null,
+    @Name("heading") val heading: Int? = null,
+    @Name("proximity_alert_radius") val proximityAlertRadius: Int? = null,
 )
 
 data class Venue(
     @Name("location") val location: Location,
     @Name("title") val title: String,
     @Name("address") val address: String,
-    @Name("foursquare_id") val foursquareId: String?,
-    @Name("foursquare_type") val foursquareType: String?,
-    @Name("google_place_id") val googlePlaceId: String?,
-    @Name("google_place_type") val googlePlaceType: String?,
+    @Name("foursquare_id") val foursquareId: String? = null,
+    @Name("foursquare_type") val foursquareType: String? = null,
+    @Name("google_place_id") val googlePlaceId: String? = null,
+    @Name("google_place_type") val googlePlaceType: String? = null,
 )
 
 data class WebAppData(
@@ -296,14 +301,14 @@ data class MessageAutoDeleteTimerChanged(
 data class ForumTopicCreated(
     @Name("name") val name: String,
     @Name("icon_color") val iconColor: Int,
-    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String?,
+    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String? = null,
 )
 
 class ForumTopicClosed
 
 data class ForumTopicEdited(
-    @Name("name") val name: String?,
-    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String?,
+    @Name("name") val name: String? = null,
+    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String? = null,
 )
 
 class ForumTopicReopened
@@ -346,8 +351,8 @@ data class UserProfilePhotos(
 data class File(
     @Name("file_id") val fileId: String,
     @Name("file_unique_id") val fileUniqueId: String,
-    @Name("file_size") val fileSize: Int?,
-    @Name("file_path") val filePath: String?,
+    @Name("file_size") val fileSize: Int? = null,
+    @Name("file_path") val filePath: String? = null,
 )
 
 data class WebAppInfo(
@@ -358,86 +363,91 @@ interface ReplyMarkup
 
 data class ReplyKeyboardMarkup(
     @Name("keyboard") val keyboard: List<List<KeyboardButton>>,
-    @Name("is_persistent") val isPersistent: Boolean?,
-    @Name("resize_keyboard") val resizeKeyboard: Boolean?,
-    @Name("one_time_keyboard") val oneTimeKeyboard: Boolean?,
-    @Name("input_field_placeholder") val inputFieldPlaceholder: String?,
-    @Name("selective") val selective: Boolean?,
+    @Name("is_persistent") val isPersistent: Boolean? = null,
+    @Name("resize_keyboard") val resizeKeyboard: Boolean? = null,
+    @Name("one_time_keyboard") val oneTimeKeyboard: Boolean? = null,
+    @Name("input_field_placeholder") val inputFieldPlaceholder: String? = null,
+    @Name("selective") val selective: Boolean? = null,
 ) : ReplyMarkup
 
+interface Button {
+    val text: String
+}
+
 data class KeyboardButton(
-    @Name("text") val text: String,
-    @Name("request_user") val requestUser: KeyboardButtonRequestUser?,
-    @Name("request_chat") val requestChat: KeyboardButtonRequestChat?,
-    @Name("request_contact") val requestContact: Boolean?,
-    @Name("request_location") val requestLocation: Boolean?,
-    @Name("request_poll") val requestPoll: KeyboardButtonPollType?,
-    @Name("web_app") val webApp: WebAppInfo?,
-)
+    @Name("text") override val text: String,
+    @Name("request_user") val requestUser: KeyboardButtonRequestUser? = null,
+    @Name("request_chat") val requestChat: KeyboardButtonRequestChat? = null,
+    @Name("request_contact") val requestContact: Boolean? = null,
+    @Name("request_location") val requestLocation: Boolean? = null,
+    @Name("request_poll") val requestPoll: KeyboardButtonPollType? = null,
+    @Name("web_app") val webApp: WebAppInfo? = null,
+) : Button
 
 data class KeyboardButtonRequestUser(
     @Name("request_id") val requestId: Int,
-    @Name("user_is_bot") val userIsBot: Boolean?,
-    @Name("user_is_premium") val userIsPremium: Boolean?,
+    @Name("user_is_bot") val userIsBot: Boolean? = null,
+    @Name("user_is_premium") val userIsPremium: Boolean? = null,
 )
 
 data class KeyboardButtonRequestChat(
     @Name("request_id") val requestId: Int,
     @Name("chat_is_channel") val chatIsChannel: Boolean,
-    @Name("chat_is_forum") val chatIsForum: Boolean?,
-    @Name("chat_has_username") val chatHasUsername: Boolean?,
-    @Name("chat_is_created") val chatIsCreated: Boolean?,
-    @Name("user_administrator_rights") val userAdministratorRights: ChatAdministratorRights?,
-    @Name("bot_administrator_rights") val botAdministratorRights: ChatAdministratorRights?,
-    @Name("bot_is_member") val botIsMember: Boolean?,
+    @Name("chat_is_forum") val chatIsForum: Boolean? = null,
+    @Name("chat_has_username") val chatHasUsername: Boolean? = null,
+    @Name("chat_is_created") val chatIsCreated: Boolean? = null,
+    @Name("user_administrator_rights") val userAdministratorRights: ChatAdministratorRights? = null,
+    @Name("bot_administrator_rights") val botAdministratorRights: ChatAdministratorRights? = null,
+    @Name("bot_is_member") val botIsMember: Boolean? = null,
 )
 
 data class KeyboardButtonPollType(
-    @Name("type") val type: String?,
+    @Name("type") val type: String? = null,
 )
 
 data class ReplyKeyboardRemove(
     @Name("remove_keyboard") val removeKeyboard: Boolean,
-    @Name("selective") val selective: Boolean?,
+    @Name("selective") val selective: Boolean? = null,
 ) : ReplyMarkup
 
 data class InlineKeyboardMarkup(
     @Name("inline_keyboard") val inlineKeyboard: List<List<InlineKeyboardButton>>,
 ) : ReplyMarkup
 
+
 data class InlineKeyboardButton(
-    @Name("text") val text: String,
-    @Name("url") val url: String?,
-    @Name("callback_data") val callbackData: String?,
-    @Name("web_app") val webApp: WebAppInfo?,
-    @Name("login_url") val loginUrl: LoginUrl?,
-    @Name("switch_inline_query") val switchInlineQuery: String?,
-    @Name("switch_inline_query_current_chat") val switchInlineQueryCurrentChat: String?,
-    @Name("callback_game") val callbackGame: CallbackGame?,
-    @Name("pay") val pay: Boolean?,
-)
+    @Name("text") override val text: String,
+    @Name("url") val url: String? = null,
+    @Name("callback_data") val callbackData: String? = null,
+    @Name("web_app") val webApp: WebAppInfo? = null,
+    @Name("login_url") val loginUrl: LoginUrl? = null,
+    @Name("switch_inline_query") val switchInlineQuery: String? = null,
+    @Name("switch_inline_query_current_chat") val switchInlineQueryCurrentChat: String? = null,
+    @Name("callback_game") val callbackGame: CallbackGame? = null,
+    @Name("pay") val pay: Boolean? = null,
+) : Button
 
 data class LoginUrl(
     @Name("url") val url: String,
-    @Name("forward_text") val forwardText: String?,
-    @Name("bot_username") val botUsername: String?,
-    @Name("request_write_access") val requestWriteAccess: Boolean?,
+    @Name("forward_text") val forwardText: String? = null,
+    @Name("bot_username") val botUsername: String? = null,
+    @Name("request_write_access") val requestWriteAccess: Boolean? = null,
 )
 
 data class CallbackQuery(
     @Name("id") val id: String,
     @Name("from") val from: User,
-    @Name("message") val message: Message?,
-    @Name("inline_message_id") val inlineMessageId: String?,
+    @Name("message") val message: Message? = null,
+    @Name("inline_message_id") val inlineMessageId: String? = null,
     @Name("chat_instance") val chatInstance: String,
-    @Name("data") val data: String?,
-    @Name("game_short_name") val gameShortName: String?,
+    @Name("data") val data: String? = null,
+    @Name("game_short_name") val gameShortName: String? = null,
 )
 
 data class ForceReply(
     @Name("force_reply") val forceReply: Boolean,
-    @Name("input_field_placeholder") val inputFieldPlaceholder: String?,
-    @Name("selective") val selective: Boolean?,
+    @Name("input_field_placeholder") val inputFieldPlaceholder: String? = null,
+    @Name("selective") val selective: Boolean? = null,
 ) : ReplyMarkup
 
 data class ChatPhoto(
@@ -453,10 +463,10 @@ data class ChatInviteLink(
     @Name("creates_join_request") val createsJoinRequest: Boolean,
     @Name("is_primary") val isPrimary: Boolean,
     @Name("is_revoked") val isRevoked: Boolean,
-    @Name("name") val name: String?,
-    @Name("expire_date") val expireDate: Int?,
-    @Name("member_limit") val memberLimit: Int?,
-    @Name("pending_join_request_count") val pendingJoinRequestCount: Int?,
+    @Name("name") val name: String? = null,
+    @Name("expire_date") val expireDate: Int? = null,
+    @Name("member_limit") val memberLimit: Int? = null,
+    @Name("pending_join_request_count") val pendingJoinRequestCount: Int? = null,
 )
 
 data class ChatAdministratorRights(
@@ -468,38 +478,59 @@ data class ChatAdministratorRights(
     @Name("can_promote_members") val canPromoteMembers: Boolean,
     @Name("can_change_info") val canChangeInfo: Boolean,
     @Name("can_invite_users") val canInviteUsers: Boolean,
-    @Name("can_post_messages") val canPostMessages: Boolean?,
-    @Name("can_edit_messages") val canEditMessages: Boolean?,
-    @Name("can_pin_messages") val canPinMessages: Boolean?,
-    @Name("can_manage_topics") val canManageTopics: Boolean?,
+    @Name("can_post_messages") val canPostMessages: Boolean? = null,
+    @Name("can_edit_messages") val canEditMessages: Boolean? = null,
+    @Name("can_pin_messages") val canPinMessages: Boolean? = null,
+    @Name("can_manage_topics") val canManageTopics: Boolean? = null,
 )
 
-sealed interface ChatMember
+data class ChatMember (
+    @Name("user") val user: User,
+    @Name("status") val status: String,
+    @Name("custom_title") val customTitle: String? = null,
+    @Name("is_anonymous") val isAnonymous: Boolean? = null,
+    @Name("until_date") val forceReply: Int? = null,
+    @Name("can_be_edited") val canBeEdited: Boolean? = null,
+    @Name("can_post_messages") val canPostMessages: Boolean? = null,
+    @Name("can_edit_messages") val canEditMessages: Boolean? = null,
+    @Name("can_delete_messages") val canDeleteMessages: Boolean? = null,
+    @Name("can_restrict_members") val canRestrictMembers: Boolean? = null,
+    @Name("can_promote_members") val canPromoteMembers: Boolean? = null,
+    @Name("can_change_info") val canChangeInfo: Boolean? = null,
+    @Name("can_invite_users") val canInviteUsers: Boolean? = null,
+    @Name("can_pin_messages") val canPinMessages: Boolean? = null,
+    @Name("is_member") val isMember: Boolean? = null,
+    @Name("can_send_messages") val canSendMessages: Boolean? = null,
+    @Name("can_send_media_messages") val canSendMediaMessages: Boolean? = null,
+    @Name("can_send_polls") val canSendPolls: Boolean? = null,
+    @Name("can_send_other_messages") val canSendOtherMessages: Boolean? = null,
+    @Name("can_add_web_page_previews") val canAddWebPagePreviews: Boolean? = null,
+)
 
-data class ChatMemberOwner(
+/*data class ChatMemberOwner(
     @Name("status") val status: String,
     @Name("user") val user: User,
-    @Name("is_anonymous") val isAnonymous: Boolean,
-    @Name("custom_title") val customTitle: String?,
+    @Name("is_anonymous") val isAnonymous: Boolean? = null,
+    @Name("custom_title") val customTitle: String? = null,
 ) : ChatMember
 
 data class ChatMemberAdministrator(
     @Name("status") val status: String,
     @Name("user") val user: User,
-    @Name("can_be_edited") val canBeEdited: Boolean,
-    @Name("is_anonymous") val isAnonymous: Boolean,
-    @Name("can_manage_chat") val canManageChat: Boolean,
-    @Name("can_delete_messages") val canDeleteMessages: Boolean,
-    @Name("can_manage_video_chats") val canManageVideoChats: Boolean,
-    @Name("can_restrict_members") val canRestrictMembers: Boolean,
-    @Name("can_promote_members") val canPromoteMembers: Boolean,
-    @Name("can_change_info") val canChangeInfo: Boolean,
-    @Name("can_invite_users") val canInviteUsers: Boolean,
-    @Name("can_post_messages") val canPostMessages: Boolean?,
-    @Name("can_edit_messages") val canEditMessages: Boolean?,
-    @Name("can_pin_messages") val canPinMessages: Boolean?,
-    @Name("can_manage_topics") val canManageTopics: Boolean?,
-    @Name("custom_title") val customTitle: String?,
+    @Name("can_be_edited") val canBeEdited: Boolean? = null,
+    @Name("is_anonymous") val isAnonymous: Boolean? = null,
+    @Name("can_manage_chat") val canManageChat: Boolean? = null,
+    @Name("can_delete_messages") val canDeleteMessages: Boolean? = null,
+    @Name("can_manage_video_chats") val canManageVideoChats: Boolean? = null,
+    @Name("can_restrict_members") val canRestrictMembers: Boolean? = null,
+    @Name("can_promote_members") val canPromoteMembers: Boolean? = null,
+    @Name("can_change_info") val canChangeInfo: Boolean? = null,
+    @Name("can_invite_users") val canInviteUsers: Boolean? = null,
+    @Name("can_post_messages") val canPostMessages: Boolean? = null,
+    @Name("can_edit_messages") val canEditMessages: Boolean? = null,
+    @Name("can_pin_messages") val canPinMessages: Boolean? = null,
+    @Name("can_manage_topics") val canManageTopics: Boolean? = null,
+    @Name("custom_title") val customTitle: String? = null,
 ) : ChatMember
 
 data class ChatMemberMember(
@@ -511,20 +542,20 @@ data class ChatMemberRestricted(
     @Name("status") val status: String,
     @Name("user") val user: User,
     @Name("is_member") val isMember: Boolean,
-    @Name("can_send_messages") val canSendMessages: Boolean,
-    @Name("can_send_audios") val canSendAudios: Boolean,
-    @Name("can_send_documents") val canSendDocuments: Boolean,
-    @Name("can_send_photos") val canSendPhotos: Boolean,
-    @Name("can_send_videos") val canSendVideos: Boolean,
-    @Name("can_send_video_notes") val canSendVideoNotes: Boolean,
-    @Name("can_send_voice_notes") val canSendVoiceNotes: Boolean,
-    @Name("can_send_polls") val canSendPolls: Boolean,
-    @Name("can_send_other_messages") val canSendOtherMessages: Boolean,
-    @Name("can_add_web_page_previews") val canAddWebPagePreviews: Boolean,
-    @Name("can_change_info") val canChangeInfo: Boolean,
-    @Name("can_invite_users") val canInviteUsers: Boolean,
-    @Name("can_pin_messages") val canPinMessages: Boolean,
-    @Name("can_manage_topics") val canManageTopics: Boolean,
+    @Name("can_send_messages") val canSendMessages: Boolean? = null,
+    @Name("can_send_audios") val canSendAudios: Boolean? = null,
+    @Name("can_send_documents") val canSendDocuments: Boolean? = null,
+    @Name("can_send_photos") val canSendPhotos: Boolean? = null,
+    @Name("can_send_videos") val canSendVideos: Boolean? = null,
+    @Name("can_send_video_notes") val canSendVideoNotes: Boolean? = null,
+    @Name("can_send_voice_notes") val canSendVoiceNotes: Boolean? = null,
+    @Name("can_send_polls") val canSendPolls: Boolean? = null,
+    @Name("can_send_other_messages") val canSendOtherMessages: Boolean? = null,
+    @Name("can_add_web_page_previews") val canAddWebPagePreviews: Boolean? = null,
+    @Name("can_change_info") val canChangeInfo: Boolean? = null,
+    @Name("can_invite_users") val canInviteUsers: Boolean? = null,
+    @Name("can_pin_messages") val canPinMessages: Boolean? = null,
+    @Name("can_manage_topics") val canManageTopics: Boolean? = null,
     @Name("until_date") val untilDate: Int,
 ) : ChatMember
 
@@ -537,7 +568,7 @@ data class ChatMemberBanned(
     @Name("status") val status: String,
     @Name("user") val user: User,
     @Name("until_date") val untilDate: Int,
-) : ChatMember
+) : ChatMember*/
 
 data class ChatMemberUpdated(
     @Name("chat") val chat: Chat,
@@ -545,7 +576,7 @@ data class ChatMemberUpdated(
     @Name("date") val date: Int,
     @Name("old_chat_member") val oldChatMember: ChatMember,
     @Name("new_chat_member") val newChatMember: ChatMember,
-    @Name("invite_link") val inviteLink: ChatInviteLink?,
+    @Name("invite_link") val inviteLink: ChatInviteLink? = null,
 )
 
 data class ChatJoinRequest(
@@ -553,25 +584,25 @@ data class ChatJoinRequest(
     @Name("from") val from: User,
     @Name("user_chat_id") val userChatId: Int,
     @Name("date") val date: Int,
-    @Name("bio") val bio: String?,
-    @Name("invite_link") val inviteLink: ChatInviteLink?,
+    @Name("bio") val bio: String? = null,
+    @Name("invite_link") val inviteLink: ChatInviteLink? = null,
 )
 
 data class ChatPermissions(
-    @Name("can_send_messages") val canSendMessages: Boolean?,
-    @Name("can_send_audios") val canSendAudios: Boolean?,
-    @Name("can_send_documents") val canSendDocuments: Boolean?,
-    @Name("can_send_photos") val canSendPhotos: Boolean?,
-    @Name("can_send_videos") val canSendVideos: Boolean?,
-    @Name("can_send_video_notes") val canSendVideoNotes: Boolean?,
-    @Name("can_send_voice_notes") val canSendVoiceNotes: Boolean?,
-    @Name("can_send_polls") val canSendPolls: Boolean?,
-    @Name("can_send_other_messages") val canSendOtherMessages: Boolean?,
-    @Name("can_add_web_page_previews") val canAddWebPagePreviews: Boolean?,
-    @Name("can_change_info") val canChangeInfo: Boolean?,
-    @Name("can_invite_users") val canInviteUsers: Boolean?,
-    @Name("can_pin_messages") val canPinMessages: Boolean?,
-    @Name("can_manage_topics") val canManageTopics: Boolean?,
+    @Name("can_send_messages") val canSendMessages: Boolean? = null,
+    @Name("can_send_audios") val canSendAudios: Boolean? = null,
+    @Name("can_send_documents") val canSendDocuments: Boolean? = null,
+    @Name("can_send_photos") val canSendPhotos: Boolean? = null,
+    @Name("can_send_videos") val canSendVideos: Boolean? = null,
+    @Name("can_send_video_notes") val canSendVideoNotes: Boolean? = null,
+    @Name("can_send_voice_notes") val canSendVoiceNotes: Boolean? = null,
+    @Name("can_send_polls") val canSendPolls: Boolean? = null,
+    @Name("can_send_other_messages") val canSendOtherMessages: Boolean? = null,
+    @Name("can_add_web_page_previews") val canAddWebPagePreviews: Boolean? = null,
+    @Name("can_change_info") val canChangeInfo: Boolean? = null,
+    @Name("can_invite_users") val canInviteUsers: Boolean? = null,
+    @Name("can_pin_messages") val canPinMessages: Boolean? = null,
+    @Name("can_manage_topics") val canManageTopics: Boolean? = null,
 )
 
 data class ChatLocation(
@@ -583,7 +614,7 @@ data class ForumTopic(
     @Name("message_thread_id") val messageThreadId: Int,
     @Name("name") val name: String,
     @Name("icon_color") val iconColor: Int,
-    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String?,
+    @Name("icon_custom_emoji_id") val iconCustomEmojiId: String? = null,
 )
 
 data class BotCommand(
@@ -642,10 +673,7 @@ data class MenuButtonDefault(
     @Name("type") val type: String,
 ) : MenuButton
 
-data class ResponseParameters(
-    @Name("migrate_to_chat_id") val migrateToChatId: Int?,
-    @Name("retry_after") val retryAfter: Int?,
-)
+
 
 sealed interface InputMedia
 
@@ -654,59 +682,59 @@ class InputFile
 data class InputMediaPhoto(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("has_spoiler") val hasSpoiler: Boolean?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia
 
 data class InputMediaVideo(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String?*/
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("width") val width: Int?,
-    @Name("height") val height: Int?,
-    @Name("duration") val duration: Int?,
-    @Name("supports_streaming") val supportsStreaming: Boolean?,
-    @Name("has_spoiler") val hasSpoiler: Boolean?,
+    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("width") val width: Int? = null,
+    @Name("height") val height: Int? = null,
+    @Name("duration") val duration: Int? = null,
+    @Name("supports_streaming") val supportsStreaming: Boolean? = null,
+    @Name("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia
 
 data class InputMediaAnimation(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String?*/
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("width") val width: Int?,
-    @Name("height") val height: Int?,
-    @Name("duration") val duration: Int?,
-    @Name("has_spoiler") val hasSpoiler: Boolean?,
+    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("width") val width: Int? = null,
+    @Name("height") val height: Int? = null,
+    @Name("duration") val duration: Int? = null,
+    @Name("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia
 
 data class InputMediaAudio(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String?*/
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("duration") val duration: Int?,
-    @Name("performer") val performer: String?,
-    @Name("title") val title: String?,
+    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("duration") val duration: Int? = null,
+    @Name("performer") val performer: String? = null,
+    @Name("title") val title: String? = null,
 ) : InputMedia
 
 data class InputMediaDocument(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String?*/
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("disable_content_type_detection") val disableContentTypeDetection: Boolean?
+    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("disable_content_type_detection") val disableContentTypeDetection: Boolean? = null
 )
 
 data class Sticker(
@@ -717,13 +745,13 @@ data class Sticker(
     @Name("height") val height: Int,
     @Name("is_animated") val isAnimated: Boolean,
     @Name("is_video") val isVideo: Boolean,
-    @Name("thumb") val thumb: PhotoSize?,
-    @Name("emoji") val emoji: String?,
-    @Name("set_name") val setName: String?,
-    @Name("premium_animation") val premiumAnimation: File?,
-    @Name("mask_position") val maskPosition: MaskPosition?,
-    @Name("custom_emoji_id") val customEmojiId: String?,
-    @Name("file_size") val fileSize: Int?,
+    @Name("thumb") val thumb: PhotoSize? = null,
+    @Name("emoji") val emoji: String? = null,
+    @Name("set_name") val setName: String? = null,
+    @Name("premium_animation") val premiumAnimation: File? = null,
+    @Name("mask_position") val maskPosition: MaskPosition? = null,
+    @Name("custom_emoji_id") val customEmojiId: String? = null,
+    @Name("file_size") val fileSize: Int? = null,
 )
 
 data class StickerSet(
@@ -733,7 +761,7 @@ data class StickerSet(
     @Name("is_animated") val isAnimated: Boolean,
     @Name("is_video") val isVideo: Boolean,
     @Name("stickers") val stickers: List<Sticker>,
-    @Name("thumb") val thumb: PhotoSize?,
+    @Name("thumb") val thumb: PhotoSize? = null,
 )
 
 data class MaskPosition(
@@ -768,10 +796,10 @@ data class ShippingAddress(
 )
 
 data class OrderInfo(
-    @Name("name") val name: String?,
-    @Name("phone_number") val phoneNumber: String?,
-    @Name("email") val email: String?,
-    @Name("shipping_address") val shippingAddress: ShippingAddress?,
+    @Name("name") val name: String? = null,
+    @Name("phone_number") val phoneNumber: String? = null,
+    @Name("email") val email: String? = null,
+    @Name("shipping_address") val shippingAddress: ShippingAddress? = null,
 )
 
 data class ShippingOption(
@@ -784,8 +812,8 @@ data class SuccessfulPayment(
     @Name("currency") val currency: String,
     @Name("total_amount") val totalAmount: Int,
     @Name("invoice_payload") val invoicePayload: String,
-    @Name("shipping_option_id") val shippingOptionId: String?,
-    @Name("order_info") val orderInfo: OrderInfo?,
+    @Name("shipping_option_id") val shippingOptionId: String? = null,
+    @Name("order_info") val orderInfo: OrderInfo? = null,
     @Name("telegram_payment_charge_id") val telegramPaymentChargeId: String,
     @Name("provider_payment_charge_id") val providerPaymentChargeId: String,
 )
@@ -803,8 +831,8 @@ data class PreCheckoutQuery(
     @Name("currency") val currency: String,
     @Name("total_amount") val totalAmount: Int,
     @Name("invoice_payload") val invoicePayload: String,
-    @Name("shipping_option_id") val shippingOptionId: String?,
-    @Name("order_info") val orderInfo: OrderInfo?,
+    @Name("shipping_option_id") val shippingOptionId: String? = null,
+    @Name("order_info") val orderInfo: OrderInfo? = null,
 )
 
 data class PassportData(
@@ -821,14 +849,14 @@ data class PassportFile(
 
 data class EncryptedPassportElement(
     @Name("type") val type: String,
-    @Name("data") val data: String?,
-    @Name("phone_number") val phoneNumber: String?,
-    @Name("email") val email: String?,
-    @Name("files") val files: List<PassportFile>?,
-    @Name("front_side") val frontSide: PassportFile?,
-    @Name("reverse_side") val reverseSide: PassportFile?,
-    @Name("selfie") val selfie: PassportFile?,
-    @Name("translation") val translation: List<PassportFile>?,
+    @Name("data") val data: String? = null,
+    @Name("phone_number") val phoneNumber: String? = null,
+    @Name("email") val email: String? = null,
+    @Name("files") val files: List<PassportFile>? = null,
+    @Name("front_side") val frontSide: PassportFile? = null,
+    @Name("reverse_side") val reverseSide: PassportFile? = null,
+    @Name("selfie") val selfie: PassportFile? = null,
+    @Name("translation") val translation: List<PassportFile>? = null,
     @Name("hash") val hash: String,
 )
 
@@ -905,18 +933,18 @@ data class PassportElementErrorUnspecified(
     @Name("title") val title: String,
     @Name("description") val description: String,
     @Name("photo") val photo: List<PhotoSize>,
-    @Name("text") val text: String?,
-    @Name("text_entities") val textEntities: List<MessageEntity>?,
-    @Name("animation") val animation: Animation?,
+    @Name("text") val text: String? = null,
+    @Name("text_entities") val textEntities: List<MessageEntity>? = null,
+    @Name("animation") val animation: Animation? = null,
 ) : PassportElementError
 
 data class Game(
     @Name("title") val title: String,
     @Name("description") val description: String,
     @Name("photo") val photo: List<PhotoSize>,
-    @Name("text") val text: String?,
-    @Name("text_entities") val text_entities: List<MessageEntity>?,
-    @Name("animation") val animation: Animation?,
+    @Name("text") val text: String? = null,
+    @Name("text_entities") val text_entities: List<MessageEntity>? = null,
+    @Name("animation") val animation: Animation? = null,
 )
 
 class CallbackGame
@@ -932,16 +960,16 @@ data class InlineQuery(
     @Name("from") val from: User,
     @Name("query") val query: String,
     @Name("offset") val offset: String,
-    @Name("chat_type") val chatType: String?,
-    @Name("location") val location: Location?,
+    @Name("chat_type") val chatType: String? = null,
+    @Name("location") val location: Location? = null,
 )
 
 sealed interface InlineQueryResult
 
 data class InlineQueryResultButton(
     @Name("text") val text: String,
-    @Name("web_app") val webApp: WebAppInfo?,
-    @Name("start_parameter") val startParameter: String?
+    @Name("web_app") val webApp: WebAppInfo? = null,
+    @Name("start_parameter") val startParameter: String? = null
 )
 
 
@@ -950,13 +978,13 @@ data class InlineQueryResultArticle(
     @Name("id") val id: String,
     @Name("title") val title: String,
     @Name("input_message_content") val inputMessageContent: InputMessageContent,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("url") val url: String?,
-    @Name("hide_url") val hideUrl: Boolean?,
-    @Name("description") val description: String?,
-    @Name("thumb_url") val thumbUrl: String?,
-    @Name("thumb_width") val thumbWidth: Int?,
-    @Name("thumb_height") val thumbHeight: Int?,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("url") val url: String? = null,
+    @Name("hide_url") val hideUrl: Boolean? = null,
+    @Name("description") val description: String? = null,
+    @Name("thumb_url") val thumbUrl: String? = null,
+    @Name("thumb_width") val thumbWidth: Int? = null,
+    @Name("thumb_height") val thumbHeight: Int? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultPhoto(
@@ -964,49 +992,49 @@ data class InlineQueryResultPhoto(
     @Name("id") val id: String,
     @Name("photo_url") val photoUrl: String,
     @Name("thumb_url") val thumbUrl: String,
-    @Name("photo_width") val photoWidth: Int?,
-    @Name("photo_height") val photoHeight: Int?,
-    @Name("title") val title: String?,
-    @Name("description") val description: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("photo_width") val photoWidth: Int? = null,
+    @Name("photo_height") val photoHeight: Int? = null,
+    @Name("title") val title: String? = null,
+    @Name("description") val description: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultGif(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("gif_url") val gifUrl: String,
-    @Name("gif_width") val gifWidth: Int?,
-    @Name("gif_height") val gifHeight: Int?,
-    @Name("gif_duration") val gifDuration: Int?,
+    @Name("gif_width") val gifWidth: Int? = null,
+    @Name("gif_height") val gifHeight: Int? = null,
+    @Name("gif_duration") val gifDuration: Int? = null,
     @Name("thumb_url") val thumbUrl: String,
-    @Name("thumb_mime_type") val thumbMimeType: String?,
-    @Name("title") val title: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("thumb_mime_type") val thumbMimeType: String? = null,
+    @Name("title") val title: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultMpeg4Gif(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("mpeg4_url") val mpeg4Url: String,
-    @Name("mpeg4_width") val mpeg4Width: Int?,
-    @Name("mpeg4_height") val mpeg4Height: Int?,
-    @Name("mpeg4_duration") val mpeg4Duration: Int?,
+    @Name("mpeg4_width") val mpeg4Width: Int? = null,
+    @Name("mpeg4_height") val mpeg4Height: Int? = null,
+    @Name("mpeg4_duration") val mpeg4Duration: Int? = null,
     @Name("thumb_url") val thumbUrl: String,
-    @Name("thumb_mime_type") val thumbMimeType: String?,
-    @Name("title") val title: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("thumb_mime_type") val thumbMimeType: String? = null,
+    @Name("title") val title: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultVideo(
@@ -1016,15 +1044,15 @@ data class InlineQueryResultVideo(
     @Name("mime_type") val mimeType: String,
     @Name("thumb_url") val thumbUrl: String,
     @Name("title") val title: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("video_width") val videoWidth: Int?,
-    @Name("video_height") val videoHeight: Int?,
-    @Name("video_duration") val videoDuration: Int?,
-    @Name("description") val description: String?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("video_width") val videoWidth: Int? = null,
+    @Name("video_height") val videoHeight: Int? = null,
+    @Name("video_duration") val videoDuration: Int? = null,
+    @Name("description") val description: String? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultAudio(
@@ -1032,13 +1060,13 @@ data class InlineQueryResultAudio(
     @Name("id") val id: String,
     @Name("audio_url") val audioUrl: String,
     @Name("title") val title: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("performer") val performer: String?,
-    @Name("audio_duration") val audioDuration: Int?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("performer") val performer: String? = null,
+    @Name("audio_duration") val audioDuration: Int? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultVoice(
@@ -1046,29 +1074,29 @@ data class InlineQueryResultVoice(
     @Name("id") val id: String,
     @Name("voice_url") val voiceUrl: String,
     @Name("title") val title: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("voice_duration") val voiceDuration: Int?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("voice_duration") val voiceDuration: Int? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultDocument(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("title") val title: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @Name("document_url") val documentUrl: String,
     @Name("mime_type") val mimeType: String,
-    @Name("description") val description: String?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
-    @Name("thumb_url") val thumbUrl: String?,
-    @Name("thumb_width") val thumbWidth: Int?,
-    @Name("thumb_height") val thumbHeight: Int?,
+    @Name("description") val description: String? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
+    @Name("thumb_url") val thumbUrl: String? = null,
+    @Name("thumb_width") val thumbWidth: Int? = null,
+    @Name("thumb_height") val thumbHeight: Int? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultLocation(
@@ -1077,15 +1105,15 @@ data class InlineQueryResultLocation(
     @Name("latitude") val latitude: Float,
     @Name("longitude") val longitude: Float,
     @Name("title") val title: String,
-    @Name("horizontal_accuracy") val horizontalAccuracy: Float?,
-    @Name("live_period") val livePeriod: Int?,
-    @Name("heading") val heading: Int?,
-    @Name("proximity_alert_radius") val proximityAlertRadius: Int?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
-    @Name("thumb_url") val thumbUrl: String?,
-    @Name("thumb_width") val thumbWidth: Int?,
-    @Name("thumb_height") val thumbHeight: Int?,
+    @Name("horizontal_accuracy") val horizontalAccuracy: Float? = null,
+    @Name("live_period") val livePeriod: Int? = null,
+    @Name("heading") val heading: Int? = null,
+    @Name("proximity_alert_radius") val proximityAlertRadius: Int? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
+    @Name("thumb_url") val thumbUrl: String? = null,
+    @Name("thumb_width") val thumbWidth: Int? = null,
+    @Name("thumb_height") val thumbHeight: Int? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultVenue(
@@ -1095,15 +1123,15 @@ data class InlineQueryResultVenue(
     @Name("longitude") val longitude: Float,
     @Name("title") val title: String,
     @Name("address") val address: String,
-    @Name("foursquare_id") val foursquareId: String?,
-    @Name("foursquare_type") val foursquareType: String?,
-    @Name("google_place_id") val googlePlaceId: String?,
-    @Name("google_place_type") val googlePlaceType: String?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
-    @Name("thumb_url") val thumbUrl: String?,
-    @Name("thumb_width") val thumbWidth: Int?,
-    @Name("thumb_height") val thumbHeight: Int?,
+    @Name("foursquare_id") val foursquareId: String? = null,
+    @Name("foursquare_type") val foursquareType: String? = null,
+    @Name("google_place_id") val googlePlaceId: String? = null,
+    @Name("google_place_type") val googlePlaceType: String? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
+    @Name("thumb_url") val thumbUrl: String? = null,
+    @Name("thumb_width") val thumbWidth: Int? = null,
+    @Name("thumb_height") val thumbHeight: Int? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultContact(
@@ -1111,65 +1139,65 @@ data class InlineQueryResultContact(
     @Name("id") val id: String,
     @Name("phone_number") val phoneNumber: String,
     @Name("first_name") val firstName: String,
-    @Name("last_name") val lastName: String?,
-    @Name("vcard") val vcard: String?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
-    @Name("thumb_url") val thumbUrl: String?,
-    @Name("thumb_width") val thumbWidth: Int?,
-    @Name("thumb_height") val thumbHeight: Int?,
+    @Name("last_name") val lastName: String? = null,
+    @Name("vcard") val vcard: String? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
+    @Name("thumb_url") val thumbUrl: String? = null,
+    @Name("thumb_width") val thumbWidth: Int? = null,
+    @Name("thumb_height") val thumbHeight: Int? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultGame(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("game_short_name") val gameShortName: String,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedPhoto(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("photo_file_id") val photoFileId: String,
-    @Name("title") val title: String?,
-    @Name("description") val description: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("title") val title: String? = null,
+    @Name("description") val description: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedGif(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("gif_file_id") val gifFileId: String,
-    @Name("title") val title: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("title") val title: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedMpeg4Gif(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("mpeg4_file_id") val mpeg4FileId: String,
-    @Name("title") val title: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("title") val title: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedSticker(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("sticker_file_id") val stickerFileId: String,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedDocument(
@@ -1177,12 +1205,12 @@ data class InlineQueryResultCachedDocument(
     @Name("id") val id: String,
     @Name("title") val title: String,
     @Name("document_file_id") val documentFileId: String,
-    @Name("description") val description: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("description") val description: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedVideo(
@@ -1190,12 +1218,12 @@ data class InlineQueryResultCachedVideo(
     @Name("id") val id: String,
     @Name("video_file_id") val videoFileId: String,
     @Name("title") val title: String,
-    @Name("description") val description: String?,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("description") val description: String? = null,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedVoice(
@@ -1203,40 +1231,40 @@ data class InlineQueryResultCachedVoice(
     @Name("id") val id: String,
     @Name("voice_file_id") val voiceFileId: String,
     @Name("title") val title: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 data class InlineQueryResultCachedAudio(
     @Name("type") val type: String,
     @Name("id") val id: String,
     @Name("audio_file_id") val audioFileId: String,
-    @Name("caption") val caption: String?,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>?,
-    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup?,
-    @Name("input_message_content") val inputMessageContent: InputMessageContent?,
+    @Name("caption") val caption: String? = null,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
+    @Name("input_message_content") val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult
 
 sealed interface InputMessageContent
 
 data class InputTextMessageContent(
     @Name("message_text") val messageText: String,
-    @Name("parse_mode") val parseMode: String?,
-    @Name("entities") val entities: List<MessageEntity>?,
-    @Name("disable_web_page_preview") val disableWebPagePreview: Boolean?,
+    @Name("parse_mode") val parseMode: String? = null,
+    @Name("entities") val entities: List<MessageEntity>? = null,
+    @Name("disable_web_page_preview") val disableWebPagePreview: Boolean? = null,
 ) : InputMessageContent
 
 data class InputLocationMessageContent(
     @Name("latitude") val latitude: Float,
     @Name("longitude") val longitude: Float,
-    @Name("horizontal_accuracy") val horizontalAccuracy: Float?,
-    @Name("live_period") val livePeriod: Int?,
-    @Name("heading") val heading: Int?,
-    @Name("proximity_alert_radius") val proximityAlertRadius: Int?,
+    @Name("horizontal_accuracy") val horizontalAccuracy: Float? = null,
+    @Name("live_period") val livePeriod: Int? = null,
+    @Name("heading") val heading: Int? = null,
+    @Name("proximity_alert_radius") val proximityAlertRadius: Int? = null,
 ) : InputMessageContent
 
 data class InputVenueMessageContent(
@@ -1244,17 +1272,17 @@ data class InputVenueMessageContent(
     @Name("longitude") val longitude: Float,
     @Name("title") val title: String,
     @Name("address") val address: String,
-    @Name("foursquare_id") val foursquareId: String?,
-    @Name("foursquare_type") val foursquareType: String?,
-    @Name("google_place_id") val googlePlaceId: String?,
-    @Name("google_place_type") val googlePlaceType: String?,
+    @Name("foursquare_id") val foursquareId: String? = null,
+    @Name("foursquare_type") val foursquareType: String? = null,
+    @Name("google_place_id") val googlePlaceId: String? = null,
+    @Name("google_place_type") val googlePlaceType: String? = null,
 ) : InputMessageContent
 
 data class InputContactMessageContent(
     @Name("phone_number") val phoneNumber: String,
     @Name("first_name") val firstName: String,
-    @Name("last_name") val lastName: String?,
-    @Name("vcard") val vcard: String?,
+    @Name("last_name") val lastName: String? = null,
+    @Name("vcard") val vcard: String? = null,
 ) : InputMessageContent
 
 data class InputInvoiceMessageContent(
@@ -1264,33 +1292,34 @@ data class InputInvoiceMessageContent(
     @Name("provider_token") val providerToken: String,
     @Name("currency") val currency: String,
     @Name("prices") val prices: List<LabeledPrice>,
-    @Name("max_tip_amount") val maxTipAmount: Int?,
-    @Name("suggested_tip_amounts") val suggestedTipAmounts: List<Int>?,
-    @Name("provider_data") val providerData: String?,
-    @Name("photo_url") val photoUrl: String?,
-    @Name("photo_size") val photoSize: Int?,
-    @Name("photo_width") val photoWidth: Int?,
-    @Name("photo_height") val photoHeight: Int?,
-    @Name("need_name") val needName: Boolean?,
-    @Name("need_phone_number") val needPhoneNumber: Boolean?,
-    @Name("need_email") val needEmail: Boolean?,
-    @Name("need_shipping_address") val needShippingAddress: Boolean?,
-    @Name("send_phone_number_to_provider") val sendPhoneNumberToProvider: Boolean?,
-    @Name("send_email_to_provider") val sendEmailToProvider: Boolean?,
-    @Name("is_flexible") val isFlexible: Boolean?,
+    @Name("max_tip_amount") val maxTipAmount: Int? = null,
+    @Name("suggested_tip_amounts") val suggestedTipAmounts: List<Int>? = null,
+    @Name("provider_data") val providerData: String? = null,
+    @Name("photo_url") val photoUrl: String? = null,
+    @Name("photo_size") val photoSize: Int? = null,
+    @Name("photo_width") val photoWidth: Int? = null,
+    @Name("photo_height") val photoHeight: Int? = null,
+    @Name("need_name") val needName: Boolean? = null,
+    @Name("need_phone_number") val needPhoneNumber: Boolean? = null,
+    @Name("need_email") val needEmail: Boolean? = null,
+    @Name("need_shipping_address") val needShippingAddress: Boolean? = null,
+    @Name("send_phone_number_to_provider") val sendPhoneNumberToProvider: Boolean? = null,
+    @Name("send_email_to_provider") val sendEmailToProvider: Boolean? = null,
+    @Name("is_flexible") val isFlexible: Boolean? = null,
 ) : InputMessageContent
 
 data class ChosenInlineResult(
     @Name("result_id") val resultId: String,
     @Name("from") val from: User,
-    @Name("location") val location: Location?,
-    @Name("inline_message_id") val inlineMessageId: String?,
+    @Name("location") val location: Location? = null,
+    @Name("inline_message_id") val inlineMessageId: String? = null,
     @Name("query") val query: String,
 )
 
 data class SentWebAppMessage(
-    @Name("inline_message_id") val inlineMessageId: String?
+    @Name("inline_message_id") val inlineMessageId: String? = null
 )
+
 
 data class Update(
     @Name("update_id") val updateId: Int,
@@ -1304,7 +1333,10 @@ data class Update(
     @Name("shipping_query") val shippingQuery: ShippingQuery? = null,
     @Name("pre_checkout_query") val preCheckoutQuery: PreCheckoutQuery? = null,
     @Name("poll") val poll: Poll? = null,
-    @Name("poll_answer") val pollAnswer: PollAnswer? = null
+    @Name("poll_answer") val pollAnswer: PollAnswer? = null,
+    @Name("my_chat_member") val myChatMember: ChatMemberUpdated? = null,
+    @Name("chat_member") val chatMember: ChatMemberUpdated? = null,
+    @Name("chat_join_request") val chatJoinRequest: ChatJoinRequest? = null
 )
 
 

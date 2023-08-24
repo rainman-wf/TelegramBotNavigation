@@ -1,7 +1,7 @@
 package navigation.models
 
 class NavResponse(
-    val userId: UserId,
+    val userId: Long,
     val username: String? = null,
     val firstName: String,
     val data: String,
