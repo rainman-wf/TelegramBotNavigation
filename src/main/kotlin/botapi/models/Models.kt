@@ -69,7 +69,7 @@ data class Chat(
 data class Message(
     @Name("message_id") val messageId: Long,
     @Name("message_thread_id") val messageThreadId: Long? = null,
-    @Name("from") val from: User,
+    @Name("from") val from: User? = null,
     @Name("sender_chat") val senderChat: Chat? = null,
     @Name("date") val date: Long,
     @Name("chat") val chat: Chat,

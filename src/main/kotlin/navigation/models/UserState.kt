@@ -77,4 +77,8 @@ internal class UserState(private val userId: Long) {
         val size= frameStack.size
         return frameStack.elementAt(size - 2)
     }
+
+    override fun toString(): String {
+        return this::class.simpleName.toString() + " : id $userId"
+    }
 }

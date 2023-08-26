@@ -4,7 +4,7 @@ import botapi.models.*
 
 internal fun Update.toResponse(): NavResponse {
     return when (val result =
-        message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: error("unhandled update type")) {
+        message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: channelPost ?: error("unhandled update type")) {
 
         is Message -> result.toResponse()
 
@@ -38,9 +38,9 @@ internal fun Update.toResponse(): NavResponse {
 
 internal fun Message.toResponse() =
     NavResponse(
-        userId = from.id,
-        username = from.username,
-        firstName = from.firstName,
+        userId = from?.id ?: senderChat!!.id,
+        username = from?.username ?: senderChat!!.username,
+        firstName = from?.firstName ?: senderChat!!.title!!,
         data = text ?: "",
         messageId = messageId
     )

@@ -1,6 +1,7 @@
 package test
 
 import botapi.Bot
+import botapi.sender.forwardMessage
 import navigation.Navigation
 import navigation.args.NavArg
 import navigation.frame.*
@@ -22,18 +23,37 @@ suspend fun main() {
     bot.updates {
         Navigation.listen(it)
     }
+
+    bot.forwardMessage(1, 2, 3) {
+        protectContent = true
+        disableNotification = true
+    }
 }
 
-class Home : HomeFrame()
+class Home : HomeFrame() {
+    override suspend fun handle(navResponse: NavResponse) {
+        super.handle(navResponse)
+//        when (navResponse.data) {
+//            "/start" -> navigate(::Main)
+//        }
+    }
+}
 
 class Main : RootFrame() {
+
+    class ResultArgs(
+        val value: String
+    ) : NavArg
+
     override suspend fun show() {
         text {
-            content { "hello" }
+            content {
+                getResult<ResultArgs>()?.value ?: "Hello"
+            }
             keyboard {
                 row {
                     button("Go", "next")
-                    button("AiAi" , "aiai")
+                    button("AiAi", "aiai")
                 }
             }
         }
@@ -65,22 +85,25 @@ class SomeFrame : Frame() {
         super.handle(navResponse)
         when (navResponse.data) {
             "back" -> back()
+            else -> back(Main.ResultArgs(navResponse.data))
         }
     }
 }
 
 class Final : FinalFrame() {
 
-    class Args (
+    class Args(
         val name: String
-    ): NavArg
+    ) : NavArg
 
     private val args: Args by lazy { navArgs() }
 
     override suspend fun show() {
         text {
-            content { args.name  }
+            content { args.name }
         }
     }
 }
+
+
 

@@ -1,7 +1,15 @@
 package botapi.sender.builder
 
+import botapi.common.*
+import botapi.common.CHAT_ID
+import botapi.common.DISABLE_NOTIFICATION
+import botapi.common.FROM_CHAT_ID
+import botapi.common.MESSAGE_ID
+import botapi.common.MESSAGE_THREAD_ID
+import botapi.common.PROTECT_CONTENT
 import botapi.models.*
 import com.google.gson.Gson
+import retrofit2.http.Field
 
 internal val gson = Gson()
 
@@ -87,4 +95,10 @@ class CopyMessage {
     var replyToMessageId: Long? = null
     var allowSendingWithoutReply: Boolean? = null
     var replyMarkup: ReplyMarkup? = null
+}
+
+class ForwardMessage {
+    var messageThreadId: Long? = null
+    var disableNotification: Boolean? = null
+    var protectContent: Boolean? = null
 }

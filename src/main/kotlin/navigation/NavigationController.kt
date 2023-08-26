@@ -21,7 +21,7 @@ internal object NavigationController {
     }
 
     suspend fun updateHandler(navResponse: NavResponse) {
-        if (!createState(navResponse)) return
+        createState(navResponse)
         if (navResponse.data == "/home") home(navResponse.userId)
         roots[navResponse.data]?.let {
             val frame = createFrame(navResponse.userId) { it.invoke() }
@@ -82,8 +82,8 @@ internal object NavigationController {
      * Support functions
      */
 
-    private suspend fun createState(navResponse: NavResponse): Boolean {
-        return if (!states.containsKey(navResponse.userId)) {
+    private fun createState(navResponse: NavResponse) {
+        if (!states.containsKey(navResponse.userId)) {
             val state =
                 UserState(navResponse.userId)
                     .addLast(
@@ -93,9 +93,7 @@ internal object NavigationController {
                         }
                     )
             states[navResponse.userId] = state
-            state.last.handle(navResponse)
-            false
-        } else true
+        }
     }
 
     fun setNavSession(userId: Long, sessionId: Long?) {

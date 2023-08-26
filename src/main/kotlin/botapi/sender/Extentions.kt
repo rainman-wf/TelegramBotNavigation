@@ -2,7 +2,7 @@ package botapi.sender
 
 import botapi.Bot
 import botapi.common.toJson
-import botapi.sender.builder.SendMessage
+import botapi.sender.builder.*
 import botapi.sender.builder.gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -34,10 +34,10 @@ suspend fun Bot.sendMessage(chatId: Long, text: String, builder: SendMessage.() 
 suspend fun Bot.sendDocument(
     chatId: Long,
     document: File,
-    builder: botapi.sender.builder.SendDocument.() -> Unit = {}
+    builder: SendDocument.() -> Unit = {}
 ) = apiRequest {
 
-    val _builder = botapi.sender.builder.SendDocument()
+    val _builder = SendDocument()
 
     builder(_builder)
 
@@ -67,10 +67,10 @@ suspend fun Bot.sendDocument(
 suspend fun Bot.sendDocument(
     chatId: Long,
     document: String,
-    builder: botapi.sender.builder.SendDocument.() -> Unit = {}
+    builder: SendDocument.() -> Unit = {}
 ) = apiRequest {
 
-    val _builder = botapi.sender.builder.SendDocument()
+    val _builder = SendDocument()
 
     builder(_builder)
 
@@ -91,9 +91,9 @@ suspend fun Bot.sendDocument(
     )
 }
 
-suspend fun Bot.sendPhoto(chatId: Long, photo: File, builder: botapi.sender.builder.SendPhoto.() -> Unit = {}) = apiRequest {
+suspend fun Bot.sendPhoto(chatId: Long, photo: File, builder: SendPhoto.() -> Unit = {}) = apiRequest {
 
-    val _builder = botapi.sender.builder.SendPhoto()
+    val _builder = SendPhoto()
 
     val _photo = MultipartBody.Part.createFormData(
         "photo", photo.name, photo.asRequestBody(
@@ -119,9 +119,9 @@ suspend fun Bot.sendPhoto(chatId: Long, photo: File, builder: botapi.sender.buil
     )
 }
 
-suspend fun Bot.sendPhoto(chatId: Long, photo: String, builder: botapi.sender.builder.SendPhoto.() -> Unit = {}) = apiRequest {
+suspend fun Bot.sendPhoto(chatId: Long, photo: String, builder: SendPhoto.() -> Unit = {}) = apiRequest {
 
-    val _builder = botapi.sender.builder.SendPhoto()
+    val _builder = SendPhoto()
 
     builder(_builder)
 
@@ -144,11 +144,11 @@ suspend fun Bot.sendPhoto(chatId: Long, photo: String, builder: botapi.sender.bu
 suspend fun Bot.editMessageReplyMarkup(
     chatId: Long,
     messageId: Long,
-    builder: botapi.sender.builder.EditMessageReplyMarkupBuilder.() -> Unit = {}
+    builder: EditMessageReplyMarkupBuilder.() -> Unit = {}
 ) =
     apiRequest {
 
-        val _builder = botapi.sender.builder.EditMessageReplyMarkupBuilder()
+        val _builder = EditMessageReplyMarkupBuilder()
 
         builder(_builder)
 
@@ -165,10 +165,10 @@ suspend fun Bot.deleteMessage(chatId: Long, messageId: Long) = apiRequest {
 
 suspend fun Bot.answerInlineQuery(
     inlineQueryId: String,
-    builder: botapi.sender.builder.AnswerInlineQuery.() -> Unit
+    builder: AnswerInlineQuery.() -> Unit
 ) = apiRequest {
 
-    val _buildr = botapi.sender.builder.AnswerInlineQuery()
+    val _buildr = AnswerInlineQuery()
 
     builder(_buildr)
 
@@ -188,10 +188,10 @@ suspend fun Bot.editMessageText(
     chatId: Long,
     messageId: Long,
     text: String,
-    builder: botapi.sender.builder.EditMessageText.() -> Unit = {}
+    builder: EditMessageText.() -> Unit = {}
 ) = apiRequest {
 
-    val _builder = botapi.sender.builder.EditMessageText()
+    val _builder = EditMessageText()
 
     builder(_builder)
 
@@ -209,10 +209,10 @@ suspend fun Bot.editMessageText(
 
 suspend fun Bot.answerCallbackQuery(
     callbackQueryId: String,
-    builder: botapi.sender.builder.AnswerCallbackQuery.() -> Unit = {}
+    builder: AnswerCallbackQuery.() -> Unit = {}
 ) = apiRequest {
 
-    val _builder = botapi.sender.builder.AnswerCallbackQuery()
+    val _builder = AnswerCallbackQuery()
 
     builder(_builder)
 
@@ -228,10 +228,10 @@ suspend fun Bot.answerCallbackQuery(
 suspend fun Bot.copyMessage(
     chatId: Any,
     fromChatId: Any,
-    messageId: Long, builder: botapi.sender.builder.CopyMessage.() -> Unit = {}
+    messageId: Long, builder: CopyMessage.() -> Unit = {}
 ) = apiRequest {
 
-    val _builder = botapi.sender.builder.CopyMessage()
+    val _builder = CopyMessage()
 
     builder(_builder)
 
@@ -263,16 +263,19 @@ suspend fun Bot.forwardMessage(
     fromChatId: Long,
     chatId: Long,
     messageId: Long,
-    protectContent: Boolean? = null,
-    messageThreadId: Long? = null,
-    disableNotification: Boolean? = null,
+    builder: ForwardMessage.() -> Unit = {}
 ) = apiRequest {
+
+    val _builder = ForwardMessage()
+
+    builder(_builder)
+
     requestSenderApi.forwardMessage(
         fromChatId = fromChatId,
         chatId = chatId,
         messageId = messageId,
-        protectContent = protectContent,
-        messageThreadId = messageThreadId,
-        disableNotification = disableNotification,
+        protectContent = _builder.protectContent,
+        messageThreadId = _builder.messageThreadId,
+        disableNotification = _builder.disableNotification,
     )
 }
