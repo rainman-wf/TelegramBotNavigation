@@ -7,7 +7,7 @@ import navigation.listen
 import navigation.models.NavResponse
 
 
-val bot = Bot("5168485531:AAE0sxjvdc6O1voIxvRwqs9klag5VSqIVbs")
+val bot = Bot("TOKEN")
 
 suspend fun main() {
 
