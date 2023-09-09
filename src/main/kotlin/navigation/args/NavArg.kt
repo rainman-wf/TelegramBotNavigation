@@ -1,6 +1,7 @@
 package navigation.args
 
-interface NavArg
 
+
+interface NavArg
 
 

@@ -10,27 +10,48 @@ import navigation.models.*
 import java.io.File
 import kotlin.properties.Delegates
 
-abstract class Frame(internal val autoCloseParams: AutoCloseParams? = null) {
+abstract class Frame {
+
+    internal val controller = NavigationController
+
+    private var _parent: Frame? = null
+    val parent get() = _parent
+    internal fun setParentFrame (frame: Frame): Frame {
+        _parent = frame
+        return this
+    }
 
     private var _userId by Delegates.notNull<Long>()
     val userId get() = _userId
-    private lateinit var _args: NavArg
-    internal val controller = NavigationController
-    private var result: NavArg? = null
-    private var chainMode: Boolean = false
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T : NavArg> navArgs() = _args as T
-
     internal fun setUserId(userId: Long): Frame {
         _userId = userId
         return this
     }
 
+
+
+    private var _args: NavArg? = null
+    @Suppress("UNCHECKED_CAST")
+    fun <T : NavArg?> navArgs() = _args as T?
     internal fun setArgs(args: NavArg): Frame {
         _args = args
         return this
     }
+
+
+    private var _result: NavArg? = null
+    @Suppress("UNCHECKED_CAST")
+    fun <T : NavArg?> results() = _result as T?
+    internal fun putResult(arg: NavArg) {
+        _result = arg
+    }
+    internal fun resetResult() {
+        _result = null
+    }
+
+
+    private var chainMode: Boolean = false
+
 
     fun setChainMode() {
         chainMode = true
@@ -45,15 +66,6 @@ abstract class Frame(internal val autoCloseParams: AutoCloseParams? = null) {
         fun attachBot(bot: Bot) {
             this.bot = bot
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T : NavArg?> getResult(): T? {
-        return result as T?
-    }
-
-    internal fun putResult(arg: NavArg) {
-        result = arg
     }
 
     abstract suspend fun show()

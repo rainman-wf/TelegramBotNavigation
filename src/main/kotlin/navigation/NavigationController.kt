@@ -10,11 +10,7 @@ internal object NavigationController {
     private val states = mutableMapOf<Long, UserState>()
     private val roots = mutableMapOf<String, () -> Frame>()
 
-    private inline fun <reified T : Frame> createFrame(userId: Long, args: NavArg? = null, constructor: () -> T): T {
-        val builder = constructor().setUserId(userId)
-        args?.let { builder.setArgs(it) }
-        return builder as T
-    }
+    // base functions
 
     fun initBaseFrames(frames: Map<String, () -> Frame>) {
         roots.putAll(frames)
@@ -30,9 +26,11 @@ internal object NavigationController {
         states[navResponse.userId]?.last?.handle(navResponse)
     }
 
+
+    /** navigation functions */
+
     suspend fun navigate(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
         val frame = createFrame(userId, args) { constructor() }
-        frame.show()
 
         val state = states[userId]!!
 
@@ -42,6 +40,35 @@ internal object NavigationController {
         } else {
             state.addLast(frame)
         }
+
+        frame.show()
+    }
+
+    suspend fun navigate(userId: Long, constructor: () -> Frame, args: NavArg? = null, parent: Frame?) {
+        val frame = createFrame(userId, args, parent) { constructor() }
+
+        val state = states[userId]!!
+
+        if (frame is FinalFrame) {
+            state.resetSession()
+            state.resetStack()
+        } else {
+            state.addLast(frame)
+        }
+
+        frame.show()
+    }
+
+
+    suspend fun back(userId: Long) {
+        val currentFrame = states[userId]!!.last
+        states[userId]!!.apply {
+            if (currentFrame is ListFrame) previous else previous.show()
+        }
+    }
+
+    suspend fun home(userId: Long) {
+        states[userId]!!.home().show()
     }
 
     suspend fun replace(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
@@ -62,20 +89,20 @@ internal object NavigationController {
         states[userId]!!.last.show()
     }
 
-    fun parentFrame(userId: Long): Frame {
-        return states[userId]!!.parent
+
+    suspend fun repeat(userId: Long) {
+        setNavSession(userId, null)
+        update(userId)
     }
 
-    suspend fun back(userId: Long) {
-        val currentFrame = states[userId]!!.last
-        states[userId]!!.apply {
-            if (currentFrame is ListFrame) previous else previous.show()
-        }
-    }
+    suspend fun next(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
+        val frame = createFrame(userId, args) { constructor() }
 
-    suspend fun home(userId: Long) {
-        states[userId]!!.resetStack().show()
-        states[userId]!!.resetSession()
+        frame.show()
+
+        setNavSession(userId, null)
+        states[userId]!!.resetStack()
+        navigate(userId, constructor, args)
     }
 
     /**
@@ -84,14 +111,7 @@ internal object NavigationController {
 
     private fun createState(navResponse: NavResponse) {
         if (!states.containsKey(navResponse.userId)) {
-            val state =
-                UserState(navResponse.userId)
-                    .addLast(
-                        createFrame (navResponse.userId) {
-                            roots["/home"]?.invoke()
-                                ?: error("home frame must be associated with /home command")
-                        }
-                    )
+            val state = UserState(navResponse.userId, roots["/home"]!!.invoke().setUserId(navResponse.userId) as HomeFrame)
             states[navResponse.userId] = state
         }
     }
@@ -106,9 +126,5 @@ internal object NavigationController {
 
     fun getNavSession(userId: Long) = states[userId]?.navSession
 
-    suspend fun repeat(userId: Long) {
-        setNavSession(userId, null)
-        update(userId)
-    }
 }
 

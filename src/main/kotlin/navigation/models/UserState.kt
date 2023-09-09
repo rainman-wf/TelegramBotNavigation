@@ -1,11 +1,16 @@
 package navigation.models
 
 import kotlinx.coroutines.*
+import navigation.frame.AutoCloseable
 import navigation.frame.Frame
+import navigation.frame.HomeFrame
 import navigation.log
 import java.util.*
 
-internal class UserState(private val userId: Long) {
+internal class UserState(
+    private val userId: Long,
+    private val homeFrame: HomeFrame
+) {
 
     private val frameStack: Deque<Frame> = LinkedList()
     private var _navSession: Long? = null
@@ -16,20 +21,29 @@ internal class UserState(private val userId: Long) {
     fun setSession(sessionId: Long) {
         _navSession = sessionId
         autoClose.cancel()
-        last.autoCloseParams?.let {
-            autoClose = CoroutineScope(Dispatchers.Default).launch {
-                delay(it.timeout)
-                resetStack().let { frame ->
-                    if (it.removeCurrent) frame.show()
-                    _navSession = null
+        last.let {
+            if (it is AutoCloseable) {
+                autoClose = CoroutineScope(Dispatchers.Default).launch {
+                    delay(it.timeout * 1000L)
+                    home().let { frame ->
+                        if (it.removeCurrent) frame.show()
+                        _navSession = null
+                    }
                 }
             }
         }
+        log()
     }
 
     fun resetSession() {
         autoClose.cancel()
         _navSession = null
+        log()
+    }
+
+    fun resetStack() : UserState {
+        frameStack.clear()
+        return this
     }
 
     fun addLast(frame: Frame): UserState {
@@ -38,20 +52,20 @@ internal class UserState(private val userId: Long) {
     }
 
     fun replaceLast(frame: Frame) : UserState {
-        frameStack.removeLast()
+        removeLast()
         frameStack.addLast(frame)
         return this
     }
 
     val last: Frame
         get() {
-            return frameStack.peekLast()
+            return frameStack.peekLast() ?: homeFrame
         }
 
     val previous: Frame
         get() {
-            frameStack.removeLast()
-            return frameStack.peekLast()
+            removeLast()
+            return last
         }
 
     private fun log() {
@@ -59,26 +73,26 @@ internal class UserState(private val userId: Long) {
     }
 
     fun resetToRoot(frame: Frame) : Frame {
-        val homeFrame = frameStack.pollFirst()
         frameStack.clear()
-        frameStack.addLast(homeFrame)
         frameStack.addLast(frame)
         return last
     }
 
-    fun resetStack() : Frame {
-        val homeFrame = frameStack.pollFirst()
+    fun home() : Frame {
         frameStack.clear()
-        frameStack.addLast(homeFrame)
-        return last
+        return homeFrame
     }
 
     val parent: Frame get() {
-        val size= frameStack.size
+        val size = frameStack.size
         return frameStack.elementAt(size - 2)
     }
 
     override fun toString(): String {
         return this::class.simpleName.toString() + " : id $userId"
+    }
+
+    private fun removeLast() {
+        if (frameStack.isNotEmpty()) frameStack.removeLast()
     }
 }

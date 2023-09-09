@@ -286,5 +286,13 @@ internal interface SendMsgApi {
     suspend fun getFile(
         @Query("file_id") fileId: String
     ): Response<BaseResponse<File>>
+
+    @FormUrlEncoded
+    @POST("pinChatMessage")
+    suspend fun pinChatMessage(
+        @Field(CHAT_ID) chatId: Any,
+        @Field(MESSAGE_ID) messageId: Long,
+        @Field(DISABLE_NOTIFICATION) disableNotification: Boolean?
+    ) : Response<BaseResponse<Boolean>>
 }
 

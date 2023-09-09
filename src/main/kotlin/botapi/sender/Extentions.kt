@@ -279,3 +279,23 @@ suspend fun Bot.forwardMessage(
         disableNotification = _builder.disableNotification,
     )
 }
+
+suspend fun Bot.pinChatMessage(
+    chatId: Long,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
+
+}
+
+suspend fun Bot.pinChatMessage(
+    chatId: String,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
+
+}

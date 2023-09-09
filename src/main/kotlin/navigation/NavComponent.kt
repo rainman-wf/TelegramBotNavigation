@@ -19,6 +19,10 @@ abstract class NavComponent {
         content = text()
     }
 
+    fun formatted() {
+        formatted = true
+    }
+
 }
 
 

@@ -1,7 +1,4 @@
-package test
-
 import botapi.Bot
-import botapi.sender.forwardMessage
 import navigation.Navigation
 import navigation.args.NavArg
 import navigation.frame.*
@@ -18,42 +15,58 @@ suspend fun main() {
     Navigation.init(bot) {
         home(::Home)
         root("/start", ::Main)
+        root("/settings", ::Settings)
     }
 
     bot.updates {
         Navigation.listen(it)
     }
-
-    bot.forwardMessage(1, 2, 3) {
-        protectContent = true
-        disableNotification = true
-    }
 }
 
-class Home : HomeFrame() {
-    override suspend fun handle(navResponse: NavResponse) {
-        super.handle(navResponse)
-//        when (navResponse.data) {
-//            "/start" -> navigate(::Main)
-//        }
-    }
-}
+class Home : HomeFrame()
 
 class Main : RootFrame() {
 
-    class ResultArgs(
-        val value: String
+    override suspend fun show() {
+        text {
+            content {
+                "Main Frame"
+            }
+
+            keyboard {
+                row {
+                    button("Next", "next")
+                    button("Back", "back")
+                }
+            }
+        }
+    }
+
+    override suspend fun handle(navResponse: NavResponse) {
+        super.handle(navResponse)
+        when(navResponse.data) {
+            "next" -> navigate(::SomeMenuPoint)
+            "back" -> back()
+        }
+    }
+}
+
+class Settings : RootFrame() {
+
+    class WaitingResult (
+        val value: Int
     ) : NavArg
 
     override suspend fun show() {
         text {
             content {
-                getResult<ResultArgs>()?.value ?: "Hello"
+                "Settings: result ${results<WaitingResult>()?.value ?: "NULL"}"
             }
+
             keyboard {
                 row {
-                    button("Go", "next")
-                    button("AiAi", "aiai")
+                    button("Go", "yes")
+
                 }
             }
         }
@@ -62,20 +75,22 @@ class Main : RootFrame() {
     override suspend fun handle(navResponse: NavResponse) {
         super.handle(navResponse)
         when (navResponse.data) {
-            "next" -> navigate(::Final, Final.Args(navResponse.firstName))
-            "aiai" -> navigate(::SomeFrame)
+            "yes" -> navigateForResult(::ResultEditor)
         }
     }
 }
 
-
-class SomeFrame : Frame() {
+class ResultEditor: Frame() {
     override suspend fun show() {
         text {
-            content { "Aiaiai" }
+            content {
+                "input result"
+            }
+
             keyboard {
                 row {
-                    button("back", "back")
+                    button("YaYa", "1")
+                    button("NaNa", "2")
                 }
             }
         }
@@ -84,26 +99,26 @@ class SomeFrame : Frame() {
     override suspend fun handle(navResponse: NavResponse) {
         super.handle(navResponse)
         when (navResponse.data) {
-            "back" -> back()
-            else -> back(Main.ResultArgs(navResponse.data))
+            "1", "2" -> back(Settings.WaitingResult(navResponse.data.toInt()))
+            else -> back()
         }
+
     }
 }
 
-class Final : FinalFrame() {
+class SomeMenuPoint : Frame(), AutoCloseable {
 
-    class Args(
-        val name: String
-    ) : NavArg
-
-    private val args: Args by lazy { navArgs() }
-
+    override val timeout = 5
+    override val removeCurrent = true
     override suspend fun show() {
         text {
-            content { args.name }
+            content {
+                "Wait fo close $timeout"
+            }
         }
     }
 }
+
 
 
 
