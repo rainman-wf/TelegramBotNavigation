@@ -1,12 +1,18 @@
 plugins {
     kotlin("jvm") version "1.9.0"
+    id("maven-publish")
+    id("java-library")
 }
 
 group = "rainmann.telegram-bot"
-version = "0.1.7"
+version = "0.1.6"
 
 repositories {
     mavenCentral()
+}
+
+java {
+    withSourcesJar()
 }
 
 dependencies {
@@ -15,5 +21,24 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(kotlin("stdlib-jdk8"))
     implementation("com.google.dagger:dagger:2.48")
+}
+
+
+publishing {
+    publications {
+        create<MavenPublication>("maven_public") {
+            groupId = "rainmann.telegram-bot"
+            version = "0.1.3"
+            artifactId = "TelegramBotNavigation"
+            from(components.getByName("kotlin"))
+        }
+    }
+}
+
+
+
+kotlin {
+    jvmToolchain(11)
 }
