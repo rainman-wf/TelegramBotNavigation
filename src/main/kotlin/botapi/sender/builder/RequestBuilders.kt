@@ -1,15 +1,7 @@
 package botapi.sender.builder
 
-import botapi.common.*
-import botapi.common.CHAT_ID
-import botapi.common.DISABLE_NOTIFICATION
-import botapi.common.FROM_CHAT_ID
-import botapi.common.MESSAGE_ID
-import botapi.common.MESSAGE_THREAD_ID
-import botapi.common.PROTECT_CONTENT
 import botapi.models.*
 import com.google.gson.Gson
-import retrofit2.http.Field
 
 internal val gson = Gson()
 
@@ -64,7 +56,7 @@ class AnswerInlineQuery {
     var nextOffset: String? = null
     var button: InlineQueryResultButton? = null
 
-    fun MutableList<InlineQueryResult>.build (builder: InlineQueryResultsBuilder.() -> Unit) {
+    fun MutableList<InlineQueryResult>.build(builder: InlineQueryResultsBuilder.() -> Unit) {
         val _builder = InlineQueryResultsBuilder()
         builder(_builder)
         this@AnswerInlineQuery.results.addAll(_builder.build())
@@ -101,4 +93,16 @@ class ForwardMessage {
     var messageThreadId: Long? = null
     var disableNotification: Boolean? = null
     var protectContent: Boolean? = null
+}
+
+class PromoteChatMember {
+    var isAnonymous: Boolean? = null
+    var canChangeInfo: Boolean? = null
+    var canPostMessages: Boolean? = null
+    var canEditMessages: Boolean? = null
+    var canDeleteMessages: Boolean? = null
+    var canInviteUsers: Boolean? = null
+    var canRestrictMembers: Boolean? = null
+    var canPinMessages: Boolean? = null
+    var canPromoteMembers: Boolean? = null
 }

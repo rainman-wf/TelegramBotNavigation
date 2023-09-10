@@ -16,7 +16,7 @@ suspend fun Bot.sendMessage(chatId: Long, text: String, builder: SendMessage.() 
 
     builder(_builder)
 
-    requestSenderApi.sendMessage(
+    api.requestSenderApi.sendMessage(
         chatId = chatId,
         text = text,
         messageThreadId = _builder.messageThreadId,
@@ -47,7 +47,7 @@ suspend fun Bot.sendDocument(
         )
     )
 
-    requestSenderApi.sendDocument(
+    api.requestSenderApi.sendDocument(
         chatId = chatId,
         document = _document,
         messageThreadId = _builder.messageThreadId,
@@ -74,7 +74,7 @@ suspend fun Bot.sendDocument(
 
     builder(_builder)
 
-    requestSenderApi.sendDocument(
+    api.requestSenderApi.sendDocument(
         chatId = chatId,
         document = document,
         messageThreadId = _builder.messageThreadId,
@@ -103,7 +103,7 @@ suspend fun Bot.sendPhoto(chatId: Long, photo: File, builder: SendPhoto.() -> Un
 
     builder(_builder)
 
-    requestSenderApi.sendPhoto(
+    api.requestSenderApi.sendPhoto(
         chatId = chatId,
         photo = _photo,
         messageThreadId = _builder.messageThreadId,
@@ -125,7 +125,7 @@ suspend fun Bot.sendPhoto(chatId: Long, photo: String, builder: SendPhoto.() -> 
 
     builder(_builder)
 
-    requestSenderApi.sendPhoto(
+    api.requestSenderApi.sendPhoto(
         chatId = chatId,
         photo = photo,
         messageThreadId = _builder.messageThreadId,
@@ -152,7 +152,7 @@ suspend fun Bot.editMessageReplyMarkup(
 
         builder(_builder)
 
-        requestUpdateMsgApi.editMessageReplyMarkup(
+        api.requestUpdateMsgApi.editMessageReplyMarkup(
             chatId = chatId,
             messageId = messageId,
             replyMarkup = _builder.replyMarkup?.toJson()
@@ -160,7 +160,7 @@ suspend fun Bot.editMessageReplyMarkup(
     }
 
 suspend fun Bot.deleteMessage(chatId: Long, messageId: Long) = apiRequest {
-    requestUpdateMsgApi.deleteMessage(chatId, messageId)
+    api.requestUpdateMsgApi.deleteMessage(chatId, messageId)
 }
 
 suspend fun Bot.answerInlineQuery(
@@ -174,7 +174,7 @@ suspend fun Bot.answerInlineQuery(
 
     if (_buildr.results.isEmpty()) throw IllegalArgumentException("AnswerInlineQuery results must not be empty")
 
-    inlineModeApi.answerInlineQuery(
+    api.inlineModeApi.answerInlineQuery(
         inlineQueryId = inlineQueryId,
         results = requireNotNull(_buildr.results.toJson()),
         cacheTime = _buildr.cacheTime,
@@ -195,7 +195,7 @@ suspend fun Bot.editMessageText(
 
     builder(_builder)
 
-    requestUpdateMsgApi.editMessageText(
+    api.requestUpdateMsgApi.editMessageText(
         chatId = chatId,
         messageId = messageId,
         inlineMessageId = null,
@@ -216,7 +216,7 @@ suspend fun Bot.answerCallbackQuery(
 
     builder(_builder)
 
-    inlineModeApi.answerCallbackQuery(
+    api.inlineModeApi.answerCallbackQuery(
         callbackQueryId = callbackQueryId,
         text = _builder.text,
         showAlert = _builder.showAlert,
@@ -235,7 +235,7 @@ suspend fun Bot.copyMessage(
 
     builder(_builder)
 
-    requestSenderApi.copyMessage(
+    api.requestSenderApi.copyMessage(
         chatId = chatId,
         fromChatId = fromChatId,
         messageId = messageId,
@@ -252,11 +252,11 @@ suspend fun Bot.copyMessage(
 }
 
 suspend fun Bot.getUserProfilePhotos(userId: Long, offset: Int? = null, limit: Int? = null) = apiRequest {
-    requestSenderApi.getUserProfilePhotos(userId, offset, limit)
+    api.getter.getUserProfilePhotos(userId, offset, limit)
 }
 
 suspend fun Bot.getFile(fileId: String) = apiRequest {
-    requestSenderApi.getFile(fileId)
+    api.getter.getFile(fileId)
 }
 
 suspend fun Bot.forwardMessage(
@@ -270,7 +270,7 @@ suspend fun Bot.forwardMessage(
 
     builder(_builder)
 
-    requestSenderApi.forwardMessage(
+    api.requestSenderApi.forwardMessage(
         fromChatId = fromChatId,
         chatId = chatId,
         messageId = messageId,
@@ -286,7 +286,7 @@ suspend fun Bot.pinChatMessage(
     disableNotification: Boolean? = null
 ) = apiRequest {
 
-    requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
+    api.requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
 
 }
 
@@ -296,6 +296,80 @@ suspend fun Bot.pinChatMessage(
     disableNotification: Boolean? = null
 ) = apiRequest {
 
-    requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
+    api.requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
+}
 
+suspend fun Bot.banChatMember(
+    chatId: Long,
+    userId: Long,
+    untilDate: Long? = null,
+) = apiRequest {
+    api.groupsActions.banChatMember(chatId, userId, untilDate)
+}
+
+suspend fun Bot.unbanChatMember(
+    chatId: Long,
+    userId: Long,
+    onlyIfBanned: Boolean? = null,
+) = apiRequest {
+    api.groupsActions.unbanChatMember(chatId, userId, onlyIfBanned)
+}
+
+suspend fun Bot.restrictChatMember(
+    chatId: Long,
+    userId: Long,
+    permissions: String,
+    untilDate: Long? = null,
+) = apiRequest {
+    api.groupsActions.restrictChatMember(chatId, userId, permissions, untilDate)
+}
+
+suspend fun Bot.promoteChatMember(chatId: Long, userId: Long, builder: PromoteChatMember.() -> Unit = {}) = apiRequest {
+
+    val _builder = PromoteChatMember()
+
+    builder(_builder)
+
+    api.groupsActions.promoteChatMember(
+        chatId = chatId,
+        userId = userId,
+        isAnonymous = _builder.isAnonymous,
+        canChangeInfo = _builder.canChangeInfo,
+        canPostMessages = _builder.canPostMessages,
+        canEditMessages = _builder.canEditMessages,
+        canDeleteMessages = _builder.canDeleteMessages,
+        canInviteUsers = _builder.canInviteUsers,
+        canRestrictMembers = _builder.canRestrictMembers,
+        canPinMessages = _builder.canPinMessages,
+        canPromoteMembers = _builder.canPromoteMembers
+    )
+}
+
+suspend fun Bot.setChatPermissions(chatId: Long, permissions: String) = apiRequest {
+    api.groupsActions.setChatPermissions(chatId, permissions)
+}
+
+suspend fun Bot.exportChatInviteLink(chatId: Long) = apiRequest {
+    api.groupsActions.exportChatInviteLink(chatId)
+}
+
+suspend fun Bot.setChatPhoto(chatId: Long, photo: File) = apiRequest {
+
+    val _photo = MultipartBody.Part.createFormData(
+        "photo", photo.name, photo.asRequestBody("multipart/form-data".toMediaType())
+    )
+
+    api.groupsActions.setChatPhoto(chatId, _photo)
+}
+
+suspend fun Bot.deleteChatPhoto(chatId: Long) = apiRequest {
+    api.groupsActions.deleteChatPhoto(chatId)
+}
+
+suspend fun Bot.setChatTitle(chatId: Long, title: String) = apiRequest {
+    api.groupsActions.setChatTitle(chatId, title)
+}
+
+suspend fun Bot.setChatDescription(chatId: Long, description: String) = apiRequest {
+    api.groupsActions.setChatDescription(chatId, description)
 }

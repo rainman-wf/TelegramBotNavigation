@@ -1,6 +1,7 @@
 package botapi.common
 
 internal const val CHAT_ID = "chat_id"
+internal const val USER_ID = "user_id"
 internal const val MESSAGE_THREAD_ID = "message_thread_id"
 internal const val TEXT = "text"
 internal const val PARSE_MODE = "parse_mode"

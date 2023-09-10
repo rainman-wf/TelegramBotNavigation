@@ -31,7 +31,6 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -274,18 +273,6 @@ internal interface SendMsgApi {
     ): Response<BaseResponse<Message>>
 
 
-    @GET("getUserProfilePhotos")
-    suspend fun getUserProfilePhotos(
-        @Query("user_id") userId: Long,
-        @Query("offset") offset: Int? = null,
-        @Query("limit") limit: Int? = null
-    ): Response<BaseResponse<UserProfilePhotos>>
-
-
-    @GET("getFile")
-    suspend fun getFile(
-        @Query("file_id") fileId: String
-    ): Response<BaseResponse<File>>
 
     @FormUrlEncoded
     @POST("pinChatMessage")

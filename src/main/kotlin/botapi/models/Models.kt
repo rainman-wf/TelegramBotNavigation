@@ -66,6 +66,8 @@ data class Chat(
     @Name("location") val location: ChatLocation? = null,
 )
 
+interface Sendresponse
+
 data class Message(
     @Name("message_id") val messageId: Long,
     @Name("message_thread_id") val messageThreadId: Long? = null,
@@ -138,11 +140,11 @@ data class Message(
     @Name("video_chat_participants_invited") val videoChatParticipantsInvited: VideoChatParticipantsInvited? = null,
     @Name("web_app_data") val webAppData: WebAppData? = null,
     @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
-)
+) : Sendresponse
 
 data class MessageId(
     @Name("message_id") val messageId: Long,
-)
+) : Sendresponse
 
 data class MessageEntity(
     @Name("type") val type: String,
