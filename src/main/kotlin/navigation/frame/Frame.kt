@@ -8,9 +8,10 @@ import navigation.NavigationController
 import navigation.args.NavArg
 import navigation.models.*
 import java.io.File
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-abstract class Frame {
+abstract class Frame  {
 
     internal val controller = NavigationController
 
