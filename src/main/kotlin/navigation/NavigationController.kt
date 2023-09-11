@@ -35,13 +35,13 @@ internal object NavigationController {
         val state = states[userId]!!
 
         if (frame is FinalFrame) {
+            frame.show()
             state.resetSession()
             state.resetStack()
         } else {
             state.addLast(frame)
+            frame.show()
         }
-
-        frame.show()
     }
 
     suspend fun navigate(userId: Long, constructor: () -> Frame, args: NavArg? = null, parent: Frame?) {
@@ -50,13 +50,13 @@ internal object NavigationController {
         val state = states[userId]!!
 
         if (frame is FinalFrame) {
+            frame.show()
             state.resetSession()
             state.resetStack()
         } else {
             state.addLast(frame)
+            frame.show()
         }
-
-        frame.show()
     }
 
 
