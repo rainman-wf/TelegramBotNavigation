@@ -12,7 +12,7 @@ class Bot(token: String) {
     lateinit var pool: RequestPoolExecutor
         private set
 
-    suspend fun updates(body: suspend (Update) -> Unit) = api.poller.poll().collect {
+    suspend fun updates(body: suspend Update.() -> Unit) = api.poller.poll().collect {
         body(it)
     }
 

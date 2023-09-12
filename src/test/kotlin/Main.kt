@@ -19,7 +19,7 @@ suspend fun main() {
     }
 
     bot.updates {
-        Navigation.listen(it)
+        Navigation.listen(this)
     }
 }
 
