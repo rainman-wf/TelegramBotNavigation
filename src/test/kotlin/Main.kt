@@ -15,7 +15,6 @@ suspend fun main() {
     Navigation.init(bot) {
         home(::Home)
         root("/start", ::Main)
-        root("/settings", ::Settings)
     }
 
     bot.updates {
@@ -26,7 +25,6 @@ suspend fun main() {
 class Home : HomeFrame()
 
 class Main : RootFrame() {
-
     override suspend fun show() {
         text {
             content {
@@ -48,61 +46,6 @@ class Main : RootFrame() {
             "next" -> navigate(::SomeMenuPoint)
             "back" -> back()
         }
-    }
-}
-
-class Settings : RootFrame() {
-
-    class WaitingResult (
-        val value: Int
-    ) : NavArg
-
-    override suspend fun show() {
-        text {
-            content {
-                "Settings: result ${results<WaitingResult>()?.value ?: "NULL"}"
-            }
-
-            keyboard {
-                row {
-                    button("Go", "yes")
-
-                }
-            }
-        }
-    }
-
-    override suspend fun handle(navResponse: NavResponse) {
-        super.handle(navResponse)
-        when (navResponse.data) {
-            "yes" -> navigateForResult(::ResultEditor)
-        }
-    }
-}
-
-class ResultEditor: Frame() {
-    override suspend fun show() {
-        text {
-            content {
-                "input result"
-            }
-
-            keyboard {
-                row {
-                    button("YaYa", "1")
-                    button("NaNa", "2")
-                }
-            }
-        }
-    }
-
-    override suspend fun handle(navResponse: NavResponse) {
-        super.handle(navResponse)
-        when (navResponse.data) {
-            "1", "2" -> back(Settings.WaitingResult(navResponse.data.toInt()))
-            else -> back()
-        }
-
     }
 }
 

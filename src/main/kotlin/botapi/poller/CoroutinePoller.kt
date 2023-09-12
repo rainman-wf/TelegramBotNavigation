@@ -1,6 +1,7 @@
 package botapi.poller
 
 import botapi.models.Update
+import botapi.sender.builder.gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +15,16 @@ class CoroutinePoller (
 
     private var lastUpdateId: Int? = null
 
-    fun poll(): Flow<Update> {
+    fun poll(allowedTypes: List<String>? = null): Flow<Update> {
         return channelFlow {
             while (true) {
                 val data = try {
-                    api.getUpdates(lastUpdateId, 90)
+                    api.getUpdates(
+                        offset = lastUpdateId,
+                        limit = null,
+                        timeout = 90,
+                        gson.toJson(allowedTypes)
+                    )
                 } catch (e: Exception) {
                     println("Update polling error : ${e::class.simpleName} : ${e.message}")
                     delay(5000)
