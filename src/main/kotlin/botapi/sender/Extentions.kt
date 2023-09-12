@@ -280,24 +280,7 @@ suspend fun Bot.forwardMessage(
     )
 }
 
-suspend fun Bot.pinChatMessage(
-    chatId: Long,
-    messageId: Long,
-    disableNotification: Boolean? = null
-) = apiRequest {
 
-    api.requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
-
-}
-
-suspend fun Bot.pinChatMessage(
-    chatId: String,
-    messageId: Long,
-    disableNotification: Boolean? = null
-) = apiRequest {
-
-    api.requestSenderApi.pinChatMessage(chatId, messageId, disableNotification)
-}
 
 suspend fun Bot.banChatMember(
     chatId: Long,
@@ -345,12 +328,112 @@ suspend fun Bot.promoteChatMember(chatId: Long, userId: Long, builder: PromoteCh
     )
 }
 
-suspend fun Bot.setChatPermissions(chatId: Long, permissions: String) = apiRequest {
-    api.groupsActions.setChatPermissions(chatId, permissions)
+suspend fun Bot.setChatAdministratorCustomTitle(chatId: Long, userId: Long, customTitle: String) = apiRequest {
+    api.groupsActions.setChatAdministratorCustomTitle(chatId, userId, customTitle)
 }
+
+suspend fun Bot.setChatAdministratorCustomTitle(chatId: String, userId: Long, customTitle: String) = apiRequest {
+    api.groupsActions.setChatAdministratorCustomTitle(chatId, userId, customTitle)
+}
+
+suspend fun Bot.banChatSenderChat(chatId: Long, senderChatId: Long) = apiRequest {
+    api.groupsActions.banChatSenderChat(chatId, senderChatId)
+}
+
+suspend fun Bot.banChatSenderChat(chatId: String, senderChatId: Long) = apiRequest {
+    api.groupsActions.banChatSenderChat(chatId, senderChatId)
+}
+
+suspend fun Bot.unbanChatSenderChat(chatId: Long, senderChatId: Long) = apiRequest {
+    api.groupsActions.unbanChatSenderChat(chatId, senderChatId)
+}
+
+suspend fun Bot.unbanChatSenderChat(chatId: String, senderChatId: Long) = apiRequest {
+    api.groupsActions.unbanChatSenderChat(chatId, senderChatId)
+}
+
+suspend fun Bot.setChatPermissions(chatId: Long, permissions: String, useIndependentChatPermissions: Boolean? = null) =
+    apiRequest {
+        api.groupsActions.setChatPermissions(chatId, permissions, useIndependentChatPermissions)
+    }
+
+suspend fun Bot.setChatPermissions(
+    chatId: String,
+    permissions: String,
+    useIndependentChatPermissions: Boolean? = null
+) =
+    apiRequest {
+        api.groupsActions.setChatPermissions(chatId, permissions, useIndependentChatPermissions)
+    }
 
 suspend fun Bot.exportChatInviteLink(chatId: Long) = apiRequest {
     api.groupsActions.exportChatInviteLink(chatId)
+}
+
+suspend fun Bot.exportChatInviteLink(chatId: String) = apiRequest {
+    api.groupsActions.exportChatInviteLink(chatId)
+}
+
+suspend fun Bot.createChatInviteLink(chatId: Long, builder: CreateChatInviteLink.() -> Unit = {}) = apiRequest {
+    val _builder = CreateChatInviteLink()
+    builder(_builder)
+    api.groupsActions.createChatInviteLink(
+        chatId = chatId,
+        name = _builder.name,
+        expireDate = _builder.expireDate,
+        memberLimit = _builder.memberLimit,
+        createsJoinRequest = _builder.createsJoinRequest
+    )
+}
+
+suspend fun Bot.createChatInviteLink(chatId: String, builder: CreateChatInviteLink.() -> Unit = {}) = apiRequest {
+    val _builder = CreateChatInviteLink()
+    builder(_builder)
+    api.groupsActions.createChatInviteLink(
+        chatId = chatId,
+        name = _builder.name,
+        expireDate = _builder.expireDate,
+        memberLimit = _builder.memberLimit,
+        createsJoinRequest = _builder.createsJoinRequest
+    )
+}
+
+suspend fun Bot.editChatInviteLink(chatId: Long, inviteLink: String, builder: EditChatInviteLink.() -> Unit = {}) = apiRequest {
+    val _builder = EditChatInviteLink()
+    builder(_builder)
+    api.groupsActions.editChatInviteLink(
+        chatId = chatId,
+        inviteLink = inviteLink,
+        name = _builder.name,
+        expireDate = _builder.expireDate,
+        memberLimit = _builder.memberLimit,
+        createsJoinRequest = _builder.createsJoinRequest
+    )
+}
+
+suspend fun Bot.revokeChatInviteLink(chatId: Long, inviteLink: String) = apiRequest {
+    api.groupsActions.revokeChatInviteLink(chatId, inviteLink)
+}
+
+suspend fun Bot.revokeChatInviteLink(chatId: String, inviteLink: String) = apiRequest {
+    api.groupsActions.revokeChatInviteLink(chatId, inviteLink)
+}
+
+
+suspend fun Bot.approveChatJoinRequest(chatId: Long, userId: Long) = apiRequest {
+    api.groupsActions.approveChatJoinRequest(chatId, userId)
+}
+
+suspend fun Bot.approveChatJoinRequest(chatId: String, userId: Long) = apiRequest {
+    api.groupsActions.declineChatJoinRequest(chatId, userId)
+}
+
+suspend fun Bot.declineChatJoinRequest(chatId: Long, userId: Long) = apiRequest {
+    api.groupsActions.approveChatJoinRequest(chatId, userId)
+}
+
+suspend fun Bot.declineChatJoinRequest(chatId: String, userId: Long) = apiRequest {
+    api.groupsActions.declineChatJoinRequest(chatId, userId)
 }
 
 suspend fun Bot.setChatPhoto(chatId: Long, photo: File) = apiRequest {
@@ -373,3 +456,106 @@ suspend fun Bot.setChatTitle(chatId: Long, title: String) = apiRequest {
 suspend fun Bot.setChatDescription(chatId: Long, description: String) = apiRequest {
     api.groupsActions.setChatDescription(chatId, description)
 }
+
+suspend fun Bot.pinChatMessage(
+    chatId: Long,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    api.groupsActions.pinChatMessage(chatId, messageId, disableNotification)
+
+}
+
+suspend fun Bot.pinChatMessage(
+    chatId: String,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    api.groupsActions.pinChatMessage(chatId, messageId, disableNotification)
+}
+
+suspend fun Bot.unpinChatMessage(
+    chatId: Long,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    api.groupsActions.pinChatMessage(chatId, messageId, disableNotification)
+
+}
+
+suspend fun Bot.unpinChatMessage(
+    chatId: String,
+    messageId: Long,
+    disableNotification: Boolean? = null
+) = apiRequest {
+
+    api.groupsActions.pinChatMessage(chatId, messageId, disableNotification)
+}
+
+suspend fun Bot.unpinAllChatMessages(chatId: Long) = apiRequest {
+    api.groupsActions.unpinAllChatMessages(chatId)
+}
+
+suspend fun Bot.unpinAllChatMessages(chatId: String) = apiRequest {
+    api.groupsActions.unpinAllChatMessages(chatId)
+}
+
+suspend fun Bot.leaveChat(chatId: Long) = apiRequest {
+    api.groupsActions.leaveChat(chatId)
+}
+
+suspend fun Bot.leaveChat(chatId: String) = apiRequest {
+    api.groupsActions.leaveChat(chatId)
+}
+
+suspend fun Bot.getChat(chatId: Long) = apiRequest {
+    api.groupsActions.getChat(chatId)
+}
+
+suspend fun Bot.getChat(chatId: String) = apiRequest {
+    api.groupsActions.getChat(chatId)
+}
+
+suspend fun Bot.getChatAdministrators(chatId: Long) = apiRequest {
+    api.groupsActions.getChatAdministrators(chatId)
+}
+
+suspend fun Bot.getChatAdministrators(chatId: String) = apiRequest {
+    api.groupsActions.getChatAdministrators(chatId)
+}
+
+suspend fun Bot.getChatMemberCount(chatId: Long) = apiRequest {
+    api.groupsActions.getChatMemberCount(chatId)
+}
+
+suspend fun Bot.getChatMemberCount(chatId: String) = apiRequest {
+    api.groupsActions.getChatMemberCount(chatId)
+}
+
+suspend fun Bot.getChatMember(chatId: Long,userId: Long) = apiRequest {
+    api.groupsActions.getChatMember(chatId, userId)
+}
+
+suspend fun Bot.getChatMember(chatId: String,userId: Long) = apiRequest {
+    api.groupsActions.getChatMember(chatId, userId)
+}
+
+suspend fun Bot.setChatStickerSet(chatId: Long,stickerSetName: String) = apiRequest {
+    api.groupsActions.setChatStickerSet(chatId, stickerSetName)
+}
+
+suspend fun Bot.setChatStickerSet(chatId: String,stickerSetName: String) = apiRequest {
+    api.groupsActions.setChatStickerSet(chatId, stickerSetName)
+}
+
+suspend fun Bot.deleteChatStickerSet(chatId: Long) = apiRequest {
+    api.groupsActions.deleteChatStickerSet(chatId)
+}
+
+suspend fun Bot.deleteChatStickerSet(chatId: String) = apiRequest {
+    api.groupsActions.deleteChatStickerSet(chatId)
+}
+

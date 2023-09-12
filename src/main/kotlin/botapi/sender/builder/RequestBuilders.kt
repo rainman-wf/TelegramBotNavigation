@@ -106,3 +106,17 @@ class PromoteChatMember {
     var canPinMessages: Boolean? = null
     var canPromoteMembers: Boolean? = null
 }
+
+class CreateChatInviteLink {
+    var name: String? = null
+    var expireDate: Long? = null
+    var memberLimit: Int? = null
+    var createsJoinRequest: Boolean? = null
+}
+
+class EditChatInviteLink {
+    var name: String? = null
+    var expireDate: Long? = null
+    var memberLimit: Int? = null
+    var createsJoinRequest: Boolean? = null
+}
