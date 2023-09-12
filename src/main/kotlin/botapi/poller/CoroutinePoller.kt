@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.flowOn
 
 class CoroutinePoller (
     private val api: Api
-) : Poller {
+)  {
 
     private var lastUpdateId: Int? = null
 
-    override fun poll(): Flow<Update> {
+    fun poll(): Flow<Update> {
         return channelFlow {
             while (true) {
                 val data = try {
@@ -22,6 +22,10 @@ class CoroutinePoller (
                 } catch (e: Exception) {
                     println("Update polling error : ${e::class.simpleName} : ${e.message}")
                     delay(5000)
+                    continue
+                }
+                if (!data.isSuccessful) {
+                    println(data.errorBody()?.string() ?: "Get Updates error: ${data.code()}")
                     continue
                 }
                 val body = data.body() ?: PollingUpdatesResult(false, listOf())
