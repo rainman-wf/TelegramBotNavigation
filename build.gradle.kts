@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "rainmann.telegram-bot"
-version = "0.1.6"
+version = "0.1.18"
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ publishing {
     publications {
         create<MavenPublication>("maven_public") {
             groupId = "rainmann.telegram-bot"
-            version = "0.1.3"
+            version = "0.1.18"
             artifactId = "TelegramBotNavigation"
             from(components.getByName("kotlin"))
         }
