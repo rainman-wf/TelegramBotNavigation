@@ -75,8 +75,9 @@ class RequestPoolExecutor (
         }
     }
 
-    suspend fun send(pack: SendingPackage<Sendresponse>) {
-        sender.emit(pack)
+    @Suppress("UNCHECKED_CAST")
+    suspend fun <T : Sendresponse> send(pack: SendingPackage<T>) {
+        sender.emit(pack as SendingPackage<Sendresponse>)
     }
 
     data class SendingPackage<T : Sendresponse> (
