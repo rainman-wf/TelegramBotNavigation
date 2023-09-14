@@ -39,8 +39,8 @@ internal fun Update.toResponse(): NavResponse {
 internal fun Message.toResponse() =
     NavResponse(
         userId = from?.id ?: senderChat!!.id,
-        username = from?.username ?: senderChat!!.username,
-        firstName = from?.firstName ?: senderChat!!.title!!,
+        username = from?.username,
+        firstName = from?.firstName ?: senderChat!!.title ?: "Title",
         data = text ?: "",
         messageId = messageId
     )
