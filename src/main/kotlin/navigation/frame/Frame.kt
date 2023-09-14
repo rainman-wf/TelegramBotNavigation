@@ -8,7 +8,6 @@ import navigation.NavigationController
 import navigation.args.NavArg
 import navigation.models.*
 import java.io.File
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 abstract class Frame  {
@@ -90,6 +89,7 @@ abstract class Frame  {
                     ?: throw IllegalArgumentException("Message content is must not be null")) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
+                protectContent = _protected
             }
         } else {
             bot.editMessageText(
@@ -114,6 +114,7 @@ abstract class Frame  {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
+                protectContent = _protected
             }
 
             is String -> bot.sendPhoto(
@@ -123,6 +124,7 @@ abstract class Frame  {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
+                protectContent = _protected
             }
 
             else -> throw IllegalArgumentException("photo must be File or string (id / url)")
@@ -141,6 +143,7 @@ abstract class Frame  {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
+                protectContent = _protected
             }
 
             is String -> bot.sendDocument(
@@ -150,6 +153,7 @@ abstract class Frame  {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
+                protectContent = _protected
             }
 
             else -> throw IllegalArgumentException("document must be File or string (id / url)")
