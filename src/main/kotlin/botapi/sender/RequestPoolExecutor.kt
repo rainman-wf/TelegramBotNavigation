@@ -17,7 +17,7 @@ class RequestPoolExecutor (
     private val bot: Bot
 ){
 
-    private val sender = MutableSharedFlow<SendingPackage<Any>>()
+    private val sender = MutableSharedFlow<SendingPackage<Sendresponse>>()
 
     internal suspend fun launch() {
 
@@ -77,15 +77,10 @@ class RequestPoolExecutor (
 
     @Suppress("UNCHECKED_CAST")
     suspend fun <T : Sendresponse> send(pack: SendingPackage<T>) {
-        sender.emit(pack as SendingPackage<Any>)
+        sender.emit(pack as SendingPackage<Sendresponse>)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    suspend fun send(pack: SendingPackage<Boolean>) {
-        sender.emit(pack as SendingPackage<Any>)
-    }
-
-    data class SendingPackage<T : Any> (
+    data class SendingPackage<T : Sendresponse> (
         val pack: List<Pair<Long, suspend () -> BaseResponse<T>>>,
         val pinMessage: Boolean? = false,
         val result: suspend (SendingResult) -> Unit = {}
