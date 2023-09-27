@@ -11,9 +11,7 @@ import botapi.common.MESSAGE_ID
 import botapi.common.PARSE_MODE
 import botapi.common.REPLY_MARKUP
 import botapi.common.TEXT
-import botapi.models.BaseResponse
-import botapi.models.Message
-import botapi.models.ParseMode
+import botapi.models.*
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -45,6 +43,16 @@ internal interface UpdateMsgApi {
         @Field(PARSE_MODE) parseMode: ParseMode?,
         @Field(CAPTION_ENTITIES) captionEntities: String?,
         @Field(REPLY_MARKUP) replyMarkup: String?
+    ): Response<BaseResponse<Message>>
+
+    @FormUrlEncoded
+    @POST("editMessageMedia")
+    suspend fun editMessageMedia(
+        @Field(CHAT_ID) chatId: Any?,
+        @Field(MESSAGE_ID) messageId: Long?,
+        @Field(INLINE_MESSAGE_ID) inlineMessageId: String?,
+        @Field("media") media: String,
+        @Field(REPLY_MARKUP) replyMarkup: String?,
     ): Response<BaseResponse<Message>>
 
     @FormUrlEncoded

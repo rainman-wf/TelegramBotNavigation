@@ -12,6 +12,4 @@ abstract class HomeFrame : Frame() {
     }
 }
 
-abstract class RootFrame : Frame()
-
 abstract class FinalFrame : Frame()

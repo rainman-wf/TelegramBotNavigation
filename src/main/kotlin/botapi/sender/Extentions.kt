@@ -207,6 +207,46 @@ suspend fun Bot.editMessageText(
     )
 }
 
+suspend fun Bot.editMessageCaption(
+    chatId: Long,
+    messageId: Long,
+    caption: String,
+    builder: EditMessageCaption.() -> Unit = {}
+) = apiRequest {
+
+    val _builder = EditMessageCaption()
+
+    builder(_builder)
+
+    api.requestUpdateMsgApi.editMessageCaption(
+        chatId = chatId,
+        messageId = messageId,
+        inlineMessageId = null,
+        caption = caption,
+        parseMode = _builder.parseMode,
+        captionEntities = _builder.captionEntities?.toJson(),
+        replyMarkup = _builder.replyMarkup?.toJson()
+    )
+}
+
+suspend fun Bot.editMessageMedia(
+    chatId: Long, messageId: Long, builder: EditMessageMedia.() -> Unit
+) = apiRequest {
+
+    val _builder = EditMessageMedia()
+
+    builder(_builder)
+
+    api.requestUpdateMsgApi.editMessageMedia(
+        chatId = chatId,
+        messageId = messageId,
+        inlineMessageId = null,
+        media = _builder.inputMedia.toJson()!!,
+        replyMarkup = _builder.replyMarkup?.toJson()
+    )
+}
+
+
 suspend fun Bot.answerCallbackQuery(
     callbackQueryId: String,
     builder: AnswerCallbackQuery.() -> Unit = {}

@@ -9,6 +9,7 @@ internal suspend fun <T> apiRequest(body: suspend () -> Response<BaseResponse<T>
     val response = try {
         body()
     } catch (e: Exception) {
+        e.printStackTrace()
         return BaseResponse(null, false, 1001, e.message)
     }
 

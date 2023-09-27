@@ -686,17 +686,17 @@ data class InputMediaPhoto(
     @Name("media") val media: String,
     @Name("caption") val caption: String? = null,
     @Name("parse_mode") val parseMode: String? = null,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("caption_entities") val captionEntities: String? = null,
     @Name("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia
 
 data class InputMediaVideo(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("thumbnail") val thumbnail: Any? = null,
     @Name("caption") val caption: String? = null,
     @Name("parse_mode") val parseMode: String? = null,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("caption_entities") val captionEntities: String? = null,
     @Name("width") val width: Int? = null,
     @Name("height") val height: Int? = null,
     @Name("duration") val duration: Int? = null,
@@ -707,10 +707,10 @@ data class InputMediaVideo(
 data class InputMediaAnimation(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("thumbnail") val thumbnail: Any? = null,
     @Name("caption") val caption: String? = null,
     @Name("parse_mode") val parseMode: String? = null,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("caption_entities") val captionEntities: String? = null,
     @Name("width") val width: Int? = null,
     @Name("height") val height: Int? = null,
     @Name("duration") val duration: Int? = null,
@@ -720,10 +720,10 @@ data class InputMediaAnimation(
 data class InputMediaAudio(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("thumbnail") val thumbnail: Any? = null,
     @Name("caption") val caption: String? = null,
     @Name("parse_mode") val parseMode: String? = null,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("caption_entities") val captionEntities: String? = null,
     @Name("duration") val duration: Int? = null,
     @Name("performer") val performer: String? = null,
     @Name("title") val title: String? = null,
@@ -732,12 +732,12 @@ data class InputMediaAudio(
 data class InputMediaDocument(
     @Name("type") val type: String,
     @Name("media") val media: String,
-    @Name("thumb") val thumb: InputFile,/* or String? = null*/
+    @Name("thumbnail") val thumbnail: Any? = null,
     @Name("caption") val caption: String? = null,
     @Name("parse_mode") val parseMode: String? = null,
-    @Name("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @Name("caption_entities") val captionEntities: String? = null,
     @Name("disable_content_type_detection") val disableContentTypeDetection: Boolean? = null
-)
+): InputMedia
 
 data class Sticker(
     @Name("file_id") val fileId: String,

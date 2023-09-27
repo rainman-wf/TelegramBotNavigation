@@ -1,4 +1,10 @@
 import botapi.Bot
+import botapi.models.InputMediaPhoto
+import botapi.models.ParseMode
+import botapi.sender.builder.InputMediaBuilder
+import botapi.sender.deleteMessage
+import botapi.sender.editMessageMedia
+import botapi.sender.sendPhoto
 import navigation.Navigation
 import navigation.args.NavArg
 import navigation.frame.*
@@ -7,14 +13,15 @@ import navigation.listen
 import navigation.models.NavResponse
 
 
-val bot = Bot("TOKEN")
+val bot = Bot(token)
 
 suspend fun main() {
 
-    bot.setLoggingLevel(Bot.LoggingLevel.NONE)
+    bot.setLoggingLevel(Bot.LoggingLevel.BODY)
+
     Navigation.init(bot) {
         home(::Home)
-        root("/start", ::Main)
+        root("/start", ::FirstFrame)
     }
 
     bot.updates {
@@ -24,16 +31,38 @@ suspend fun main() {
 
 class Home : HomeFrame()
 
-class Main : RootFrame() {
+class FirstFrame : Frame() {
     override suspend fun show() {
-        text {
+        photo {
+            photo = photo1
             content {
-                "Main Frame"
+                "first photo"
             }
-
             keyboard {
                 row {
                     button("Next", "next")
+                }
+            }
+        }
+    }
+    override suspend fun handle(navResponse: NavResponse) {
+        super.handle(navResponse)
+        when (navResponse.data) {
+            "next" -> navigate(::SecondFrame)
+
+        }
+    }
+}
+
+class SecondFrame : Frame() {
+    override suspend fun show() {
+        photo {
+            photo = photo2
+            content {
+                "SECOND PHOTO"
+            }
+            keyboard {
+                row {
                     button("Back", "back")
                 }
             }
@@ -42,25 +71,12 @@ class Main : RootFrame() {
 
     override suspend fun handle(navResponse: NavResponse) {
         super.handle(navResponse)
-        when(navResponse.data) {
-            "next" -> navigate(::SomeMenuPoint)
+        when (navResponse.data) {
             "back" -> back()
         }
     }
 }
 
-class SomeMenuPoint : Frame(), AutoCloseable {
-
-    override val timeout = 5
-    override val removeCurrent = true
-    override suspend fun show() {
-        text {
-            content {
-                "Wait fo close $timeout"
-            }
-        }
-    }
-}
 
 
 

@@ -38,29 +38,25 @@ internal class InitApi(token: String) {
         .build().create(SendMsgApi::class.java)
 
     internal val requestUpdateMsgApi = Retrofit.Builder()
-        .addConverterFactory(converterFactory
-        )
+        .addConverterFactory(converterFactory)
         .client(client)
         .baseUrl(baseUrl)
         .build().create(UpdateMsgApi::class.java)
 
     internal val inlineModeApi = Retrofit.Builder()
-        .addConverterFactory(converterFactory
-        )
+        .addConverterFactory(converterFactory)
         .client(client)
         .baseUrl(baseUrl)
         .build().create(InlineModeApi::class.java)
 
     internal val getter = Retrofit.Builder()
-        .addConverterFactory(converterFactory
-        )
+        .addConverterFactory(converterFactory)
         .client(client)
         .baseUrl(baseUrl)
         .build().create(GetDataApi::class.java)
 
     internal val groupsActions = Retrofit.Builder()
-        .addConverterFactory(converterFactory
-        )
+        .addConverterFactory(converterFactory)
         .client(client)
         .baseUrl(baseUrl)
         .build().create(GroupsActionsApi::class.java)

@@ -3,6 +3,7 @@ package navigation.frame
 import botapi.Bot
 import botapi.models.*
 import botapi.sender.*
+import botapi.sender.builder.InputMediaBuilder
 import navigation.NavComponent
 import navigation.NavigationController
 import navigation.args.NavArg
@@ -10,13 +11,13 @@ import navigation.models.*
 import java.io.File
 import kotlin.properties.Delegates
 
-abstract class Frame  {
+abstract class Frame {
 
     internal val controller = NavigationController
 
     private var _parent: Frame? = null
     val parent get() = _parent
-    internal fun setParentFrame (frame: Frame): Frame {
+    internal fun setParentFrame(frame: Frame): Frame {
         _parent = frame
         return this
     }
@@ -29,8 +30,8 @@ abstract class Frame  {
     }
 
 
-
     private var _args: NavArg? = null
+
     @Suppress("UNCHECKED_CAST")
     fun <T : NavArg?> navArgs() = _args as T?
     internal fun setArgs(args: NavArg): Frame {
@@ -40,11 +41,13 @@ abstract class Frame  {
 
 
     private var _result: NavArg? = null
+
     @Suppress("UNCHECKED_CAST")
     fun <T : NavArg?> results() = _result as T?
     internal fun putResult(arg: NavArg) {
         _result = arg
     }
+
     internal fun resetResult() {
         _result = null
     }
@@ -72,6 +75,7 @@ abstract class Frame  {
 
     open suspend fun handle(navResponse: NavResponse) {
         navResponse.messageId?.let { bot.deleteMessage(_userId, it) }
+        navResponse.callbackId?.let { bot.answerCallbackQuery(it) { cacheTime = 1 } }
     }
 
     internal fun setNavSession(messageId: Long?) {
@@ -106,7 +110,17 @@ abstract class Frame  {
     inner class Photo(private val messageId: Long? = null) : NavComponent() {
         lateinit var photo: Any
 
-        suspend fun execute() = when (photo) {
+        suspend fun execute() = messageId?.let { id ->
+            if (photo is String) {
+                bot.editMessageMedia(_userId, id) {
+                    replyMarkup = keyboard
+                    buildMedia<InputMediaPhoto> {
+                        this.caption = content?.let { if (formatted) it.toMarkdown() else it }
+                        media = photo as String
+                    }
+                }
+            } else throw IllegalArgumentException("photo must be a string (id / url)")
+        } ?: when (photo) {
             is File -> bot.sendPhoto(
                 _userId,
                 photo as File
