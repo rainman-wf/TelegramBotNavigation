@@ -13,12 +13,20 @@ suspend fun Frame.navigateForResult(constructor: () -> Frame, args: NavArg? = nu
     controller.navigate(userId, constructor, args, this)
 }
 
-suspend fun Frame.back(args: NavArg? = null) {
-    args?.apply {
+suspend fun Frame.back(args: NavArg) {
+    args.apply {
         parent?.putResult(this)
             ?: throw IllegalArgumentException("Use navigateWithResult() to this frame for back with result")
     }
     controller.back(userId)
+}
+
+suspend fun Frame.back() {
+    controller.back(userId)
+}
+
+suspend fun Frame.back(steps: Int) {
+    controller.back(userId, steps)
 }
 
 suspend fun Frame.home() = controller.home(userId)

@@ -1,11 +1,14 @@
 package navigation.frame
 
-suspend fun Frame.text(block: Frame.Message.() -> Unit) {
+import botapi.models.Message
+
+suspend fun Frame.text(block: Frame.Message.() -> Unit) : Message? {
     val msgId = controller.getNavSession(userId)
     val builder = Message(msgId)
     block(builder)
-    val response = builder.execute()
-    setNavSession(response.result?.messageId)
+    return builder.execute().result?.also {
+        setNavSession(it.messageId)
+    }
 }
 
 suspend fun Frame.photo(block: Frame.Photo.() -> Unit) {

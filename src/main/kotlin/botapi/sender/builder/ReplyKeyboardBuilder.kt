@@ -6,7 +6,20 @@ class ReplyKeyboardBuilder {
 
     private val rows: MutableList<List<KeyboardButton>> = mutableListOf()
 
-    fun build() = ReplyKeyboardMarkup(rows)
+    var isPersistent: Boolean? = null
+    var resizeKeyboard: Boolean? = null
+    var oneTimeKeyboard: Boolean? = null
+    var inputFieldPlaceHolder: String? = null
+    var selective: Boolean? = null
+
+    fun build() = ReplyKeyboardMarkup(
+        rows,
+        isPersistent,
+        resizeKeyboard,
+        oneTimeKeyboard,
+        inputFieldPlaceHolder,
+        selective,
+    )
 
     fun row(rowBuilder: RowBuilder.() -> Unit) {
         val builder = RowBuilder()
@@ -18,8 +31,6 @@ class ReplyKeyboardBuilder {
 
         private val buttons: MutableList<KeyboardButton> = mutableListOf()
 
-        fun build () = buttons
-
         inner class KeyboardButtonBuilder(
             val requestUser: KeyboardButtonRequestUser? = null,
             val requestChat: KeyboardButtonRequestChat? = null,
@@ -29,7 +40,9 @@ class ReplyKeyboardBuilder {
             val webApp: WebAppInfo? = null,
         )
 
-        fun button(text: String, builder: KeyboardButtonBuilder.() -> Unit) {
+        fun build() = buttons
+
+        fun button(text: String, builder: KeyboardButtonBuilder.() -> Unit = {}) {
 
             val _builder = KeyboardButtonBuilder()
 
@@ -46,6 +59,7 @@ class ReplyKeyboardBuilder {
                     webApp = _builder.webApp,
                 )
             )
+
         }
     }
 }

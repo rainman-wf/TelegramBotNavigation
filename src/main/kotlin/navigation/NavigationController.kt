@@ -61,10 +61,7 @@ internal object NavigationController {
 
 
     suspend fun back(userId: Long) {
-        val currentFrame = states[userId]!!.last
-        states[userId]!!.apply {
-            if (currentFrame is ListFrame) previous else previous.show()
-        }
+        states[userId]!!.apply { previous.show() }
     }
 
     suspend fun home(userId: Long) {
@@ -111,7 +108,8 @@ internal object NavigationController {
 
     private fun createState(navResponse: NavResponse) {
         if (!states.containsKey(navResponse.userId)) {
-            val state = UserState(navResponse.userId, roots["/home"]!!.invoke().setUserId(navResponse.userId) as HomeFrame)
+            val state =
+                UserState(navResponse.userId, roots["/home"]!!.invoke().setUserId(navResponse.userId) as HomeFrame)
             states[navResponse.userId] = state
         }
     }
@@ -125,6 +123,17 @@ internal object NavigationController {
     }
 
     fun getNavSession(userId: Long) = states[userId]?.navSession
+    suspend fun back(userId: Long, steps: Int) {
+
+        if (steps > 1)  {
+            repeat(steps - 1) {
+                states[userId]!!.deleteStackItem()
+            }
+            states[userId]!!.last
+        }
+
+        states[userId]!!.apply { previous.show() }
+    }
 
 }
 

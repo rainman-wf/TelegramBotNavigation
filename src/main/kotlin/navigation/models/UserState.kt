@@ -32,13 +32,11 @@ internal class UserState(
                 }
             }
         }
-        log()
     }
 
     fun resetSession() {
         autoClose.cancel()
         _navSession = null
-        log()
     }
 
     fun resetStack() : UserState {
@@ -94,5 +92,9 @@ internal class UserState(
 
     private fun removeLast() {
         if (frameStack.isNotEmpty()) frameStack.removeLast()
+    }
+
+    fun deleteStackItem() {
+        frameStack.removeLast()
     }
 }

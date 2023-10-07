@@ -12,7 +12,7 @@ class ListBuilder<T>(
     suspend fun execute() {
         Frame.bot.answerInlineQuery(queryId) {
             results.addAll(adapter.map(list))
-            cacheTime = 10
+            cacheTime = 1
             isPersonal = true
         }
     }
