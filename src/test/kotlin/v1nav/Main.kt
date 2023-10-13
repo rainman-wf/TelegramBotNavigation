@@ -1,23 +1,23 @@
+package v1nav
+
 import botapi.Bot
-import botapi.models.InputMediaPhoto
-import botapi.models.ParseMode
-import botapi.sender.builder.InputMediaBuilder
-import botapi.sender.deleteMessage
-import botapi.sender.editMessageMedia
-import botapi.sender.sendPhoto
 import navigation.Navigation
-import navigation.args.NavArg
 import navigation.frame.*
 import navigation.init
 import navigation.listen
 import navigation.models.NavResponse
+import photo1
+import photo2
+import token
 
 
 val bot = Bot(token)
 
+
+
 suspend fun main() {
 
-    bot.setLoggingLevel(Bot.LoggingLevel.BODY)
+    bot.setLoggingLevel(Bot.LoggingLevel.NONE)
 
     Navigation.init(bot) {
         home(::Home)

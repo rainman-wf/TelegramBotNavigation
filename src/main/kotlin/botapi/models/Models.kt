@@ -974,7 +974,6 @@ data class InlineQueryResultButton(
     @Name("start_parameter") val startParameter: String? = null
 )
 
-
 data class InlineQueryResultArticle(
     @Name("type") val type: String,
     @Name("id") val id: String,

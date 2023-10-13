@@ -16,6 +16,8 @@ abstract class NavComponent {
         keyboard = _builder.build()
     }
 
+
+
     fun content(text: () -> String) {
         content = text()
     }

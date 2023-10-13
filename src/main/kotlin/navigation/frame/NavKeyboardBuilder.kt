@@ -15,6 +15,42 @@ class NavKeyboardBuilder {
         rows.add(builder.build())
     }
 
+    fun backButton(text: String = "Назад") =button(text, "back")
+    fun homeButton(text: String = "Выйти") = button(text, "home")
+
+    fun button(
+        text: String,
+        data: String,
+        type: ButtonType = ButtonType.CALLBACK
+    ) {
+
+        val _builder = InlineButtonBuilder()
+
+        when (type) {
+            ButtonType.CALLBACK -> _builder.callbackData = data
+            ButtonType.URL -> _builder.url = data
+            ButtonType.INLINE_QUERY -> _builder.switchInlineQuery = data
+            ButtonType.INLINE_QUERY_CURRENT_CHAT -> _builder.switchInlineQueryCurrentChat = data
+            ButtonType.PAY -> _builder.pay = true
+        }
+
+        rows.add(
+            listOf(
+                InlineKeyboardButton(
+                    text = text,
+                    url = _builder.url,
+                    callbackData = _builder.callbackData,
+                    webApp = _builder.webApp,
+                    loginUrl = _builder.loginUrl,
+                    switchInlineQuery = _builder.switchInlineQuery,
+                    switchInlineQueryCurrentChat = _builder.switchInlineQueryCurrentChat,
+                    callbackGame = _builder.callbackGame,
+                    pay = _builder.pay,
+                )
+            )
+        )
+    }
+
     fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) {
         val buttons = adapter.map(list)
         val grouped = buttons.groupBy(columns).map { it.toList() }
@@ -27,20 +63,21 @@ class NavKeyboardBuilder {
             .map { it.value.map { index -> index.value } }
     }
 
+    inner class InlineButtonBuilder(
+        var url: String? = null,
+        var callbackData: String? = null,
+        var webApp: WebAppInfo? = null,
+        var loginUrl: LoginUrl? = null,
+        var switchInlineQuery: String? = null,
+        var switchInlineQueryCurrentChat: String? = null,
+        var callbackGame: CallbackGame? = null,
+        var pay: Boolean? = null,
+    )
+
+
     inner class RowBuilder {
 
         private val buttons: MutableList<InlineKeyboardButton> = mutableListOf()
-
-        inner class InlineButtonBuilder(
-            var url: String? = null,
-            var callbackData: String? = null,
-            var webApp: WebAppInfo? = null,
-            var loginUrl: LoginUrl? = null,
-            var switchInlineQuery: String? = null,
-            var switchInlineQueryCurrentChat: String? = null,
-            var callbackGame: CallbackGame? = null,
-            var pay: Boolean? = null,
-        )
 
         fun build() = buttons
 
