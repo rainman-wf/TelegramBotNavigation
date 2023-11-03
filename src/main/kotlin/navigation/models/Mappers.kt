@@ -4,7 +4,7 @@ import botapi.models.*
 
 internal fun Update.toResponse(): NavResponse {
     return when (val result =
-        message ?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: channelPost ?: error("unhandled update type")) {
+        message ?: editedMessage?: callbackQuery ?: inlineQuery ?: chosenInlineResult ?: channelPost ?: error("unhandled update type")) {
 
         is Message -> result.toResponse()
 
@@ -31,6 +31,7 @@ internal fun Update.toResponse(): NavResponse {
             data = result.query,
             listItem = result.resultId
         )
+
 
         else -> error("unhandled update type")
     }
