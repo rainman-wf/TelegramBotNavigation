@@ -3,9 +3,9 @@ package navv2.entities
 import botapi.Bot
 import navv2.abstractions.Activity
 
-internal object ContextManager {
-
-    lateinit var bot: Bot
+internal class ContextManager(
+    internal val bot: Bot
+) {
 
     private val contextContainer = mutableMapOf<Long, Context>()
     private val registeredActivities = mutableMapOf<String, () -> Activity>()
@@ -26,7 +26,7 @@ internal object ContextManager {
 
     private fun getContext(userId: Long): Context {
         return contextContainer[userId] ?: run {
-            val newContext = Context(userId)
+            val newContext = Context(userId).attachContextManager(this)
             contextContainer[userId] = newContext
             newContext
         }

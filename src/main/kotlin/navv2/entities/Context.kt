@@ -1,28 +1,39 @@
 package navv2.entities
 
-import botapi.Bot
+import botapi.sender.deleteMessage
+import kotlinx.coroutines.Job
 import navigation.log
 import navv2.entities.Context.Condition.*
 import navv2.abstractions.Activity
+import navv2.abstractions.FinalFragment
 import navv2.abstractions.Updatable
 
 class Context(override val userId: Long) : Updatable {
 
     var activity: Activity? = null
-        private set
+        internal set
 
-    val bot: Bot get() = ContextManager.bot
+    val notificationManager: NotificationManager = NotificationManager()
+
+    internal fun attachContextManager(contextManager: ContextManager) : Context {
+        manager = contextManager
+        return this
+    }
+
+    private lateinit var manager: ContextManager
 
     override suspend fun handle(action: UserAction) {
-        log("before handle: $activity : ${activity?.fragmentManager?.stack?.joinToString (" -> ")}")
-        when (calcCondition(action)) {
-            ROOT -> createOrReplaceActivity(requireNotNull(action.data), requireNotNull(action.messageId))
+        when (calcCondition(action.also { println(it) })) {
+            ROOT -> createOrReplaceActivity(requireNotNull(action.data), action.messageId)
             LAST_BACK -> destroyActivity()
             HOME -> destroyActivity()
             IGNORE -> return
             HANDLE -> activity?.handle(action)
         }
-        log("after handle:  $activity : ${activity?.fragmentManager?.stack?.joinToString (" -> ")}")
+    }
+
+    internal suspend fun deleteInput(msgId: Long) {
+        manager.bot.deleteMessage(userId, msgId)
     }
 
     private suspend fun destroyActivity() {
@@ -34,20 +45,27 @@ class Context(override val userId: Long) : Updatable {
         destroyActivity()
     }
 
-    private suspend fun createOrReplaceActivity(command: String, msgId: Long) {
+    private suspend fun createOrReplaceActivity(command: String, msgId: Long?) {
         activity =
             if (activity != null)
-                ContextManager.requireActivityConstructor(command)
+                manager.requireActivityConstructor(command)
                     .invoke()
                     .setMsgId(requireNotNull(activity?.msgId))
-                    .passContext(this)
+                    .attachContext(this)
+                    .attachBot(manager.bot)
             else
-                ContextManager.requireActivityConstructor(command)
+                manager.requireActivityConstructor(command)
                     .invoke()
-                    .passContext(this)
-        requireNotNull(activity).onCreate()
-        requireNotNull(activity).onStart()
-        requireNotNull(activity).onStarted(msgId)
+                    .attachContext(this)
+                    .attachBot(manager.bot)
+        requireNotNull(activity).apply {
+            onCreate()
+            onStart()
+            onStarted(msgId)
+            if (fragmentManager.stack.last is FinalFragment)
+                activity = null
+        }
+
     }
 
     private enum class Condition {
@@ -59,14 +77,14 @@ class Context(override val userId: Long) : Updatable {
             update.data?.let { data ->
                 when {
                     data == "back" && it.fragmentManager.stack.size == 1 -> LAST_BACK
-                    ContextManager.isActivityRegistered(data) -> ROOT
+                    manager.isActivityRegistered(data) -> ROOT
                     data == "home" -> HOME
                     else -> HANDLE
                 }
             }
         } ?: update.data?.let { data ->
             when {
-                ContextManager.isActivityRegistered(data) -> ROOT
+                manager.isActivityRegistered(data) -> ROOT
                 else -> IGNORE
             }
         } ?: IGNORE

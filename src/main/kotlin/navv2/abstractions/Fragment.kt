@@ -1,12 +1,19 @@
 package navv2.abstractions
 
+import botapi.Bot
 import botapi.sender.deleteMessage
 import navv2.entities.ContextManager
 import navv2.entities.UserAction
 
 abstract class Fragment : Updatable, LifeCycle {
 
-    protected val bot get() = ContextManager.bot
+    internal fun attachActivity(activity: Activity) : Fragment {
+        this.activity = activity
+        return this
+    }
+    lateinit var activity: Activity
+        private set
+
     private lateinit var args: NavArg
 
     @Suppress("UNCHECKED_CAST")
@@ -17,16 +24,8 @@ abstract class Fragment : Updatable, LifeCycle {
     }
     override val userId: Long get() = requireActivity().userId
 
-    lateinit var activity: Activity
-        private set
-
     fun setArg(args: NavArg) : Fragment {
         this.args = args
-        return this
-    }
-
-    internal fun attachActivity(activity: Activity) : Fragment {
-        this.activity = activity
         return this
     }
 
@@ -36,9 +35,11 @@ abstract class Fragment : Updatable, LifeCycle {
         return activity
     }
 
+    internal fun _requireActivity() : Activity = activity
+
     override suspend fun handle(action: UserAction) {
         action.messageId?.apply {
-            val result = bot.deleteMessage(action.from.id, this)
+            val result = requireActivity().bot.deleteMessage(action.from.id, this)
             println(result)
         }
         when (action.data) {
@@ -62,6 +63,10 @@ abstract class Fragment : Updatable, LifeCycle {
 
     protected suspend fun update() {
         activity.navController.update()
+    }
+
+    protected suspend fun replace(fragment: () -> Fragment, arg: NavArg? = null) {
+        activity.navController.replace(fragment, arg)
     }
 
     override fun toString(): String {

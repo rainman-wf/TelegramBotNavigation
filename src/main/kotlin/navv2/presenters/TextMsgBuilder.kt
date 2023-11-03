@@ -1,5 +1,6 @@
 package navv2.presenters
 
+import botapi.Bot
 import botapi.models.ParseMode
 import botapi.sender.editMessageText
 import botapi.sender.sendMessage
@@ -7,9 +8,9 @@ import navigation.NavComponent
 import navigation.models.toMarkdown
 import navv2.entities.ContextManager
 
-class TextMsgBuilder(private val userId: Long, private val messageId: Long? = null) : NavComponent() {
+class TextMsgBuilder(private val bot: Bot, private val userId: Long, private val messageId: Long? = null) : NavComponent() {
     suspend fun execute() = if (messageId == null) {
-        ContextManager.bot.sendMessage(
+        bot.sendMessage(
             chatId = userId,
             text = content?.let { if (formatted) it.toMarkdown() else it }
                 ?: throw IllegalArgumentException("Message content is must not be null")) {
@@ -18,7 +19,7 @@ class TextMsgBuilder(private val userId: Long, private val messageId: Long? = nu
             protectContent = _protected
         }
     } else {
-        ContextManager.bot.editMessageText(
+        bot.editMessageText(
             chatId = userId,
             messageId = messageId,
             text = content?.let { if (formatted) it.toMarkdown() else it }

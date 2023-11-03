@@ -1,5 +1,6 @@
 package navv2.presenters
 
+import botapi.Bot
 import botapi.models.InlineQueryResultArticle
 import botapi.models.InputTextMessageContent
 import botapi.sender.answerInlineQuery
@@ -8,6 +9,7 @@ import navv2.abstractions.ListAdapter
 import navv2.entities.ContextManager
 
 class ListBuilder<T>(
+    private val bot: Bot,
     private val list: List<T>,
     private val queryId: String,
 ) {
@@ -15,7 +17,7 @@ class ListBuilder<T>(
     lateinit var adapter: ListAdapter<T>
 
     suspend fun execute() {
-        ContextManager.bot.answerInlineQuery(queryId) {
+        bot.answerInlineQuery(queryId) {
             results.addAll(
                 adapter.bind(list).map {
                     InlineQueryResultArticle(

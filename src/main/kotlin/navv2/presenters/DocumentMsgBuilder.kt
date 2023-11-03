@@ -1,14 +1,14 @@
 package navv2.presenters
 
+import botapi.Bot
 import botapi.models.ParseMode
 import botapi.sender.sendDocument
 import navigation.NavComponent
 import navigation.models.toMarkdown
-import navv2.entities.ContextManager.bot
 
 import java.io.File
 
-class DocumentMsgBuilder(private val userId: Long, private val messageId: Long? = null) : NavComponent() {
+class DocumentMsgBuilder(private val bot: Bot, private val userId: Long, private val messageId: Long? = null) : NavComponent() {
 
     private lateinit var document: Any
 

@@ -1,15 +1,15 @@
 package navv2.presenters
 
+import botapi.Bot
 import botapi.models.InputMediaPhoto
 import botapi.models.ParseMode
 import botapi.sender.editMessageMedia
 import botapi.sender.sendPhoto
 import navigation.NavComponent
 import navigation.models.toMarkdown
-import navv2.entities.ContextManager.bot
 import java.io.File
 
-class PhotoMsgBuilder(private val userId: Long, private val messageId: Long? = null) : NavComponent() {
+class PhotoMsgBuilder(private val bot: Bot, private val userId: Long, private val messageId: Long? = null) : NavComponent() {
         lateinit var photo: Any
 
         suspend fun execute() = messageId?.let { id ->

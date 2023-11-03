@@ -42,7 +42,8 @@ internal fun Message.toResponse() =
         username = from?.username,
         firstName = from?.firstName ?: senderChat!!.title ?: "Title",
         data = text ?: "",
-        messageId = messageId
+        messageId = messageId,
+        entities = entities
     )
 
 internal fun String.toMarkdown(): String {

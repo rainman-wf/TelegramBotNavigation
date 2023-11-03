@@ -2,16 +2,24 @@ package navv2.abstractions
 
 import botapi.Bot
 import botapi.sender.deleteMessage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import navv2.entities.Context
-import navv2.entities.ContextManager
 import navv2.entities.NavController
 import navv2.entities.UserAction
 import java.util.*
 
 abstract class Activity : Updatable, LifeCycle {
 
-    protected val bot: Bot get() = ContextManager.bot
+    internal var autoClose: Job = Job()
+    open val deleteInput = true
+
+    fun attachBot(bot: Bot): Activity {
+        this.bot = bot
+        return this
+    }
+
+    internal lateinit var bot: Bot
     lateinit var navController: NavController
         private set
 
@@ -24,12 +32,12 @@ abstract class Activity : Updatable, LifeCycle {
 
     lateinit var context: Context private set
 
-    internal fun passContext(context: Context): Activity {
+    internal fun attachContext(context: Context): Activity {
         this.context = context
         return this
     }
 
-    internal fun setMsgId(msgId: Long) : Activity {
+    internal fun setMsgId(msgId: Long): Activity {
         this.msgId = msgId
         return this
     }
@@ -47,8 +55,8 @@ abstract class Activity : Updatable, LifeCycle {
         msgId?.let { bot.deleteMessage(userId, it) }
     }
 
-    suspend fun onStarted(msgId: Long) {
-        bot.deleteMessage(userId, msgId)
+    suspend fun onStarted(msgId: Long?) {
+        if (deleteInput) msgId?.let { bot.deleteMessage(userId, it) }
     }
 
     final override suspend fun handle(action: UserAction) {
