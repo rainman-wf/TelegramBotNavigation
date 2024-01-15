@@ -230,7 +230,7 @@ data class Contact(
     @Name("phone_number") val phoneNumber: String,
     @Name("first_name") val firstName: String,
     @Name("last_name") val lastName: String? = null,
-    @Name("user_id") val userId: Int? = null,
+    @Name("user_id") val userId: Long? = null,
     @Name("vcard") val vcard: String? = null,
 )
 
@@ -321,7 +321,7 @@ class GeneralForumTopicUnhidden
 
 data class UserShared(
     @Name("request_id") val requestId: Int,
-    @Name("user_id") val userId: Int,
+    @Name("user_id") val userId: Long,
 )
 
 data class ChatShared(
@@ -656,7 +656,7 @@ data class BotCommandScopeChatAdministrators(
 data class BotCommandScopeChatMember(
     @Name("type") val type: String,
     @Name("chat_id") val chatId: String,
-    @Name("user_id") val userId: Int,
+    @Name("user_id") val userId: Long,
 ) : BotCommandScope
 
 sealed interface MenuButton
