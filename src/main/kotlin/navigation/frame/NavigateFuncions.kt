@@ -38,7 +38,7 @@ suspend fun Frame.replace(constructor: () -> Frame, args: NavArg? = null) =
 
 suspend fun Frame.popUp(callbackId: String?, text: String, okButton: Boolean = true) {
     callbackId?.let {
-        Frame.bot.answerCallbackQuery(it) {
+        bot.answerCallbackQuery(it) {
             this.text = text
             this.showAlert = okButton
         }

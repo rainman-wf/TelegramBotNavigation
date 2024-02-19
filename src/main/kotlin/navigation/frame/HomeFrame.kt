@@ -2,7 +2,6 @@ package navigation.frame
 
 import botapi.sender.deleteMessage
 
-
 abstract class HomeFrame : Frame() {
 
     final override suspend fun show() {

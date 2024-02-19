@@ -75,7 +75,7 @@ class RequestPoolExecutor (
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST", "UNUSED")
     suspend fun <T : Sendresponse> send(pack: SendingPackage<T>) {
         sender.emit(pack as SendingPackage<Sendresponse>)
     }

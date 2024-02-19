@@ -30,7 +30,6 @@ suspend fun main() {
     bot.updates {
         api.listen(this)
     }
-
 }
 
 class MainActivity : Activity() {

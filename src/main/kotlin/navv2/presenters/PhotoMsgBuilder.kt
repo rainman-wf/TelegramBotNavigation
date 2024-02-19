@@ -30,7 +30,7 @@ class PhotoMsgBuilder(private val bot: Bot, private val userId: Long, private va
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             is String -> bot.sendPhoto(
@@ -40,7 +40,7 @@ class PhotoMsgBuilder(private val bot: Bot, private val userId: Long, private va
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             else -> throw IllegalArgumentException("photo must be File or string (id / url)")

@@ -1,5 +1,6 @@
 package navigation.frame
 
+import botapi.Bot
 import botapi.sender.answerInlineQuery
 
 class ListBuilder<T>(
@@ -9,8 +10,8 @@ class ListBuilder<T>(
 
     lateinit var adapter: ListAdapter<T>
 
-    suspend fun execute() {
-        Frame.bot.answerInlineQuery(queryId) {
+    suspend fun execute(bot: Bot) {
+        bot.answerInlineQuery(queryId) {
             results.addAll(adapter.map(list))
             cacheTime = 1
             isPersonal = true

@@ -1,17 +1,16 @@
 package navigation.frame
 
-import botapi.Bot
 import botapi.models.*
 import botapi.sender.*
-import botapi.sender.builder.InputMediaBuilder
 import navigation.NavComponent
 import navigation.NavigationController
 import navigation.args.NavArg
+import navigation.Context
 import navigation.models.*
 import java.io.File
 import kotlin.properties.Delegates
 
-abstract class Frame {
+abstract class Frame : Context {
 
     internal val controller = NavigationController
 
@@ -29,7 +28,6 @@ abstract class Frame {
         return this
     }
 
-
     private var _args: NavArg? = null
 
     @Suppress("UNCHECKED_CAST")
@@ -38,7 +36,6 @@ abstract class Frame {
         _args = args
         return this
     }
-
 
     private var _result: NavArg? = null
 
@@ -52,7 +49,6 @@ abstract class Frame {
         _result = null
     }
 
-
     private var chainMode: Boolean = false
 
 
@@ -62,13 +58,6 @@ abstract class Frame {
 
     fun resetChainMode() {
         chainMode = false
-    }
-
-    companion object {
-        lateinit var bot: Bot
-        fun attachBot(bot: Bot) {
-            this.bot = bot
-        }
     }
 
     abstract suspend fun show()
@@ -93,7 +82,7 @@ abstract class Frame {
                     ?: throw IllegalArgumentException("Message content is must not be null")) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
-                protectContent = _protected
+                protectContent = protected
             }
         } else {
             bot.editMessageText(
@@ -128,7 +117,7 @@ abstract class Frame {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             is String -> bot.sendPhoto(
@@ -138,7 +127,7 @@ abstract class Frame {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             else -> throw IllegalArgumentException("photo must be File or string (id / url)")
@@ -157,7 +146,7 @@ abstract class Frame {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             is String -> bot.sendDocument(
@@ -167,7 +156,7 @@ abstract class Frame {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard
                 caption = content?.let { if (formatted) it.toMarkdown() else it }
-                protectContent = _protected
+                protectContent = protected
             }
 
             else -> throw IllegalArgumentException("document must be File or string (id / url)")

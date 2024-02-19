@@ -20,7 +20,7 @@ class DocumentMsgBuilder(private val bot: Bot, private val userId: Long, private
             if (formatted) parseMode = ParseMode.MarkdownV2
             replyMarkup = keyboard
             caption = content?.let { if (formatted) it.toMarkdown() else it }
-            protectContent = _protected
+            protectContent = protected
         }
 
         is String -> bot.sendDocument(
@@ -30,7 +30,7 @@ class DocumentMsgBuilder(private val bot: Bot, private val userId: Long, private
             if (formatted) parseMode = ParseMode.MarkdownV2
             replyMarkup = keyboard
             caption = content?.let { if (formatted) it.toMarkdown() else it }
-            protectContent = _protected
+            protectContent = protected
         }
 
         else -> throw IllegalArgumentException("document must be File or string (id / url)")

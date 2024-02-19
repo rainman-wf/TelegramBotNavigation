@@ -6,7 +6,6 @@ import botapi.sender.editMessageText
 import botapi.sender.sendMessage
 import navigation.NavComponent
 import navigation.models.toMarkdown
-import navv2.entities.ContextManager
 
 class TextMsgBuilder(private val bot: Bot, private val userId: Long, private val messageId: Long? = null) : NavComponent() {
     suspend fun execute() = if (messageId == null) {
@@ -16,7 +15,7 @@ class TextMsgBuilder(private val bot: Bot, private val userId: Long, private val
                 ?: throw IllegalArgumentException("Message content is must not be null")) {
             if (formatted) parseMode = ParseMode.MarkdownV2
             replyMarkup = keyboard
-            protectContent = _protected
+            protectContent = protected
         }
     } else {
         bot.editMessageText(
