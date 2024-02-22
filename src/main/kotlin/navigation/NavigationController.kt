@@ -9,20 +9,44 @@ internal object NavigationController {
 
     private val states = mutableMapOf<Long, UserState>()
     private val roots = mutableMapOf<String, () -> Frame>()
+    lateinit var start: () -> StartFrame
+    lateinit var home: () -> HomeFrame
 
-    // base functions
+    val inHomeStates get() = states.filterValues { it.inHome }
+
+    /** base functions */
 
     fun initBaseFrames(frames: Map<String, () -> Frame>) {
         roots.putAll(frames)
     }
 
+    fun initHomeFrame(homeFrame: () -> HomeFrame) {
+        home = homeFrame
+    }
+
+    fun initStartFrame(frame: () -> StartFrame) {
+        start = frame
+    }
+
     suspend fun updateHandler(navResponse: NavResponse) {
         createState(navResponse)
-        if (navResponse.data == "/home") home(navResponse.userId)
-        roots[navResponse.data]?.let {
-            val frame = createFrame(navResponse.userId) { it.invoke() }
-            states[navResponse.userId]!!.resetToRoot(frame).show()
+
+        when {
+
+            navResponse.data == "/home" -> home(navResponse.userId)
+
+            navResponse.data.matches("/start( [A-Za-zА-Яа-яЁё0-9_]{1,256}$)?".toRegex()) ->
+                states[navResponse.userId]!!
+                    .resetToRoot(createFrame(navResponse.userId, getStartArg(navResponse.data)) { start.invoke() })
+                    .show()
+
+            else -> roots[navResponse.data]?.let {
+                states[navResponse.userId]!!
+                    .resetToRoot(createFrame(navResponse.userId) { it.invoke() })
+                    .show()
+            }
         }
+
         states[navResponse.userId]?.last?.handle(navResponse)
     }
 
@@ -109,7 +133,7 @@ internal object NavigationController {
     private fun createState(navResponse: NavResponse) {
         if (!states.containsKey(navResponse.userId)) {
             val state =
-                UserState(navResponse.userId, roots["/home"]!!.invoke().setUserId(navResponse.userId) as HomeFrame)
+                UserState(navResponse.userId, home().setUserId(navResponse.userId) as HomeFrame)
             states[navResponse.userId] = state
         }
     }
@@ -125,7 +149,7 @@ internal object NavigationController {
     fun getNavSession(userId: Long) = states[userId]?.navSession
     suspend fun back(userId: Long, steps: Int) {
 
-        if (steps > 1)  {
+        if (steps > 1) {
             repeat(steps - 1) {
                 states[userId]!!.deleteStackItem()
             }
@@ -135,5 +159,10 @@ internal object NavigationController {
         states[userId]!!.apply { previous.show() }
     }
 
+    private fun getStartArg(string: String): StartFrame.Args? {
+        println(string)
+        return if (string == "/start") null
+        else StartFrame.Args(string.substringAfter("/start "))
+    }
 }
 

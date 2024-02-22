@@ -97,4 +97,6 @@ internal class UserState(
     fun deleteStackItem() {
         frameStack.removeLast()
     }
+
+    internal val inHome get() = frameStack.size == 1 && frameStack.last::class is HomeFrame
 }
