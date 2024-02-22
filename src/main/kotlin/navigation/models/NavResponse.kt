@@ -1,11 +1,10 @@
 package navigation.models
 
 import botapi.models.MessageEntity
+import botapi.models.User
 
 class NavResponse(
-    val userId: Long,
-    val username: String? = null,
-    val firstName: String,
+    val user: User,
     val data: String,
     val messageId: Long? = null,
     val callbackId: String? = null,

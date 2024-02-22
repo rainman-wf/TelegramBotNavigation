@@ -5,12 +5,12 @@ import navigation.args.NavArg
 
 suspend fun Frame.navigate(constructor: () -> Frame, args: NavArg? = null) {
 
-    controller.navigate(userId, constructor, args)
+    controller.navigate(user, constructor, args)
 }
 
 suspend fun Frame.navigateForResult(constructor: () -> Frame, args: NavArg? = null) {
     resetResult()
-    controller.navigate(userId, constructor, args, this)
+    controller.navigate(user, constructor, args, this)
 }
 
 suspend fun Frame.back(args: NavArg) {
@@ -34,7 +34,7 @@ suspend fun Frame.home() = controller.home(userId)
 suspend fun Frame.update() = controller.update(userId)
 
 suspend fun Frame.replace(constructor: () -> Frame, args: NavArg? = null) =
-    controller.replace(userId, constructor, args)
+    controller.replace(user, constructor, args)
 
 suspend fun Frame.popUp(callbackId: String?, text: String, okButton: Boolean = true) {
     callbackId?.let {
@@ -49,5 +49,5 @@ suspend fun Frame.repeat() = controller.repeat(userId)
 
 suspend fun Frame.next(constructor: () -> Frame, args: NavArg? = null) {
     setNavSession(null)
-    return controller.navigate(userId, constructor, args)
+    return controller.navigate(user, constructor, args)
 }

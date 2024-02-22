@@ -1,5 +1,6 @@
 package navigation
 
+import botapi.models.User
 import navigation.args.NavArg
 import navigation.frame.*
 import navigation.models.NavResponse
@@ -33,30 +34,30 @@ internal object NavigationController {
 
         when {
 
-            navResponse.data == "/home" -> home(navResponse.userId)
+            navResponse.data == "/home" -> home(navResponse.user.id)
 
             navResponse.data.matches("/start( [A-Za-zА-Яа-яЁё0-9_]{1,256}$)?".toRegex()) ->
-                states[navResponse.userId]!!
-                    .resetToRoot(createFrame(navResponse.userId, getStartArg(navResponse.data)) { start.invoke() })
+                states[navResponse.user.id]!!
+                    .resetToRoot(createFrame(navResponse.user, getStartArg(navResponse.data)) { start.invoke() })
                     .show()
 
             else -> roots[navResponse.data]?.let {
-                states[navResponse.userId]!!
-                    .resetToRoot(createFrame(navResponse.userId) { it.invoke() })
+                states[navResponse.user.id]!!
+                    .resetToRoot(createFrame(navResponse.user) { it.invoke() })
                     .show()
             }
         }
 
-        states[navResponse.userId]?.last?.handle(navResponse)
+        states[navResponse.user.id]?.last?.handle(navResponse)
     }
 
 
     /** navigation functions */
 
-    suspend fun navigate(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
-        val frame = createFrame(userId, args) { constructor() }
+    suspend fun navigate(user: User, constructor: () -> Frame, args: NavArg? = null) {
+        val frame = createFrame(user, args) { constructor() }
 
-        val state = states[userId]!!
+        val state = states[user.id]!!
 
         if (frame is FinalFrame) {
             frame.show()
@@ -68,10 +69,10 @@ internal object NavigationController {
         }
     }
 
-    suspend fun navigate(userId: Long, constructor: () -> Frame, args: NavArg? = null, parent: Frame?) {
-        val frame = createFrame(userId, args, parent) { constructor() }
+    suspend fun navigate(user: User, constructor: () -> Frame, args: NavArg? = null, parent: Frame?) {
+        val frame = createFrame(user, args, parent) { constructor() }
 
-        val state = states[userId]!!
+        val state = states[user.id]!!
 
         if (frame is FinalFrame) {
             frame.show()
@@ -92,11 +93,11 @@ internal object NavigationController {
         states[userId]!!.home().show()
     }
 
-    suspend fun replace(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
-        val frame = createFrame(userId, args) { constructor() }
+    suspend fun replace(user: User, constructor: () -> Frame, args: NavArg? = null) {
+        val frame = createFrame(user, args) { constructor() }
         frame.show()
 
-        val state = states[userId]!!
+        val state = states[user.id]!!
 
         if (frame is FinalFrame) {
             state.resetSession()
@@ -116,14 +117,14 @@ internal object NavigationController {
         update(userId)
     }
 
-    suspend fun next(userId: Long, constructor: () -> Frame, args: NavArg? = null) {
-        val frame = createFrame(userId, args) { constructor() }
+    suspend fun next(user: User, constructor: () -> Frame, args: NavArg? = null) {
+        val frame = createFrame(user, args) { constructor() }
 
         frame.show()
 
-        setNavSession(userId, null)
-        states[userId]!!.resetStack()
-        navigate(userId, constructor, args)
+        setNavSession(user.id, null)
+        states[user.id]!!.resetStack()
+        navigate(user, constructor, args)
     }
 
     /**
@@ -131,10 +132,10 @@ internal object NavigationController {
      */
 
     private fun createState(navResponse: NavResponse) {
-        if (!states.containsKey(navResponse.userId)) {
+        if (!states.containsKey(navResponse.user.id)) {
             val state =
-                UserState(navResponse.userId, home().setUserId(navResponse.userId) as HomeFrame)
-            states[navResponse.userId] = state
+                UserState(navResponse.user.id, home().setUser(navResponse.user) as HomeFrame)
+            states[navResponse.user.id] = state
         }
     }
 

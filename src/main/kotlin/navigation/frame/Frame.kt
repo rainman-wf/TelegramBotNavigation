@@ -21,10 +21,12 @@ abstract class Frame : Context {
         return this
     }
 
-    private var _userId by Delegates.notNull<Long>()
-    val userId get() = _userId
-    internal fun setUserId(userId: Long): Frame {
-        _userId = userId
+    private lateinit var _user: User
+    val user get() = _user
+
+    val userId get() = user.id
+    internal fun setUser(user: User): Frame {
+        _user = user
         return this
     }
 
@@ -63,13 +65,13 @@ abstract class Frame : Context {
     abstract suspend fun show()
 
     open suspend fun handle(navResponse: NavResponse) {
-        navResponse.messageId?.let { bot.deleteMessage(_userId, it) }
+        navResponse.messageId?.let { bot.deleteMessage(userId, it) }
         navResponse.callbackId?.let { bot.answerCallbackQuery(it) { cacheTime = 1 } }
     }
 
     internal fun setNavSession(messageId: Long?) {
         val msgId = if (chainMode) null else messageId
-        controller.setNavSession(_userId, msgId)
+        controller.setNavSession(userId, msgId)
     }
 
 
@@ -77,7 +79,7 @@ abstract class Frame : Context {
 
         suspend fun execute() = if (messageId == null) {
             bot.sendMessage(
-                chatId = _userId,
+                chatId = userId,
                 text = content?.let { if (formatted) it.toMarkdown() else it }
                     ?: throw IllegalArgumentException("Message content is must not be null")) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
@@ -86,7 +88,7 @@ abstract class Frame : Context {
             }
         } else {
             bot.editMessageText(
-                chatId = _userId,
+                chatId = userId,
                 messageId = messageId,
                 text = content?.let { if (formatted) it.toMarkdown() else it }
                     ?: throw IllegalArgumentException("Message content is must not be null")) {
@@ -101,7 +103,7 @@ abstract class Frame : Context {
 
         suspend fun execute() = messageId?.let { id ->
             if (photo is String) {
-                bot.editMessageMedia(_userId, id) {
+                bot.editMessageMedia(userId, id) {
                     replyMarkup = keyboard
                     buildMedia<InputMediaPhoto> {
                         this.caption = content?.let { if (formatted) it.toMarkdown() else it }
@@ -111,7 +113,7 @@ abstract class Frame : Context {
             } else throw IllegalArgumentException("photo must be a string (id / url)")
         } ?: when (photo) {
             is File -> bot.sendPhoto(
-                _userId,
+                userId,
                 photo as File
             ) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
@@ -121,7 +123,7 @@ abstract class Frame : Context {
             }
 
             is String -> bot.sendPhoto(
-                _userId,
+                userId,
                 photo as String
             ) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
@@ -140,7 +142,7 @@ abstract class Frame : Context {
 
         suspend fun execute() = when (document) {
             is File -> bot.sendDocument(
-                _userId,
+                userId,
                 document as File
             ) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
@@ -150,7 +152,7 @@ abstract class Frame : Context {
             }
 
             is String -> bot.sendDocument(
-                _userId,
+                userId,
                 document as String
             ) {
                 if (formatted) parseMode = ParseMode.MarkdownV2

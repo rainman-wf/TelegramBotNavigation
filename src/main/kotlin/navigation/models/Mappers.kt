@@ -9,25 +9,19 @@ internal fun Update.toResponse(): NavResponse {
         is Message -> result.toResponse()
 
         is CallbackQuery -> NavResponse(
-            userId = result.from.id,
-            username = result.from.username,
-            firstName = result.from.firstName,
+            user = result.from,
             data = result.data ?: error("data is null"),
             callbackId = result.id
         )
 
         is InlineQuery -> NavResponse(
-            userId = result.from.id,
-            username = result.from.username,
-            firstName = result.from.firstName,
+            user = result.from,
             data = result.query,
             listQuery = result.id
         )
 
         is ChosenInlineResult -> NavResponse(
-            userId = result.from.id,
-            username = result.from.username,
-            firstName = result.from.firstName,
+            user = result.from,
             data = result.query,
             listItem = result.resultId
         )
@@ -39,9 +33,7 @@ internal fun Update.toResponse(): NavResponse {
 
 internal fun Message.toResponse() =
     NavResponse(
-        userId = from?.id ?: senderChat!!.id,
-        username = from?.username,
-        firstName = from?.firstName ?: senderChat!!.title ?: "Title",
+        user = from ?: User(senderChat!!.id, false, senderChat.title?: "Title"),
         data = text ?: "",
         messageId = messageId,
         entities = entities
