@@ -272,7 +272,19 @@ internal interface SendMsgApi {
         @Field(REPLY_MARKUP) replyMarkup: String?
     ): Response<BaseResponse<Message>>
 
-
+    @FormUrlEncoded
+    @POST("sendSticker")
+    suspend fun sendSticker(
+        @Field(CHAT_ID) chatId: Long,
+        @Field(MESSAGE_THREAD_ID) messageThreadId: Long?,
+        @Field("sticker") sticker: String,
+        @Field("emoji") emoji: String?,
+        @Field(DISABLE_NOTIFICATION) disableNotification: Boolean?,
+        @Field(PROTECT_CONTENT) protectContent: Boolean?,
+        @Field(REPLY_TO_MESSAGE_ID) replyToMessageId: Long?,
+        @Field(ALLOW_SENDING_WITHOUT_REPLY) allowSendingWithoutReply: Boolean?,
+        @Field(REPLY_MARKUP) replyMarkup: ReplyMarkup?,
+    ): Response<BaseResponse<Message>>
 
 
 }

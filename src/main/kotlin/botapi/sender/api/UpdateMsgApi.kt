@@ -76,4 +76,12 @@ internal interface UpdateMsgApi {
         @Query(MESSAGE_ID) messageId: Long
     ): Response<BaseResponse<Boolean>>
 
+    @FormUrlEncoded
+    @POST("setMessageReaction")
+    suspend fun setMessageReaction(
+        @Field(CHAT_ID) chatId: Any,
+        @Field(MESSAGE_ID) messageId: Long,
+        @Field("reaction") reaction: String? = null,
+        @Field("is_big") isBig: Boolean? = null
+    ): Response<BaseResponse<Boolean>>
 }

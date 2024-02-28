@@ -4,6 +4,7 @@ import botapi.Bot
 import botapi.common.toJson
 import botapi.sender.builder.*
 import botapi.sender.builder.gson
+import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -599,3 +600,28 @@ suspend fun Bot.deleteChatStickerSet(chatId: String) = apiRequest {
     api.groupsActions.deleteChatStickerSet(chatId)
 }
 
+suspend fun Bot.setMessageReaction(chatId: Long, messageId: Long, builder: SetMessageReaction.() -> Unit = {}) = apiRequest {
+
+    val _builder = SetMessageReaction()
+    builder(_builder)
+    api.requestUpdateMsgApi.setMessageReaction(chatId, messageId, gson.toJson(_builder.reaction), _builder.isBig)
+}
+
+suspend fun Bot.sendSticker(chatId: Long, sticker: String, builder: SendStickerBuilder.() -> Unit = {}) = apiRequest {
+
+    val _builder = SendStickerBuilder()
+
+    builder(_builder)
+
+    api.requestSenderApi.sendSticker(
+        chatId = chatId,
+        messageThreadId = _builder.messageThreadId,
+        disableNotification = _builder.disableNotification,
+        sticker = sticker,
+        emoji = _builder.emoji,
+        protectContent = _builder.protectContent,
+        replyToMessageId = _builder.replyToMessageId,
+        allowSendingWithoutReply = _builder.allowSendingWithoutReply,
+        replyMarkup = _builder.replyMarkup
+    )
+}

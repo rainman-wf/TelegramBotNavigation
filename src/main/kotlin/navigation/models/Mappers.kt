@@ -39,7 +39,7 @@ internal fun Message.toResponse() =
         entities = entities
     )
 
-internal fun String.toMarkdown(): String {
+fun String.toMarkdown(): String {
     return this
         .replace(">", "\\>")
         .replace("(", "\\(")

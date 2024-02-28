@@ -8,6 +8,7 @@ import botapi.common.PHOTO
 import botapi.common.VIDEO
 import botapi.models.*
 import com.google.gson.Gson
+import retrofit2.http.Field
 
 internal val gson = Gson()
 
@@ -94,14 +95,14 @@ class EditMessageMedia {
     var replyMarkup: ReplyMarkup? = null
     lateinit var inputMedia: InputMedia
 
-    internal inline fun <reified T: InputMedia>buildMedia(builder: InputMediaBuilder.() -> Unit) {
+    internal inline fun <reified T : InputMedia> buildMedia(builder: InputMediaBuilder.() -> Unit) {
 
         val _builder = when (T::class) {
             InputMediaPhoto::class -> InputMediaPhotoBuilder()
             InputMediaAnimation::class -> InputMediaAnimationBuilder()
             InputMediaAudio::class -> InputMediaAudioBuilder()
             InputMediaVideo::class -> InputMediaVideoBuilder()
-            InputMediaDocument::class  -> InputMediaDocumentBuilder ()
+            InputMediaDocument::class -> InputMediaDocumentBuilder()
             else -> throw IllegalArgumentException("bla bla")
         }
 
@@ -284,3 +285,18 @@ class EditChatInviteLink {
     var memberLimit: Int? = null
     var createsJoinRequest: Boolean? = null
 }
+
+class SetMessageReaction {
+    var reaction: List<ReactionTypeEmoji>? = null
+    var isBig: Boolean? = null
+}
+
+data class SendStickerBuilder(
+    var messageThreadId: Long? = null,
+    var emoji: String? = null,
+    var disableNotification: Boolean? = null,
+    var protectContent: Boolean? = null,
+    var replyToMessageId: Long? = null,
+    var allowSendingWithoutReply: Boolean? = null,
+    var replyMarkup: ReplyMarkup? = null,
+) : MarkupIncludable

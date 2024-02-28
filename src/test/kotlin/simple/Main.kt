@@ -1,25 +1,25 @@
 package simple
 
 import botapi.Bot
-import botapi.models.ParseMode
+import botapi.models.ReactionTypeEmoji
 import botapi.sender.sendMessage
+import botapi.sender.setMessageReaction
 import myId
 import token
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
+
 
 suspend fun main() {
 
     val bot = Bot(token)
+    bot.setLoggingLevel(Bot.LoggingLevel.BODY)
 
-    val regex = "/start [A-Za-zА-Яа-яЁё0-9_]{4,256}$".toRegex()
-
-    bot.updates {
-        message?.text?.let {
-            if (it.matches(regex)) {
-                bot.sendMessage(myId, "utm = ${it.substringAfter("/start ")}")
+    bot.sendMessage(myId, "Hello").result?.let {
+        bot.setMessageReaction(it.chat.id, it.messageId) {
+            reaction = listOf("👍").map { e ->
+                ReactionTypeEmoji(emoji = e)
             }
+        }.let {
+            if (!it.ok) println(it.errorDescription)
         }
     }
 

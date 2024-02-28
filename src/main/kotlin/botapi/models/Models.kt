@@ -1340,4 +1340,9 @@ data class Update(
     @Name("chat_join_request") val chatJoinRequest: ChatJoinRequest? = null
 )
 
+    data class ReactionTypeEmoji (
+        val type: String = "emoji",
+        val emoji: String
+    )
+
 
