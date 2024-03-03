@@ -21,7 +21,7 @@ suspend fun main() {
 
     app.init(bot) {
         home(::Home)
-        root("/help", ::Simple)
+        root("/help", ::MyFrame)
         start(::Main)
     }
 

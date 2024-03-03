@@ -15,7 +15,7 @@ class NavKeyboardBuilder {
         rows.add(builder.build())
     }
 
-    fun backButton(text: String = "Назад") =button(text, "back")
+    fun backButton(text: String = "Назад") = button(text, "back")
     fun homeButton(text: String = "Выйти") = button(text, "home")
 
     fun button(
@@ -51,10 +51,14 @@ class NavKeyboardBuilder {
         )
     }
 
-    fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) {
-        val buttons = adapter.map(list)
-        val grouped = buttons.groupBy(columns).map { it.toList() }
-        rows.addAll(grouped)
+
+    fun <T> grid(list: List<T>, columns: Int = 2, mapper: (T) -> InlineKeyboardButton) {
+        rows.addAll(
+            list
+                .map { mapper(it) }
+                .groupBy(columns)
+                .map { it.toList() }
+        )
     }
 
     private fun <T> Collection<T>.groupBy(quantity: Int): Collection<Collection<T>> {

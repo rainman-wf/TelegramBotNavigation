@@ -66,7 +66,11 @@ abstract class Frame : Context {
 
     open suspend fun handle(navResponse: NavResponse) {
         navResponse.messageId?.let { bot.deleteMessage(userId, it) }
-        navResponse.callbackId?.let { bot.answerCallbackQuery(it) { cacheTime = 1 } }
+    }
+
+    open suspend fun handle(navResponse: NavResponse, answerCallbackQuery: Boolean = true) {
+        navResponse.messageId?.let { bot.deleteMessage(userId, it) }
+        if (answerCallbackQuery) navResponse.callbackId?.let { bot.answerCallbackQuery(it) { cacheTime = 1 } }
     }
 
     internal fun setNavSession(messageId: Long?) {

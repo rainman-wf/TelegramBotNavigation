@@ -15,12 +15,14 @@ class InlineKeyboardBuilder {
         rows.add(builder.build())
     }
 
-    fun <T> grid(list: List<T>, columns: Int, adapter: GridAdapter<T>) {
-        val buttons = adapter.map(list)
-        val grouped = buttons.groupBy(columns).map { it.toList() }
-        rows.addAll(grouped)
+    fun <T> grid(list: List<T>, columns: Int = 2, mapper: (T) -> InlineKeyboardButton) {
+        rows.addAll(
+            list
+                .map { mapper(it) }
+                .groupBy(columns)
+                .map { it.toList() }
+        )
     }
-
     private fun <T> Collection<T>.groupBy(quantity: Int): Collection<Collection<T>> {
         return withIndex()
             .groupBy { it.index / quantity }

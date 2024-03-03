@@ -41,6 +41,8 @@ suspend fun Frame.popUp(callbackId: String?, text: String, okButton: Boolean = t
         bot.answerCallbackQuery(it) {
             this.text = text
             this.showAlert = okButton
+        }.also {
+            if (!it.ok) println(it.errorDescription)
         }
     }
 }
