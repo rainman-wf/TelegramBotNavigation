@@ -25,7 +25,7 @@ class MyFrame : Frame() {
             content { "Any" }
             keyboard {
                 grid(list,3) {
-                    InlineKeyboardButton(it.title, callbackData = it.id.toString())
+                    button(it.title, it.id.toString())
                 }
             }
         }
@@ -36,3 +36,4 @@ class MyFrame : Frame() {
         popUp(navResponse.callbackId, navResponse.data)
     }
 }
+

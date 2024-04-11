@@ -32,6 +32,10 @@ class Bot(token: String) {
         allowedUpdates.addAll(AllowedUpdates.entries)
     }
 
+    fun includeUpdates(vararg updates: AllowedUpdates) {
+        allowedUpdates.addAll(allowedUpdates)
+    }
+
     fun excludeUpdates(list: List<AllowedUpdates>) {
         allowedUpdates.addAll(AllowedUpdates.entries.minus(list.toSet()))
     }

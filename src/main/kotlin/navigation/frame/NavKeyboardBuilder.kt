@@ -17,12 +17,13 @@ class NavKeyboardBuilder {
 
     fun backButton(text: String = "Назад") = button(text, "back")
     fun homeButton(text: String = "Выйти") = button(text, "home")
+    fun checkBox(text: String, data: String, checked: Boolean) = button(if (checked) "✅ $text" else text, data)
 
     fun button(
         text: String,
         data: String,
         type: ButtonType = ButtonType.CALLBACK
-    ) {
+    ) : InlineKeyboardButton {
 
         val _builder = InlineButtonBuilder()
 
@@ -34,21 +35,18 @@ class NavKeyboardBuilder {
             ButtonType.PAY -> _builder.pay = true
         }
 
-        rows.add(
-            listOf(
-                InlineKeyboardButton(
-                    text = text,
-                    url = _builder.url,
-                    callbackData = _builder.callbackData,
-                    webApp = _builder.webApp,
-                    loginUrl = _builder.loginUrl,
-                    switchInlineQuery = _builder.switchInlineQuery,
-                    switchInlineQueryCurrentChat = _builder.switchInlineQueryCurrentChat,
-                    callbackGame = _builder.callbackGame,
-                    pay = _builder.pay,
-                )
-            )
-        )
+
+        return InlineKeyboardButton(
+            text = text,
+            url = _builder.url,
+            callbackData = _builder.callbackData,
+            webApp = _builder.webApp,
+            loginUrl = _builder.loginUrl,
+            switchInlineQuery = _builder.switchInlineQuery,
+            switchInlineQueryCurrentChat = _builder.switchInlineQueryCurrentChat,
+            callbackGame = _builder.callbackGame,
+            pay = _builder.pay,
+        ).also { rows.add(listOf(it)) }
     }
 
 
