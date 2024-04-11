@@ -84,7 +84,7 @@ abstract class Frame : Context {
         suspend fun execute() = if (messageId == null) {
             bot.sendMessage(
                 chatId = userId,
-                text = content?.let { if (formatted) it.toMarkdown() else it }
+                text = content?.let { if (formatted) it.toMarkdown().also { println(it) } else it }
                     ?: throw IllegalArgumentException("Message content is must not be null")) {
                 if (formatted) parseMode = ParseMode.MarkdownV2
                 replyMarkup = keyboard

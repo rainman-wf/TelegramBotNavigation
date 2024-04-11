@@ -44,9 +44,12 @@ class Home : HomeFrame()
 class Main : StartFrame() {
 
     override suspend fun show() {
-        text { content {
-            (context as UiProvider).value + "!!\nYour utm: " + startArgs()?.value
-        } }
+        text {
+            content {
+               "[Я Ната — психолог, сексолог и твой проводник к женскому счастью]~(https://www.instagram.com/nataytali?igsh=eG1xamsxNHdkdWRx~)"
+            }
+            formatted()
+        }
     }
 }
 
