@@ -3,7 +3,7 @@ package botapi.sender
 import botapi.Bot
 import botapi.models.BaseResponse
 import botapi.models.Message
-import botapi.models.Sendresponse
+import botapi.models.SendResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,7 +17,7 @@ class RequestPoolExecutor (
     private val bot: Bot
 ){
 
-    private val sender = MutableSharedFlow<SendingPackage<Sendresponse>>()
+    private val sender = MutableSharedFlow<SendingPackage<SendResponse>>()
 
     internal suspend fun launch() {
 
@@ -76,11 +76,11 @@ class RequestPoolExecutor (
     }
 
     @Suppress("UNCHECKED_CAST", "UNUSED")
-    suspend fun <T : Sendresponse> send(pack: SendingPackage<T>) {
-        sender.emit(pack as SendingPackage<Sendresponse>)
+    suspend fun <T : SendResponse> send(pack: SendingPackage<T>) {
+        sender.emit(pack as SendingPackage<SendResponse>)
     }
 
-    data class SendingPackage<T : Sendresponse> (
+    data class SendingPackage<T : SendResponse> (
         val pack: List<Pair<Long, suspend () -> BaseResponse<T>>>,
         val pinMessage: Boolean? = false,
         val result: suspend (SendingResult) -> Unit = {}

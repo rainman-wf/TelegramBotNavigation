@@ -1,8 +1,10 @@
 package botapi.sender.api
 
 import botapi.*
+import botapi.common.*
 import botapi.common.ALLOW_SENDING_WITHOUT_REPLY
 import botapi.common.AUDIO
+import botapi.common.BUSINESS_CONNECTION_ID
 import botapi.common.CAPTION
 import botapi.common.CAPTION_ENTITIES
 import botapi.common.CHAT_ID
@@ -286,6 +288,16 @@ internal interface SendMsgApi {
         @Field(REPLY_MARKUP) replyMarkup: ReplyMarkup?,
     ): Response<BaseResponse<Message>>
 
-
+    @FormUrlEncoded
+    @POST("sendMediaGroup")
+    suspend fun sendMediaGroup(
+        @Field(BUSINESS_CONNECTION_ID) businessConnectionId: String?,
+        @Field(CHAT_ID) chatId: Long,
+        @Field(MESSAGE_THREAD_ID) messageThreadId: Long?,
+        @Field("media") media: String,
+        @Field(DISABLE_NOTIFICATION) disableNotification: Boolean?,
+        @Field(PROTECT_CONTENT) protectContent: Boolean?,
+        @Field(REPLY_PARAMETERS) replyParameters: ReplyParameters?
+    )
 }
 

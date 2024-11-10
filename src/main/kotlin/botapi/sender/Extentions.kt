@@ -164,6 +164,10 @@ suspend fun Bot.deleteMessage(chatId: Long, messageId: Long) = apiRequest {
     api.requestUpdateMsgApi.deleteMessage(chatId, messageId)
 }
 
+suspend fun Bot.deleteMessages(chatId: Long, messageIds: List<Long>) = apiRequest {
+    api.requestUpdateMsgApi.deleteMessages(chatId, messageIds)
+}
+
 suspend fun Bot.answerInlineQuery(
     inlineQueryId: String,
     builder: AnswerInlineQuery.() -> Unit
@@ -624,4 +628,8 @@ suspend fun Bot.sendSticker(chatId: Long, sticker: String, builder: SendStickerB
         allowSendingWithoutReply = _builder.allowSendingWithoutReply,
         replyMarkup = _builder.replyMarkup
     )
+}
+
+suspend fun Bot.deleteWebhook() = apiRequest {
+    api.requestUpdateMsgApi.deleteWebhook()
 }

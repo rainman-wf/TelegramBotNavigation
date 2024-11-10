@@ -23,7 +23,9 @@ class Bot(token: String) {
         POLL_ANSWER,
         MY_CHAT_MEMBER,
         CHAT_MEMBER,
-        CHAT_JOIN_REQUEST
+        CHAT_JOIN_REQUEST,
+        MESSAGE_REACTION,
+        MESSAGE_REACTION_COUNT
     }
 
     private val allowedUpdates = mutableSetOf<AllowedUpdates>()

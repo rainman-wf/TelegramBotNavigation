@@ -1,6 +1,7 @@
 package nav
 
 import botapi.Bot
+import kotlinx.coroutines.delay
 import navigation.Context
 import navigation.frame.Frame
 import navigation.frame.HomeFrame

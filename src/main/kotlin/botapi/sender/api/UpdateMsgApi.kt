@@ -1,6 +1,7 @@
 package botapi.sender.api
 
 import botapi.*
+import botapi.common.*
 import botapi.common.CAPTION
 import botapi.common.CAPTION_ENTITIES
 import botapi.common.CHAT_ID
@@ -8,6 +9,7 @@ import botapi.common.DISABLE_WEB_PAGE_PREVIEW
 import botapi.common.ENTITIES
 import botapi.common.INLINE_MESSAGE_ID
 import botapi.common.MESSAGE_ID
+import botapi.common.MESSAGE_IDS
 import botapi.common.PARSE_MODE
 import botapi.common.REPLY_MARKUP
 import botapi.common.TEXT
@@ -76,6 +78,12 @@ internal interface UpdateMsgApi {
         @Query(MESSAGE_ID) messageId: Long
     ): Response<BaseResponse<Boolean>>
 
+    @POST("deleteMessages")
+    suspend fun deleteMessages(
+        @Query(CHAT_ID) chatId: Any,
+        @Query(MESSAGE_IDS) messageIds: List<Long>
+    ): Response<BaseResponse<Boolean>>
+
     @FormUrlEncoded
     @POST("setMessageReaction")
     suspend fun setMessageReaction(
@@ -84,4 +92,10 @@ internal interface UpdateMsgApi {
         @Field("reaction") reaction: String? = null,
         @Field("is_big") isBig: Boolean? = null
     ): Response<BaseResponse<Boolean>>
+
+    @FormUrlEncoded
+    @POST("deleteWebhook")
+    suspend fun deleteWebhook(
+        @Field("drop_pending_updates") dropPendingUpdates: Boolean? = null
+    ) : Response<BaseResponse<Boolean>>
 }

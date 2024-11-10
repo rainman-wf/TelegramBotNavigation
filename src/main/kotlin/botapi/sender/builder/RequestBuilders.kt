@@ -90,6 +90,14 @@ class EditMessageCaption {
     var replyMarkup: ReplyMarkup? = null
 }
 
+class SendMediaGroup {
+    var businessConnectionId: String? = null
+    var messageThreadId: Long? = null
+    var disableNotification: Boolean? = null
+    var protectContent: Boolean? = null
+    var replyParameters: ReplyParameters? = null
+}
+
 class EditMessageMedia {
 
     var replyMarkup: ReplyMarkup? = null

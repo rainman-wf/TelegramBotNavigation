@@ -66,7 +66,7 @@ data class Chat(
     @Name("location") val location: ChatLocation? = null,
 )
 
-interface Sendresponse
+interface SendResponse
 
 data class Message(
     @Name("message_id") val messageId: Long,
@@ -140,11 +140,11 @@ data class Message(
     @Name("video_chat_participants_invited") val videoChatParticipantsInvited: VideoChatParticipantsInvited? = null,
     @Name("web_app_data") val webAppData: WebAppData? = null,
     @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
-) : Sendresponse
+) : SendResponse
 
 data class MessageId(
     @Name("message_id") val messageId: Long,
-) : Sendresponse
+) : SendResponse
 
 data class MessageEntity(
     @Name("type") val type: String,
@@ -486,7 +486,7 @@ data class ChatAdministratorRights(
     @Name("can_manage_topics") val canManageTopics: Boolean? = null,
 )
 
-data class ChatMember (
+data class ChatMember(
     @Name("user") val user: User,
     @Name("status") val status: String,
     @Name("custom_title") val customTitle: String? = null,
@@ -676,7 +676,6 @@ data class MenuButtonDefault(
 ) : MenuButton
 
 
-
 sealed interface InputMedia
 
 class InputFile
@@ -737,7 +736,7 @@ data class InputMediaDocument(
     @Name("parse_mode") val parseMode: String? = null,
     @Name("caption_entities") val captionEntities: String? = null,
     @Name("disable_content_type_detection") val disableContentTypeDetection: Boolean? = null
-): InputMedia
+) : InputMedia
 
 data class Sticker(
     @Name("file_id") val fileId: String,
@@ -1328,6 +1327,12 @@ data class Update(
     @Name("edited_message") val editedMessage: Message? = null,
     @Name("channel_post") val channelPost: Message? = null,
     @Name("edited_channel_post") val editedChannelPost: Message? = null,
+    @Name("business_connection") val businessConnection: BusinessConnection? = null,
+    @Name("business_message") val businessMessage: Message? = null,
+    @Name("edited_business_message") val editedBusinessMessage: Message? = null,
+    @Name("deleted_business_messages") val deletedBusinessMessages: BusinessMessageDeleted? = null,
+    @Name("message_reaction") val messageReaction: MessageReactionUpdated? = null,
+    @Name("message_reaction_count") val messageReactionCount: MessageReactionCountUpdated? = null,
     @Name("inline_query") val inlineQuery: InlineQuery? = null,
     @Name("chosen_inline_result") val chosenInlineResult: ChosenInlineResult? = null,
     @Name("callback_query") val callbackQuery: CallbackQuery? = null,
@@ -1340,9 +1345,61 @@ data class Update(
     @Name("chat_join_request") val chatJoinRequest: ChatJoinRequest? = null
 )
 
-    data class ReactionTypeEmoji (
-        val type: String = "emoji",
-        val emoji: String
-    )
+data class ReactionTypeEmoji(
+    val type: String = "emoji",
+    val emoji: String
+)
+
+data class ReplyParameters(
+    @Name("message_id") val messageId: Long,
+    @Name("chat_id") val chatId: Long? = null,
+    @Name("allow_sending_without_reply") val allowSendingWithoutReply: Boolean? = null,
+    @Name("quote") val quote: String? = null,
+    @Name("quote_parse_mode") val quoteParseMode: String? = null,
+    @Name("quote_entities") val quoteEntities: String? = null,
+    @Name("quote_position") val quotePosition: Int? = null
+)
+
+data class BusinessConnection(
+    @Name("id") val id: String,
+    @Name("user") val user: User,
+    @Name("user_chat_id") val userChatId: Long,
+    @Name("date") val date: Long,
+    @Name("can_reply") val canReply: Boolean,
+    @Name("is_enabled") val isEnabled: Boolean
+)
+
+data class BusinessMessageDeleted(
+    @Name("business_connection_id") val businessConnectionId: String,
+    @Name("chat") val chat: Chat,
+    @Name("message_ids") val messageIds: List<Long>,
+)
+
+data class MessageReactionUpdated(
+    @Name("chat") val chat: Chat,
+    @Name("message_id") val messageId: Long,
+    @Name("user") val user: User? = null,
+    @Name("actor_chat") val actorChat: Chat? = null,
+    @Name("date") val date: Long,
+    @Name("old_reaction") val oldReaction: List<ReactionType>,
+    @Name("new_reaction") val newReaction: List<ReactionType>,
+)
 
 
+data class ReactionType(
+    @Name("type") val type: String,
+    @Name("emoji") val emoji: String? = null,
+    @Name("custom_emoji_id") val customEmojiId: String? = null
+)
+
+data class MessageReactionCountUpdated(
+    @Name("chat") val chat: Chat,
+    @Name("message_id") val messageId: Long,
+    @Name("date") val date: Long,
+    @Name("reactions") val reactions: List<ReactionType>,
+)
+
+data class ReactionCount(
+    @Name("type") val type: ReactionType,
+    @Name("total_count") val totalCount: Int
+)
