@@ -78,10 +78,11 @@ internal interface UpdateMsgApi {
         @Query(MESSAGE_ID) messageId: Long
     ): Response<BaseResponse<Boolean>>
 
+    @FormUrlEncoded
     @POST("deleteMessages")
     suspend fun deleteMessages(
-        @Query(CHAT_ID) chatId: Any,
-        @Query(MESSAGE_IDS) messageIds: List<Long>
+        @Field(CHAT_ID) chatId: Any,
+        @Field(MESSAGE_IDS) messageIds: List<Long>
     ): Response<BaseResponse<Boolean>>
 
     @FormUrlEncoded
