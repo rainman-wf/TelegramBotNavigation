@@ -165,7 +165,7 @@ suspend fun Bot.deleteMessage(chatId: Long, messageId: Long) = apiRequest {
 }
 
 suspend fun Bot.deleteMessages(chatId: Long, messageIds: List<Long>) = apiRequest {
-    api.requestUpdateMsgApi.deleteMessages(chatId, messageIds)
+    api.requestUpdateMsgApi.deleteMessages(chatId, messageIds.toJson()!!)
 }
 
 suspend fun Bot.answerInlineQuery(
